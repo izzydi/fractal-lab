@@ -174,6 +174,16 @@ footer a{color:var(--blue);font-weight:700}
         <div class="lab-actions"><a class="open" href="sierpinski-tetrahedron/">▶ Άνοιξε το εργαστήριο</a><a class="src" href="https://github.com/izzydi/fractal-lab/tree/main/sierpinski-tetrahedron">Κώδικας στο GitHub</a></div>
       </div>
     </article>
+    <article class="lab" style="--lc:#3f9d58;--ld:#2a7340;--lb:#effaf1">
+      <div class="lab-art"><span class="badge">5</span><span class="dim">2D</span><svg id="art-pythagoras-tree" role="img" aria-label="Δέντρο Πυθαγόρα, επίπεδο 7"></svg></div>
+      <div class="lab-body">
+        <h3>Δέντρο Πυθαγόρα</h3>
+        <p class="meta">Γυμνάσιο | 1 διδακτική ώρα</p>
+        <p>Το <span class="hl y">Πυθαγόρειο θεώρημα</span> γίνεται δέντρο: πάνω σε κάθε τετράγωνο ένα ορθογώνιο ισοσκελές τρίγωνο και δύο μικρότερα τετράγωνα.</p>
+        <div class="tags"><span class="t1">στροφή 90°</span><span class="t2">1² = α² + α²</span><span class="t3">× 2 κλαδιά</span><span class="t4">2<sup>ν+1</sup> − 1</span><span class="t5">εμβαδόν γενιάς 1</span></div>
+        <div class="lab-actions"><a class="open" href="pythagoras-tree/">▶ Άνοιξε το εργαστήριο</a><a class="src" href="https://github.com/izzydi/fractal-lab/tree/main/pythagoras-tree">Κώδικας στο GitHub</a></div>
+      </div>
+    </article>
   </div>
   <p class="order"><b>Πώς να τα χρησιμοποιήσετε:</b> η αρίθμηση είναι μια προτεινόμενη σειρά, αλλά κάθε εργαστήριο στέκεται και μόνο του. Για την πιο ήπια αρχή, το τρίγωνο Sierpinski χρειάζεται μόνο μέσα τμημάτων.</p>
 <!-- LABS:END -->
@@ -235,5 +245,6 @@ kochSVG(document.querySelector('#art-koch'),4,'#2c6fd6');
 isoSVG(document.querySelector('#art-menger'),mengerJS(0,0,0,1,2),'#f08a1c');
 {const mid=(p,q)=>[(p[0]+q[0])/2,(p[1]+q[1])/2];const s=(a,b,c,n)=>n===0?[[a,b,c]]:[...s(a,mid(a,b),mid(c,a),n-1),...s(mid(a,b),b,mid(b,c),n-1),...s(mid(c,a),mid(b,c),c,n-1)];FL2D.drawSVG(document.querySelector('#art-sierpinski-triangle'),{polygons:s([0,0],[16,0],[8,8*Math.sqrt(3)],5)},'#2f8a4e',{fillOpacity:.9,edgeWidth:.002});}
 {const mid=(p,q)=>[(p[0]+q[0])/2,(p[1]+q[1])/2,(p[2]+q[2])/2];const tet=(a,b,c,d,n)=>{if(n===0)return [[a,b,c,d]];const ab=mid(a,b),ac=mid(a,c),ad=mid(a,d),bc=mid(b,c),bd=mid(b,d),cd=mid(c,d);return [...tet(a,ab,ac,ad,n-1),...tet(ab,b,bc,bd,n-1),...tet(ac,bc,c,cd,n-1),...tet(ad,bd,cd,d,n-1)]};const S=Math.sqrt(3),T=tet([0,0,0],[8,0,0],[4,4*S,0],[4,4*S/3,8*Math.sqrt(2/3)],3);const sub=(p,q)=>[p[0]-q[0],p[1]-q[1],p[2]-q[2]],cr=(u,v)=>[u[1]*v[2]-u[2]*v[1],u[2]*v[0]-u[0]*v[2],u[0]*v[1]-u[1]*v[0]],dt=(u,v)=>u[0]*v[0]+u[1]*v[1]+u[2]*v[2],nm=u=>{const l=Math.hypot(...u)||1;return u.map(x=>x/l)};const th=-0.62,ph=0.62,ct=Math.cos(th),st=Math.sin(th),cp=Math.cos(ph),sp=Math.sin(ph),L=nm([-0.5,-0.8,0.9]);const view=p=>{const x=p[0]-4,y=p[1]-2.3,z=p[2]-2,x1=x*ct-y*st,y1=x*st+y*ct;return [x1,z*cp+y1*sp,y1*cp-z*sp]};const F=[[0,1,2,3],[0,1,3,2],[0,2,3,1],[1,2,3,0]],faces=[];for(const t of T)for(const[i,j,k,o] of F){let n=nm(cr(sub(t[j],t[i]),sub(t[k],t[i])));if(dt(n,sub(t[o],t[i]))>0)n=n.map(v=>-v);const pts=[t[i],t[j],t[k]].map(view);faces.push({pts,d:(pts[0][2]+pts[1][2]+pts[2][2])/3,l:0.5+0.75*Math.max(0,dt(n,L))})}faces.sort((a,b)=>b.d-a.d);const sh=f=>{const c=[23,138,150].map(v=>Math.round(f>=1?v+(255-v)*(f-1):v*f));return 'rgb('+c+')'};const svg=document.querySelector('#art-sierpinski-tetrahedron');let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;for(const f of faces)for(const p of f.pts){x0=Math.min(x0,p[0]);x1=Math.max(x1,p[0]);y0=Math.min(y0,-p[1]);y1=Math.max(y1,-p[1])}svg.setAttribute('viewBox',(x0-.3)+' '+(y0-.3)+' '+(x1-x0+.6)+' '+(y1-y0+.6));svg.innerHTML='<g stroke="'+sh(0.55)+'" stroke-width="0.025" stroke-linejoin="round">'+faces.map(f=>'<polygon points="'+f.pts.map(p=>p[0].toFixed(3)+','+(-p[1]).toFixed(3)).join(' ')+'" fill="'+sh(f.l)+'"/>').join('')+'</g>';}
+{const tr=(p1,p2,n)=>{const dx=p2[0]-p1[0],dy=p2[1]-p1[1],p3=[p2[0]-dy,p2[1]+dx],p4=[p1[0]-dy,p1[1]+dx];const sq=[p1,p2,p3,p4];if(n===0)return [sq];const top=[(p4[0]+p3[0])/2-dy/2,(p4[1]+p3[1])/2+dx/2];return [sq,...tr(p4,top,n-1),...tr(top,p3,n-1)]};FL2D.drawSVG(document.querySelector('#art-pythagoras-tree'),{polygons:tr([0,0],[1,0],7)},'#3f9d58',{fillOpacity:.85,edgeWidth:.002});}
 // ART:END
 </script></body></html>

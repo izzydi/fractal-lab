@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="el"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Εργαστήριο Fractals · Δέντρο Πυθαγόρα</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/lab.css">
+</head>
+<body><main class="sheet">
+<nav class="lab-nav" aria-label="Fractal Lab"><a href="../">← Όλα τα εργαστήρια</a><span>Fractal Lab | Εργαστήριο 5</span></nav>
+
+<header class="sheet-head">
+  <div class="title-card">
+    <h1><span class="t1">Εργαστήριο Fractals –</span> <span class="t2">Δέντρο Πυθαγόρα</span></h1>
+    <p>Το Πυθαγόρειο θεώρημα γίνεται δέντρο, με Python | 1 διδακτική ώρα</p>
+  </div>
+  <aside class="brand-card" aria-label="Fractal Lab">
+    <strong>Fractal Lab</strong>
+    <span>Μαθηματικά &amp; Python<br>για το Γυμνάσιο</span>
+    <em>Χωρίς λογαριασμό</em>
+  </aside>
+</header>
+
+<section class="block b-pink" aria-labelledby="s1">
+  <div class="tab"><span class="num">1</span><h2 id="s1">Ένα δέντρο από τετράγωνα</h2></div>
+  <div class="intro">
+    <div>
+      <p>Θυμάσαι το <span class="hl y">Πυθαγόρειο θεώρημα</span>; Σε κάθε ορθογώνιο τρίγωνο, το τετράγωνο της υποτείνουσας είναι ίσο με το άθροισμα των τετραγώνων των δύο κάθετων πλευρών.</p>
+      <p>Το <span class="hl o">1942</span>, ο Ολλανδός καθηγητής μαθηματικών <strong>Άλμπερτ Μπόσμαν (Albert E. Bosman)</strong> πήρε αυτή την εικόνα και την επανέλαβε ξανά και ξανά: πάνω σε ένα <span class="hl b">τετράγωνο</span> βάζεις ένα <span class="hl g">ορθογώνιο ισοσκελές τρίγωνο</span>, και πάνω στις δύο κάθετες πλευρές του δύο μικρότερα τετράγωνα.</p>
+      <p>Κάθε νέο τετράγωνο γίνεται η αρχή ενός νέου κλαδιού, και έτσι φυτρώνει το <strong>δέντρο του Πυθαγόρα</strong>. Σε κάθε επίπεδο τα τετράγωνα μικραίνουν, αλλά <span class="hl v">κάθε «γενιά» τους έχει πάντα το ίδιο εμβαδόν</span>!</p>
+      <div class="goals">
+        <h3>Στόχοι του μαθήματος</h3>
+        <ol>
+          <li><b>Σ1</b><span>Να φτιάχνεις ένα τετράγωνο στρίβοντας μια πλευρά κατά 90°.</span></li>
+          <li><b>Σ2</b><span>Να εφαρμόζεις το Πυθαγόρειο θεώρημα σε ορθογώνιο ισοσκελές τρίγωνο.</span></li>
+          <li><b>Σ3</b><span>Να υπολογίζεις πόσα τετράγωνα έχει το δέντρο σε κάθε επίπεδο.</span></li>
+          <li><b>Σ4</b><span>Να διαβάζεις και να αλλάζεις κώδικα Python με αναδρομή που «διακλαδίζεται» σε δύο.</span></li>
+        </ol>
+      </div>
+    </div>
+    <div class="figure">
+      <p class="note">Κάθε κλαδί είναι ένα μικρότερο δέντρο του Πυθαγόρα!</p>
+      <svg class="arrow" viewBox="0 0 90 46" aria-hidden="true"><path d="M70 4 C 60 30, 30 36, 12 38" fill="none" stroke="#3f9d58" stroke-width="2.5" stroke-linecap="round"/><path d="M22 30 L11 38.5 L24 43" fill="none" stroke="#3f9d58" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="fig-box"><svg id="fig-hero" role="img" aria-label="Δέντρο του Πυθαγόρα, επίπεδο 9"></svg></div>
+    </div>
+  </div>
+</section>
+<section class="block b-green" aria-labelledby="s2">
+  <div class="tab"><span class="num">2</span><h2 id="s2">Βασικές ιδέες</h2></div>
+  <div class="chips">
+    <div class="chip c1">Αρχή<small>ένα τετράγωνο</small></div>
+    <div class="chip c2">90°<small>στροφή για το τετράγωνο</small></div>
+    <div class="chip c3">45° + 45°<small>ορθογώνιο ισοσκελές</small></div>
+    <div class="chip c4">1 = ½ + ½<small>Πυθαγόρειο θεώρημα</small></div>
+    <div class="chip c5">1 → 2<small>κλαδιά σε κάθε βήμα</small></div>
+    <div class="chip c6">LEVEL 0–10<small>πόσες επαναλήψεις</small></div>
+  </div>
+</section>
+<section class="block b-blue" aria-labelledby="s3">
+  <div class="tab"><span class="num">3</span><h2 id="s3">Πώς φυτρώνει το δέντρο</h2></div>
+  <div class="steps">
+    <article class="step sA">
+      <div class="step-head"><span class="letter">A</span><h3>Ξεκίνα με τετράγωνο</h3></div>
+      <svg class="fig" id="fig-a" role="img" aria-label="Ένα τετράγωνο"></svg>
+      <p>Ένα <span class="hl y">τετράγωνο</span> με πλευρά 1 είναι ο κορμός. Αυτό είναι το επίπεδο 0.</p>
+    </article>
+    <article class="step sB">
+      <div class="step-head"><span class="letter">B</span><h3>Τρίγωνο και δύο τετράγωνα</h3></div>
+      <svg class="fig" id="fig-b" role="img" aria-label="Τετράγωνο, ορθογώνιο ισοσκελές τρίγωνο από πάνω και δύο μικρότερα τετράγωνα"></svg>
+      <p>Πάνω στο τετράγωνο βάλε ένα <span class="hl p">ορθογώνιο ισοσκελές τρίγωνο</span>. Σε κάθε κάθετη πλευρά του χτίσε ένα νέο τετράγωνο.</p>
+    </article>
+    <article class="step sC">
+      <div class="step-head"><span class="letter">C</span><h3>Επανάλαβε τον κανόνα</h3></div>
+      <svg class="fig" id="fig-c" role="img" aria-label="Δέντρο του Πυθαγόρα, επίπεδο 4"></svg>
+      <p>Κάνε το ίδιο σε <span class="hl o">κάθε νέο τετράγωνο</span>, ξανά και ξανά. Αυτό λέγεται <strong>αναδρομή</strong>.</p>
+    </article>
+  </div>
+</section>
+<section class="block b-orange" aria-labelledby="s4">
+  <div class="tab"><span class="num">4</span><h2 id="s4">Τα μαθηματικά πίσω από το σχέδιο</h2></div>
+  <p class="math-lead">Ξεκινάμε με ένα τετράγωνο με πλευρά <span class="hl y">1 μονάδα</span> και εξηγούμε <strong>γιατί</strong> ο κώδικας κάνει κάθε υπολογισμό.</p>
+  <div class="math-grid">
+    <article class="math-item m1"><h3><span class="q">1</span>Πώς φτιάχνουμε ένα τετράγωνο;</h3>
+      <p>Ξέρουμε την κάτω πλευρά. Για να βρούμε τις πάνω κορυφές, <strong>στρίβουμε</strong> την πλευρά κατά 90°. Ένα βήμα (dx, dy) γίνεται (−dy, dx):</p>
+      <div class="fbox">(1, 0) &nbsp;→&nbsp; (0, 1)</div>
+      <p>Δηλαδή ένα βήμα «δεξιά» γίνεται ένα βήμα «πάνω». <strong>Στον κώδικα:</strong> <code>p3 = (p2[0] - dy, p2[1] + dx)</code>.</p>
+    </article>
+    <article class="math-item m2"><h3><span class="q">2</span>Το ορθογώνιο ισοσκελές τρίγωνο</h3>
+      <p>Το τρίγωνο πάνω στο τετράγωνο έχει μία <strong>ορθή γωνία</strong> στην κορυφή και δύο ίσες γωνίες στη βάση:</p>
+      <div class="fbox green">90° + 45° + 45° = 180°</div>
+      <p>Η κορυφή του βρίσκεται πάνω από τη μέση της βάσης, σε ύψος ίσο με το μισό της βάσης. <strong>Στον κώδικα:</strong> η γραμμή <code>top = (...)</code>.</p>
+    </article>
+    <article class="math-item m3"><h3><span class="q">3</span>Το Πυθαγόρειο θεώρημα με εμβαδά</h3>
+      <svg class="fig" id="fig-pyth" role="img" aria-label="Τετράγωνο με εμβαδόν 1 και δύο τετράγωνα με εμβαδόν 1/2 πάνω στις κάθετες πλευρές του τριγώνου" style="height:170px"></svg>
+      <p>Η υποτείνουσα του τριγώνου είναι η πλευρά του μεγάλου τετραγώνου, ίση με 1. Οι δύο κάθετες πλευρές είναι ίσες, άρα:</p>
+      <div class="fbox blue">1² = α² + α² &nbsp;→&nbsp; α² = 1/2</div>
+    </article>
+    <article class="math-item m4"><h3><span class="q">4</span>Πόσο μικραίνει κάθε τετράγωνο;</h3>
+      <p>Αφού α² = 1/2, η πλευρά είναι α = √(1/2) ≈ 0,71. Κάθε νέο τετράγωνο έχει πλευρά × 0,71:</p>
+      <div class="table"><span class="th">Επίπεδο</span><span class="th">Πλευρά</span><span class="th">Εμβαδόν</span><span>0</span><span>1</span><span>1</span><span>1</span><span>≈ 0,71</span><span>1/2</span><span>2</span><span>0,5</span><span>1/4</span><span>3</span><span>≈ 0,35</span><span>1/8</span><span>4</span><span>0,25</span><span>1/16</span></div>
+      <p>Κάθε δύο επίπεδα η πλευρά γίνεται μισή, γιατί 0,71 × 0,71 ≈ 0,5.</p>
+    </article>
+    <article class="math-item m5"><h3><span class="q">5</span>Πόσα τετράγωνα έχει το δέντρο;</h3>
+      <p>Κάθε τετράγωνο φυτρώνει <strong>2</strong> νέα. Τα νέα τετράγωνα σε κάθε επίπεδο είναι 1, 2, 4, 8, … και τα προσθέτουμε:</p>
+      <div class="fbox pink">1 + 2 + 4 + 8 = 15 &nbsp;(επίπεδο 3)</div>
+      <p>Γενικά, στο επίπεδο ν το δέντρο έχει 2<sup>ν+1</sup> − 1 τετράγωνα. <strong>Στον κώδικα:</strong> οι δύο κλήσεις της <code>tree</code>.</p>
+    </article>
+    <article class="math-item m6"><h3><span class="q">6</span>Το εμβαδόν κάθε «γενιάς»</h3>
+      <p>Σε κάθε επίπεδο έχουμε διπλάσια τετράγωνα, αλλά το καθένα έχει το μισό εμβαδόν:</p>
+      <div class="fbox blue">2 × 1/2 = 1 &nbsp;&nbsp; 4 × 1/4 = 1 &nbsp;&nbsp; 8 × 1/8 = 1</div>
+      <p>Κάθε γενιά τετραγώνων έχει πάντα εμβαδόν <strong>1</strong>, όσο και ο κορμός! Στα ψηλά επίπεδα όμως τα κλαδιά αρχίζουν να πέφτουν το ένα πάνω στο άλλο.</p>
+    </article>
+  </div>
+  <div class="answer">Συμπέρασμα: <span>κάθε τετράγωνο γεννά 2 μικρότερα, και κάθε γενιά έχει πάντα εμβαδόν 1</span></div>
+  <div class="bridge"><strong>Από τα μαθηματικά στην Python</strong><p>Η στροφή (−dy, dx) χτίζει κάθε τετράγωνο, το <code>top</code> βρίσκει την κορυφή του ορθογώνιου ισοσκελούς τριγώνου και οι δύο κλήσεις της <code>tree</code> φυτρώνουν τα δύο κλαδιά.</p></div>
+  <div class="did-you-know"><strong>Ήξερες ότι;</strong><p>Αν το τρίγωνο δεν ήταν ισοσκελές, π.χ. με γωνίες 30° και 60°, το ένα κλαδί θα ήταν μεγαλύτερο από το άλλο και το δέντρο θα έγερνε σαν να το φυσάει ο αέρας. Το Πυθαγόρειο θεώρημα όμως θα ίσχυε πάλι!</p></div>
+</section>
+<section class="block b-purple" aria-labelledby="s5">
+  <div class="tab"><span class="num">5</span><h2 id="s5">Γράψε και τρέξε Python</h2></div>
+  <p class="lab-guide">Οι γραμμές με <code>#</code> είναι σχόλια που εξηγούν κάθε εντολή. Ξεκίνα αλλάζοντας μόνο το <code>COLOR = "green"</code> και το <code>LEVEL = 6</code>, και πάτησε <strong>«Εκτέλεση Python»</strong>.</p>
+  <div class="workspace">
+    <article class="panel p-code">
+      <div class="panel-head"><div><h3>Ο κώδικάς σου</h3><p>Python 3 στον browser, μέσω Pyodide</p></div><span class="tag">main.py</span></div>
+      <div class="editor-wrap"><pre id="highlight" aria-hidden="true" class="editor-highlight"><code id="highlightCode"></code></pre><textarea class="editor" id="code" spellcheck="false" aria-label="Επεξεργαστής κώδικα Python" wrap="off"></textarea></div>
+      <div class="actions"><button class="primary" id="run">▶ Εκτέλεση Python</button><button class="secondary" id="reset">↺ Αρχικός κώδικας</button><button class="secondary" id="copy">⧉ Αντιγραφή</button></div>
+      <div id="status" class="status" role="status" aria-live="polite">Το σχέδιο εμφανίζεται αμέσως. Για να τρέξει ο κώδικας Python που αλλάζεις, χρειάζεται σύνδεση στο διαδίκτυο.</div>
+    </article>
+    <article class="panel p-draw">
+      <div class="panel-head"><div><h3>Το δέντρο σου</h3><p>Δοκίμασε διαφορετικά επίπεδα επανάληψης.</p></div><span class="tag" id="countBadge">127 τετράγωνα</span></div>
+      <div class="preview"><canvas id="canvas" aria-label="Το δέντρο του Πυθαγόρα σου"></canvas></div>
+      <div class="controls">
+        <div class="range-label"><label for="level">Επίπεδο επανάληψης</label><strong id="levelText">6</strong></div><input id="level" type="range" min="0" max="10" value="6"/><div class="mini-row"><span>0 · Ένα τετράγωνο</span><span>10 · 2.047 τετράγωνα</span></div>
+      </div>
+      <div class="callout">💡 Κάθε νέο επίπεδο προσθέτει <strong>διπλάσια</strong> τετράγωνα από το προηγούμενο. Άλλαξε το επίπεδο ή τον κώδικα και δες τη διαφορά.</div>
+    </article>
+  </div>
+</section>
+
+<div class="next"><span class="go" aria-hidden="true">➜</span><p><b>Πρόκληση:</b> Πόσα τετράγωνα έχει το δέντρο στο επίπεδο 5 και πόση είναι η πλευρά των μικρότερων τετραγώνων; Υπολόγισέ το με το χέρι και έλεγξέ το με το slider!</p></div>
+<details class="solution"><summary>Δες τη λύση <small>(δοκίμασε πρώτα μόνος σου!)</small></summary>
+<div class="sol-body">
+<p><strong>Πόσα τετράγωνα;</strong> Προσθέτουμε τα νέα τετράγωνα κάθε επιπέδου, από το 0 έως το 5. Κάθε φορά είναι διπλάσια:</p>
+<div class="fbox">1 + 2 + 4 + 8 + 16 + 32 = 63</div>
+<p>Με δυνάμεις: 2⁶ − 1 = 64 − 1 = 63.</p>
+<p><strong>Πόση είναι η πλευρά των μικρότερων;</strong> Κάθε επίπεδο πολλαπλασιάζει την πλευρά επί √(1/2) ≈ 0,71, ενώ κάθε δύο επίπεδα τη μειώνει στο μισό:</p>
+<div class="fbox pink">1 → 0,71 → 0,5 → 0,35 → 0,25 → 0,18</div>
+<p>Στο επίπεδο 4 η πλευρά είναι 1/2 × 1/2 = 1/4 = 0,25, και στο επίπεδο 5 είναι 0,25 × 0,71 ≈ 0,18. Το εμβαδόν τους είναι (1/2)⁵ = 1/32.</p>
+<p class="final">Απάντηση: 63 τετράγωνα, με μικρότερη πλευρά περίπου 0,18 (εμβαδόν 1/32)</p>
+</div></details>
+
+<nav class="lab-pager" aria-label="Άλλα εργαστήρια"><a href="../sierpinski-tetrahedron/">← Προηγούμενο: Τετράεδρο Sierpinski</a><a class="next-lab" href="../">Όλα τα εργαστήρια</a></nav>
+
+<footer>Εκπαιδευτικό εργαστήριο για fractals, γεωμετρία και υπολογιστική σκέψη. Δεν χρειάζεται λογαριασμός.</footer>
+</main>
+<script src="../assets/draw2d.js"></script>
+<script src="../assets/lab.js"></script>
+<script>
+
+const INITIAL = "# ΔΕΝΤΡΟ ΠΥΘΑΓΟΡΑ — ΜΑΘΑΙΝΩ PYTHON ΒΗΜΑ ΒΗΜΑ\n# Οι γραμμές που αρχίζουν με # είναι σχόλια.\n# Εξηγούν τον κώδικα, αλλά η Python ΔΕΝ τις εκτελεί.\n\n# ΒΗΜΑ 1: Διαλέγουμε επίπεδο και χρώμα.\n# Δοκίμασε LEVEL = 0, 1, 2, ... έως 10.\nLEVEL = 6\n# Δοκίμασε \"red\", \"blue\", \"green\", \"purple\" ή \"brown\".\nCOLOR = \"green\"\n\n# ΒΗΜΑ 2: Η αναδρομική συνάρτηση.\n# p1, p2 = η κάτω πλευρά του τετραγώνου, από αριστερά προς δεξιά.\ndef tree(p1, p2, level):\n    # Πόσο προχωράμε στον x και στον y κατά μήκος της πλευράς.\n    dx = p2[0] - p1[0]\n    dy = p2[1] - p1[1]\n\n    # ΒΗΜΑ 3: Χτίζουμε το τετράγωνο.\n    # Στρίβουμε την πλευρά κατά 90°: το (dx, dy) γίνεται (-dy, dx).\n    # Έτσι βρίσκουμε τις δύο πάνω κορυφές.\n    p3 = (p2[0] - dy, p2[1] + dx)\n    p4 = (p1[0] - dy, p1[1] + dx)\n    square = [p1, p2, p3, p4]\n\n    # Αν το επίπεδο είναι 0, κρατάμε μόνο αυτό το τετράγωνο.\n    if level == 0:\n        return [square]\n\n    # ΒΗΜΑ 4: Η κορυφή του ορθογώνιου ισοσκελούς τριγώνου.\n    # Ξεκινάμε από τη μέση της πάνω πλευράς (p4, p3)\n    # και ανεβαίνουμε κατά το μισό της στροφής των 90°.\n    top = ((p4[0] + p3[0]) / 2 - dy / 2,\n           (p4[1] + p3[1]) / 2 + dx / 2)\n\n    # ΑΝΑΔΡΟΜΗ! Δύο νέα δέντρα, ένα σε κάθε κάθετη πλευρά\n    # του τριγώνου: (p4, top) αριστερά και (top, p3) δεξιά.\n    return ([square]\n            + tree(p4, top, level - 1)\n            + tree(top, p3, level - 1))\n\n# ΒΗΜΑ 5: Ξεκινάμε με ένα τετράγωνο πλευράς 1.\nsquares = tree((0, 0), (1, 0), LEVEL)\n\n# ΤΕΛΟΣ! Η ιστοσελίδα ζωγραφίζει τα squares με το COLOR.\n# ΠΕΙΡΑΜΑ: Άλλαξε COLOR = \"brown\" και LEVEL = 9.\n";
+const $ = s => document.querySelector(s);
+function tree(p1, p2, n) {
+  const dx = p2[0] - p1[0], dy = p2[1] - p1[1];
+  const p3 = [p2[0] - dy, p2[1] + dx], p4 = [p1[0] - dy, p1[1] + dx], sq = [p1, p2, p3, p4];
+  if (n === 0) return [sq];
+  const top = [(p4[0] + p3[0]) / 2 - dy / 2, (p4[1] + p3[1]) / 2 + dx / 2];
+  return [sq, ...tree(p4, top, n - 1), ...tree(top, p3, n - 1)];
+}
+const squares = n => tree([0, 0], [1, 0], n);
+FL2D.drawSVG($('#fig-hero'), { polygons: squares(9) }, '#3f9d58', { fillOpacity: 0.8, edgeWidth: 0.0015 });
+FL2D.drawSVG($('#fig-a'), { polygons: squares(0) }, '#e0313b', { fillOpacity: 0.3, edgeWidth: 0.012 });
+FL2D.drawSVG($('#fig-b'), { polygons: squares(1) }, '#e2508c', { fillOpacity: 0.45, edgeWidth: 0.008 });
+$('#fig-b').insertAdjacentHTML('beforeend', '<path d="M0 -1L0.5 -1.5L1 -1Z" fill="#fff3a6" stroke="#e2508c" stroke-width="0.012" stroke-dasharray="0.04 0.03"/>');
+FL2D.drawSVG($('#fig-c'), { polygons: squares(4) }, '#f08a1c', { fillOpacity: 0.8, edgeWidth: 0.004 });
+// Το Πυθαγόρειο θεώρημα με εμβαδά: 1 = 1/2 + 1/2.
+FL2D.drawSVG($('#fig-pyth'), { polygons: squares(1) }, '#2c6fd6', { fillOpacity: 0.25, edgeWidth: 0.008 });
+{
+  const svg = $('#fig-pyth');
+  svg.insertAdjacentHTML('beforeend', '<path d="M0 -1L0.5 -1.5L1 -1Z" fill="#fff3a6" stroke="#2c6fd6" stroke-width="0.01"/>');
+  const label = (x, y, t, size) => svg.insertAdjacentHTML('beforeend', '<text x="' + x + '" y="' + (-y) + '" font-size="' + size + '" text-anchor="middle" dominant-baseline="central" font-family="Playpen Sans, cursive" font-weight="800" fill="#1f2a5c">' + t + '</text>');
+  label(0.5, 0.5, 'εμβαδόν 1', 0.15); label(0.0, 1.5, '1/2', 0.14); label(1.0, 1.5, '1/2', 0.14);
+  // σήμα ορθής γωνίας στην κορυφή του τριγώνου
+  svg.insertAdjacentHTML('beforeend', '<path d="M0.43 -1.43L0.5 -1.36L0.57 -1.43" fill="none" stroke="#1f2a5c" stroke-width="0.012"/>');
+}
+const canvas = $('#canvas');
+FractalLab.start({
+  initial: INITIAL, outputVar: 'squares', level: { min: 0, max: 10, value: 6 }, color: 'green', maxItems: 8200,
+  preview: v => squares(v.LEVEL),
+  validate: items => items.every(s => Array.isArray(s) && s.length >= 3 && s.length <= 8 && s.every(p => Array.isArray(p) && p.length === 2 && p.every(Number.isFinite))) ? null : 'Κάθε τετράγωνο πρέπει να είναι μια λίστα με σημεία (x, y).',
+  render: (items, color) => FL2D.drawCanvas(canvas, { polygons: items }, color, { edgeWidth: items.length > 500 ? 0.3 : 0.6 }),
+  countLabel: items => items.length.toLocaleString('el-GR') + (items.length === 1 ? ' τετράγωνο' : ' τετράγωνα')
+});
+
+</script></body></html>
