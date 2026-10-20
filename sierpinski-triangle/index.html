@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="el"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Εργαστήριο Fractals · Τρίγωνο Sierpinski</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/lab.css">
+</head>
+<body><main class="sheet">
+<nav class="lab-nav" aria-label="Fractal Lab"><a href="../">← Όλα τα εργαστήρια</a><span>Fractal Lab | Εργαστήριο 3</span></nav>
+
+<header class="sheet-head">
+  <div class="title-card">
+    <h1><span class="t1">Εργαστήριο Fractals –</span> <span class="t2">Τρίγωνο Sierpinski</span></h1>
+    <p>Τρύπες μέσα σε τρύπες με Python, βήμα-βήμα | 1 διδακτική ώρα</p>
+  </div>
+  <aside class="brand-card" aria-label="Fractal Lab">
+    <strong>Fractal Lab</strong>
+    <span>Μαθηματικά &amp; Python<br>για το Γυμνάσιο</span>
+    <em>Χωρίς λογαριασμό</em>
+  </aside>
+</header>
+
+<section class="block b-pink" aria-labelledby="s1">
+  <div class="tab"><span class="num">1</span><h2 id="s1">Ένα τρίγωνο γεμάτο τρύπες</h2></div>
+  <div class="intro">
+    <div>
+      <p>Ένα <strong>fractal</strong> έχει <span class="hl y">λεπτομέρειες σε κάθε κλίμακα</span>: όσο κι αν «ζουμάρεις», βρίσκεις ξανά το ίδιο μοτίβο. Αυτό λέγεται <span class="hl p">αυτοομοιότητα</span>.</p>
+      <p>Το <span class="hl o">1915</span>, ο Πολωνός μαθηματικός <strong>Βάτσλαβ Σιερπίνσκι (Wacław Sierpiński)</strong> περιέγραψε ένα σχήμα με έναν πολύ απλό κανόνα: ενώνεις τα <span class="hl g">μέσα των πλευρών</span> ενός τριγώνου, βγάζεις το <span class="hl g">μεσαίο τρίγωνο</span> και κάνεις το ίδιο στα 3 που μένουν, ξανά και ξανά.</p>
+      <p>Το αποτέλεσμα είναι το <strong>τρίγωνο Sierpinski</strong>. Σε κάθε βήμα <span class="hl v">το εμβαδόν του μικραίνει</span>, ενώ οι γραμμές του γίνονται όλο και περισσότερες.</p>
+      <div class="goals">
+        <h3>Στόχοι του μαθήματος</h3>
+        <ol>
+          <li><b>Σ1</b><span>Να βρίσκεις το μέσο ενός ευθύγραμμου τμήματος.</span></li>
+          <li><b>Σ2</b><span>Να υπολογίζεις πόσα τρίγωνα έχει κάθε επίπεδο (1, 3, 9, 27, …).</span></li>
+          <li><b>Σ3</b><span>Να υπολογίζεις με κλάσματα πόσο εμβαδόν μένει σε κάθε βήμα.</span></li>
+          <li><b>Σ4</b><span>Να διαβάζεις και να αλλάζεις κώδικα Python που καλεί τον εαυτό του (αναδρομή).</span></li>
+        </ol>
+      </div>
+    </div>
+    <div class="figure">
+      <p class="note">Κάθε γωνία του τριγώνου είναι ένα μικρότερο αντίγραφο ολόκληρου του σχήματος!</p>
+      <svg class="arrow" viewBox="0 0 90 46" aria-hidden="true"><path d="M70 4 C 60 30, 30 36, 12 38" fill="none" stroke="#3f9d58" stroke-width="2.5" stroke-linecap="round"/><path d="M22 30 L11 38.5 L24 43" fill="none" stroke="#3f9d58" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="fig-box"><svg id="fig-hero" role="img" aria-label="Τρίγωνο Sierpinski, επίπεδο 4"></svg></div>
+    </div>
+  </div>
+</section>
+<section class="block b-green" aria-labelledby="s2">
+  <div class="tab"><span class="num">2</span><h2 id="s2">Βασικές ιδέες</h2></div>
+  <div class="chips">
+    <div class="chip c1">Αρχή<small>ένα τρίγωνο</small></div>
+    <div class="chip c2">÷ 2<small>τα μέσα των πλευρών</small></div>
+    <div class="chip c3">1 → 4<small>τρίγωνα με τα μέσα</small></div>
+    <div class="chip c4">4 − 1 = 3<small>βγάζουμε το μεσαίο</small></div>
+    <div class="chip c5">× 3<small>τρίγωνα σε κάθε επίπεδο</small></div>
+    <div class="chip c6">LEVEL 0–7<small>πόσες επαναλήψεις</small></div>
+  </div>
+</section>
+<section class="block b-blue" aria-labelledby="s3">
+  <div class="tab"><span class="num">3</span><h2 id="s3">Πώς φτιάχνεται το τρίγωνο</h2></div>
+  <div class="steps">
+    <article class="step sA">
+      <div class="step-head"><span class="letter">A</span><h3>Ξεκίνα με τρίγωνο</h3></div>
+      <svg class="fig" id="fig-a" role="img" aria-label="Ισόπλευρο τρίγωνο"></svg>
+      <p>Σχεδίασε ένα <span class="hl y">ισόπλευρο τρίγωνο</span>. Αυτό είναι το επίπεδο 0.</p>
+    </article>
+    <article class="step sB">
+      <div class="step-head"><span class="letter">B</span><h3>Ένωσε τα μέσα</h3></div>
+      <svg class="fig" id="fig-b" role="img" aria-label="Τρίγωνο Sierpinski, επίπεδο 1, με τη μεσαία τρύπα"></svg>
+      <p>Βρες το <span class="hl p">μέσο κάθε πλευράς</span> και ένωσέ τα. Γίνονται 4 ίσα τρίγωνα. Βγάλε το μεσαίο: μένουν 3.</p>
+    </article>
+    <article class="step sC">
+      <div class="step-head"><span class="letter">C</span><h3>Επανάλαβε τον κανόνα</h3></div>
+      <svg class="fig" id="fig-c" role="img" aria-label="Τρίγωνο Sierpinski, επίπεδο 3"></svg>
+      <p>Κάνε το ίδιο σε <span class="hl o">καθένα από τα 3 τρίγωνα</span>, ξανά και ξανά. Αυτό λέγεται <strong>αναδρομή</strong>.</p>
+    </article>
+  </div>
+</section>
+<section class="block b-orange" aria-labelledby="s4">
+  <div class="tab"><span class="num">4</span><h2 id="s4">Τα μαθηματικά πίσω από το σχέδιο</h2></div>
+  <p class="math-lead">Ξεκινάμε με ένα ισόπλευρο τρίγωνο με πλευρά <span class="hl y">16 μονάδες</span> και εξηγούμε <strong>γιατί</strong> ο κώδικας κάνει κάθε υπολογισμό.</p>
+  <div class="math-grid">
+    <article class="math-item m1"><h3><span class="q">1</span>Πώς βρίσκουμε το μέσο;</h3>
+      <p>Το μέσο ενός τμήματος βρίσκεται ακριβώς στη μέση: παίρνουμε τον <strong>μέσο όρο</strong> των x και τον μέσο όρο των y. Για A(0, 0) και B(16, 0):</p>
+      <div class="fbox">(0 + 16) ÷ 2 = 8 &nbsp;→&nbsp; μέσο (8, 0)</div>
+      <p><strong>Στον κώδικα:</strong> <code>mid(p, q)</code> επιστρέφει <code>((p[0] + q[0]) / 2, (p[1] + q[1]) / 2)</code>.</p>
+    </article>
+    <article class="math-item m2"><h3><span class="q">2</span>Γιατί γίνονται 4 τρίγωνα;</h3>
+      <p>Οι τρεις γραμμές που ενώνουν τα μέσα κόβουν το τρίγωνο σε <strong>4 ίσα ισόπλευρα τρίγωνα</strong>, με τη μισή πλευρά το καθένα:</p>
+      <div class="fbox blue">16 ÷ 2 = 8</div>
+      <p>Τα 3 είναι στις γωνίες και το 4ο, ανάποδο, στη μέση. Αυτό το μεσαίο είναι η τρύπα.</p>
+    </article>
+    <article class="math-item m3"><h3><span class="q">3</span>Γιατί καλούμε 3 φορές τη συνάρτηση;</h3>
+      <p>Κρατάμε μόνο τα 3 τρίγωνα των γωνιών, άρα η <code>sierpinski</code> καλεί τον εαυτό της <strong>3 φορές</strong>:</p>
+      <div class="fbox green">4 − 1 = 3</div>
+      <p>Το μεσαίο τρίγωνο <code>(ab, bc, ca)</code> δεν το στέλνουμε πουθενά. Έτσι «φτιάχνεται» η τρύπα: απλώς δεν το ζωγραφίζουμε.</p>
+    </article>
+    <article class="math-item m4"><h3><span class="q">4</span>Πόσα τρίγωνα έχει κάθε επίπεδο;</h3>
+      <p>Κάθε τρίγωνο γίνεται 3 μικρότερα, άρα κάθε επίπεδο πολλαπλασιάζει επί 3:</p>
+      <div class="table"><span class="th">Επίπεδο</span><span class="th">Τρίγωνα</span><span class="th">Πλευρά</span><span>0</span><span>1</span><span>16</span><span>1</span><span>3</span><span>8</span><span>2</span><span>3 × 3 = 9</span><span>4</span><span>3</span><span>9 × 3 = 27</span><span>2</span><span>4</span><span>27 × 3 = 81</span><span>1</span></div>
+      <p>Το <code>LEVEL</code> λέει στην Python πόσες φορές θα επαναλάβει τον κανόνα.</p>
+    </article>
+    <article class="math-item m5"><h3><span class="q">5</span>Τι μένει από το εμβαδόν;</h3>
+      <p>Σε κάθε βήμα κρατάμε 3 από τα 4 ίσα κομμάτια, δηλαδή τα <strong>3/4</strong> του εμβαδού:</p>
+      <div class="fbox pink">3/4 = 0,75 &nbsp;→&nbsp; 9/16 ≈ 0,56 &nbsp;→&nbsp; 27/64 ≈ 0,42 &nbsp;→&nbsp; 81/256 ≈ 0,32</div>
+      <p>Το εμβαδόν μικραίνει συνεχώς. Αν συνεχίζαμε για πάντα, θα πλησίαζε το <strong>μηδέν</strong>.</p>
+    </article>
+    <article class="math-item m6"><h3><span class="q">6</span>Και η περίμετρος;</h3>
+      <p>Αν προσθέσουμε τις περιμέτρους όλων των τριγώνων, σε κάθε βήμα το σύνολο γίνεται <strong>× 3/2</strong>:</p>
+      <div class="fbox blue">48 → 72 → 108 → 162</div>
+      <p>Παράξενο αλλά αληθινό: όσο μικραίνει το εμβαδόν, τόσο μεγαλώνει το μήκος των γραμμών. Αυτό συμβαίνει σε πολλά fractals.</p>
+    </article>
+  </div>
+  <div class="answer">Συμπέρασμα: <span>κάθε επίπεδο τριπλασιάζει τα τρίγωνα και κρατά τα 3/4 του εμβαδού</span></div>
+  <div class="bridge"><strong>Από τα μαθηματικά στην Python</strong><p>Η <code>mid</code> βρίσκει τα μέσα με τον μέσο όρο, οι τρεις κλήσεις της <code>sierpinski</code> κρατούν τα τρίγωνα των γωνιών και το μεσαίο τρίγωνο μένει έξω: αυτή είναι η τρύπα.</p></div>
+  <div class="did-you-know"><strong>Ήξερες ότι;</strong><p>Αν στο τρίγωνο του Pascal χρωματίσεις μόνο τους περιττούς αριθμούς, εμφανίζεται το τρίγωνο Sierpinski!</p></div>
+</section>
+<section class="block b-purple" aria-labelledby="s5">
+  <div class="tab"><span class="num">5</span><h2 id="s5">Γράψε και τρέξε Python</h2></div>
+  <p class="lab-guide">Οι γραμμές με <code>#</code> είναι σχόλια που εξηγούν κάθε εντολή. Ξεκίνα αλλάζοντας μόνο το <code>COLOR = "green"</code> και το <code>LEVEL = 4</code>, και πάτησε <strong>«Εκτέλεση Python»</strong>.</p>
+  <div class="workspace">
+    <article class="panel p-code">
+      <div class="panel-head"><div><h3>Ο κώδικάς σου</h3><p>Python 3 στον browser, μέσω Pyodide</p></div><span class="tag">main.py</span></div>
+      <div class="editor-wrap"><pre id="highlight" aria-hidden="true" class="editor-highlight"><code id="highlightCode"></code></pre><textarea class="editor" id="code" spellcheck="false" aria-label="Επεξεργαστής κώδικα Python" wrap="off"></textarea></div>
+      <div class="actions"><button class="primary" id="run">▶ Εκτέλεση Python</button><button class="secondary" id="reset">↺ Αρχικός κώδικας</button><button class="secondary" id="copy">⧉ Αντιγραφή</button></div>
+      <div id="status" class="status" role="status" aria-live="polite">Το σχέδιο εμφανίζεται αμέσως. Για να τρέξει ο κώδικας Python που αλλάζεις, χρειάζεται σύνδεση στο διαδίκτυο.</div>
+    </article>
+    <article class="panel p-draw">
+      <div class="panel-head"><div><h3>Το fractal σου</h3><p>Δοκίμασε διαφορετικά επίπεδα επανάληψης.</p></div><span class="tag" id="countBadge">81 τρίγωνα</span></div>
+      <div class="preview"><canvas id="canvas" aria-label="Το τρίγωνο Sierpinski σου"></canvas></div>
+      <div class="controls">
+        <div class="range-label"><label for="level">Επίπεδο επανάληψης</label><strong id="levelText">4</strong></div><input id="level" type="range" min="0" max="7" value="4"/><div class="mini-row"><span>0 · Ένα τρίγωνο</span><span>7 · 2.187 τρίγωνα</span></div>
+      </div>
+      <div class="callout">💡 Κάθε νέο επίπεδο <strong>τριπλασιάζει</strong> τα τρίγωνα. Άλλαξε το επίπεδο ή τον κώδικα και δες τη διαφορά.</div>
+    </article>
+  </div>
+</section>
+
+<div class="next"><span class="go" aria-hidden="true">➜</span><p><b>Πρόκληση:</b> Πόσα τρίγωνα έχει το επίπεδο 6 και τι μέρος του αρχικού εμβαδού μένει; Υπολόγισέ το με το χέρι και έλεγξέ το με το slider!</p></div>
+
+<nav class="lab-pager" aria-label="Άλλα εργαστήρια"><a href="https://izzydi.github.io/menger-sponge/">← Προηγούμενο: Σφουγγάρι Menger</a><a class="next-lab" href="../sierpinski-tetrahedron/">Επόμενο: Τετράεδρο Sierpinski (3D) →</a></nav>
+
+<footer>Εκπαιδευτικό εργαστήριο για fractals, γεωμετρία και υπολογιστική σκέψη. Δεν χρειάζεται λογαριασμός.</footer>
+</main>
+<script src="../assets/draw2d.js"></script>
+<script src="../assets/lab.js"></script>
+<script>
+
+const INITIAL = "# ΤΡΙΓΩΝΟ SIERPINSKI — ΜΑΘΑΙΝΩ PYTHON ΒΗΜΑ ΒΗΜΑ\n# Οι γραμμές που αρχίζουν με # είναι σχόλια.\n# Εξηγούν τον κώδικα, αλλά η Python ΔΕΝ τις εκτελεί.\n\n# ΒΗΜΑ 1: Διαλέγουμε επίπεδο και χρώμα.\n# Δοκίμασε LEVEL = 0, 1, 2, ... έως 7.\nLEVEL = 4\n# Δοκίμασε \"red\", \"blue\", \"green\", \"purple\" ή \"orange\".\nCOLOR = \"green\"\n\n# Η sqrt(3) σημαίνει «τετραγωνική ρίζα του 3».\nfrom math import sqrt\n\n# ΒΗΜΑ 2: Μια συνάρτηση που βρίσκει το μέσο ενός τμήματος.\n# p και q είναι σημεία (x, y).\ndef mid(p, q):\n    # Το μέσο έχει τον μέσο όρο των x και τον μέσο όρο των y.\n    return ((p[0] + q[0]) / 2, (p[1] + q[1]) / 2)\n\n# ΒΗΜΑ 3: Η αναδρομική συνάρτηση.\n# a, b, c = οι τρεις κορυφές του τριγώνου.\ndef sierpinski(a, b, c, level):\n    # Αν το επίπεδο είναι 0, κρατάμε το τρίγωνο όπως είναι.\n    if level == 0:\n        return [(a, b, c)]\n\n    # Τα μέσα των τριών πλευρών.\n    ab = mid(a, b)\n    bc = mid(b, c)\n    ca = mid(c, a)\n\n    # ΑΝΑΔΡΟΜΗ! Καλούμε τη συνάρτηση 3 φορές,\n    # μία για κάθε γωνία του τριγώνου.\n    # Το μεσαίο τρίγωνο (ab, bc, ca) δεν το καλούμε:\n    # αυτό είναι η τρύπα!\n    return (sierpinski(a, ab, ca, level - 1)\n            + sierpinski(ab, b, bc, level - 1)\n            + sierpinski(ca, bc, c, level - 1))\n\n# ΒΗΜΑ 4: Ένα ισόπλευρο τρίγωνο με πλευρά 16.\nA = (0, 0)\nB = (16, 0)\nC = (8, 8 * sqrt(3))\ntriangles = sierpinski(A, B, C, LEVEL)\n\n# ΤΕΛΟΣ! Η ιστοσελίδα ζωγραφίζει τα triangles με το COLOR.\n# ΠΕΙΡΑΜΑ: Άλλαξε COLOR = \"purple\" και LEVEL = 6.\n";
+const mid = (p, q) => [(p[0] + q[0]) / 2, (p[1] + q[1]) / 2];
+function sierp(a, b, c, n) { if (n === 0) return [[a, b, c]]; const ab = mid(a, b), bc = mid(b, c), ca = mid(c, a); return [...sierp(a, ab, ca, n - 1), ...sierp(ab, b, bc, n - 1), ...sierp(ca, bc, c, n - 1)]; }
+const T = [[0, 0], [16, 0], [8, 8 * Math.sqrt(3)]];
+const tri = n => sierp(T[0], T[1], T[2], n);
+const $ = s => document.querySelector(s);
+FL2D.drawSVG($('#fig-hero'), { polygons: tri(4) }, '#3f9d58', { fillOpacity: 0.9, edgeWidth: 0.003 });
+FL2D.drawSVG($('#fig-a'), { polygons: tri(0) }, '#e0313b', { fillOpacity: 0.25, edgeWidth: 0.012 });
+FL2D.drawSVG($('#fig-b'), { polygons: tri(1) }, '#e2508c', { fillOpacity: 0.55, edgeWidth: 0.01 });
+$('#fig-b').insertAdjacentHTML('beforeend', '<path d="M8 0L12 ' + (-4 * Math.sqrt(3)).toFixed(4) + 'L4 ' + (-4 * Math.sqrt(3)).toFixed(4) + 'Z" fill="none" stroke="#e2508c" stroke-width="0.16" stroke-dasharray="0.6 0.45"/>');
+FL2D.drawSVG($('#fig-c'), { polygons: tri(3) }, '#f08a1c', { fillOpacity: 0.85, edgeWidth: 0.006 });
+const canvas = $('#canvas');
+FractalLab.start({
+  initial: INITIAL, outputVar: 'triangles', level: { min: 0, max: 7, value: 4 }, color: 'green', maxItems: 7000,
+  preview: v => tri(v.LEVEL),
+  validate: items => items.every(t => Array.isArray(t) && t.length === 3 && t.every(p => Array.isArray(p) && p.length === 2 && p.every(Number.isFinite))) ? null : 'Κάθε τρίγωνο πρέπει να είναι τρία σημεία (x, y).',
+  render: (items, color) => FL2D.drawCanvas(canvas, { polygons: items }, color, { shade: false, fillAlpha: 0.9, edgeWidth: items.length > 500 ? 0.3 : 0.6 }),
+  countLabel: items => items.length.toLocaleString('el-GR') + (items.length === 1 ? ' τρίγωνο' : ' τρίγωνα')
+});
+
+</script></body></html>

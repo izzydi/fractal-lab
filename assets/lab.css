@@ -1,0 +1,187 @@
+:root{
+  --ink:#1f2a5c;--muted:#4b5682;--paper:#ffffff;--grid:#e6eefa;
+  --red:#e0313b;--blue:#2c6fd6;--pink:#e2508c;--green:#3f9d58;--purple:#8a5cf0;--orange:#f08a1c;--teal:#1f9aa8;
+  --hl-yellow:#fff27a;--hl-green:#c9f4c0;--hl-pink:#ffd3e4;--hl-blue:#cfe6ff;--hl-orange:#ffe1b8;--hl-purple:#e8dcff;
+  --hand:'Playpen Sans','Comic Sans MS','Segoe Print',cursive;
+  --wobble:18px 26px 20px 24px / 24px 18px 26px 20px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;color:var(--ink);font:400 17px/1.6 var(--hand);
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:26px 26px}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible,a:focus-visible,canvas:focus-visible{outline:3px solid var(--pink);outline-offset:3px}
+.sheet{max-width:1180px;margin:0 auto;padding:22px 18px 40px}
+
+/* Επικεφαλίδα φύλλου εργασίας */
+.sheet-head{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:stretch}
+.title-card{background:#fffbe8;border:3px solid var(--orange);border-radius:var(--wobble);padding:14px 22px}
+.title-card h1{margin:0;font-size:clamp(28px,4.2vw,46px);line-height:1.15;font-weight:800;letter-spacing:-.5px}
+.title-card h1 .t1{color:var(--red)}.title-card h1 .t2{color:var(--blue)}
+.title-card p{margin:6px 0 0;font-size:clamp(16px,2vw,21px);font-weight:600}
+.brand-card{background:#fff;border:3px solid var(--red);border-radius:16px 22px 18px 20px / 20px 16px 22px 18px;padding:10px 18px;text-align:center;display:flex;flex-direction:column;justify-content:center;min-width:200px}
+.brand-card strong{color:var(--red);font-size:28px;line-height:1.1;font-weight:800}
+.brand-card span{font-size:14px;line-height:1.35}
+.brand-card em{font-style:normal;color:var(--blue);font-weight:700;border-top:2px solid var(--red);margin-top:6px;padding-top:4px;font-size:14px}
+
+/* Ενότητες με αριθμημένο «αυτάκι» */
+.block{position:relative;background:var(--paper);border:3px solid var(--c,var(--pink));border-radius:var(--wobble);padding:0 22px 22px;margin-top:40px}
+.tab{position:relative;top:-24px;margin:0 0 -8px -6px;max-width:calc(100% + 6px);display:inline-flex;align-items:center;gap:10px;background:var(--tab,#ffe6ef);border:3px solid var(--c,var(--pink));border-radius:14px 20px 16px 18px;padding:2px 18px 2px 4px}
+.tab .num{display:grid;place-items:center;flex:none;width:40px;height:40px;border-radius:50%;background:var(--c,var(--pink));color:#fff;font-weight:800;font-size:22px;border:3px solid #fff;margin:-8px 0 -8px -12px;box-shadow:0 0 0 3px var(--c,var(--pink))}
+.tab h2{margin:0;font-size:clamp(21px,2.6vw,29px);font-weight:800;line-height:1.3}
+.b-pink{--c:var(--pink);--tab:#ffe6ef}.b-green{--c:var(--green);--tab:#e3f7e4}.b-blue{--c:var(--blue);--tab:#e2eeff}.b-purple{--c:var(--purple);--tab:#efe6ff}.b-orange{--c:var(--orange);--tab:#fff0dc}
+
+/* Μαρκαδόροι υπογράμμισης */
+.hl{padding:0 .18em;border-radius:3px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.hl.y{background:linear-gradient(transparent 12%,var(--hl-yellow) 12% 90%,transparent 90%)}
+.hl.g{background:linear-gradient(transparent 12%,var(--hl-green) 12% 90%,transparent 90%)}
+.hl.p{background:linear-gradient(transparent 12%,var(--hl-pink) 12% 90%,transparent 90%)}
+.hl.b{background:linear-gradient(transparent 12%,var(--hl-blue) 12% 90%,transparent 90%)}
+.hl.o{background:linear-gradient(transparent 12%,var(--hl-orange) 12% 90%,transparent 90%)}
+.hl.v{background:linear-gradient(transparent 12%,var(--hl-purple) 12% 90%,transparent 90%)}
+code{font-family:Consolas,'Courier New',monospace;font-size:.92em;background:#f2f0ff;color:#5b3fb8;border-radius:5px;padding:1px 5px}
+
+/* Ενότητα 1 */
+.intro{display:grid;grid-template-columns:1.25fr .75fr;gap:22px;align-items:start}
+.intro p{margin:0 0 12px}
+.figure{position:relative;padding-top:6px}
+.note{background:#ecfbe8;border:2px solid var(--green);border-radius:12px 16px 14px 18px;padding:8px 12px;font-size:14.5px;line-height:1.4;transform:rotate(-1.5deg);max-width:260px;margin-left:auto}
+.arrow{display:block;width:90px;height:46px;margin:-2px 0 -10px 40px}
+.iso-box{border:2px dashed #b9c8e6;border-radius:16px;background:#f8fbff;max-width:340px;margin:0 auto;padding:12px}
+.iso-box svg{display:block;width:100%;height:auto}
+.goals{margin-top:6px;border:2.5px dashed var(--purple);border-radius:14px 18px 16px 20px;background:#faf7ff;padding:12px 16px}
+.goals h3{margin:0 0 6px;color:var(--purple);font-size:20px}
+.goals ol{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.goals li{display:flex;gap:10px;align-items:baseline;font-size:15.5px;line-height:1.45}
+.goals li b{flex:none;color:var(--red);border:2px solid var(--red);border-radius:6px;padding:0 6px;font-size:14px;background:#fff}
+
+/* Ενότητα 2: βασικές ιδέες */
+.chips{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.chip{border:2.5px solid var(--cc);background:var(--cb);border-radius:10px 14px 12px 15px;padding:8px 10px;font-size:19px;font-weight:600;text-align:center;line-height:1.3}
+.chip small{display:block;font-size:13.5px;font-weight:500;color:var(--muted)}
+.c1{--cc:#f0a0b8;--cb:#ffeef4}.c2{--cc:#8fbbea;--cb:#eaf4ff}.c3{--cc:#b49be8;--cb:#f2ecff}.c4{--cc:#8fd09b;--cb:#ecfaee}.c5{--cc:#f3b46b;--cb:#fff4e6}.c6{--cc:#7fcbd3;--cb:#e8f9fb}
+
+/* Ενότητα 3: βήματα A/B/C */
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.step{border:2.5px solid var(--sc);border-radius:16px 20px 14px 18px;padding:12px 14px 14px;background:#fff}
+.step-head{display:flex;gap:10px;align-items:center;margin-bottom:6px}
+.letter{flex:none;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--sc);color:#fff;font-weight:800;font-size:20px}
+.step-head h3{margin:0;font-size:19px;line-height:1.25;background:var(--sh);border:2px solid var(--sc);border-radius:10px;padding:3px 10px}
+.step p{margin:6px 0 0;font-size:15.5px;line-height:1.5}
+.step .iso{display:block;width:100%;height:150px;margin:4px 0}
+.sA{--sc:var(--red);--sh:#ffeceb}.sB{--sc:var(--pink);--sh:#ffeaf2}.sC{--sc:var(--orange);--sh:#fff2df}
+
+/* Ενότητα 4: μαθηματικά */
+.math-lead{margin:0 0 14px}
+.math-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.math-item{border:2.5px solid var(--mc);border-radius:16px 20px 15px 19px;padding:14px 16px;background:#fff}
+.math-item h3{margin:0 0 6px;font-size:19px;line-height:1.3}
+.math-item h3 .q{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--mc);color:#fff;font-size:16px;margin-right:6px;vertical-align:1px}
+.math-item p{margin:6px 0;font-size:15.5px;line-height:1.5}
+.fbox{display:table;margin:8px auto;padding:6px 18px;border:2.5px solid var(--fc,#f2c94c);background:var(--fb,#fff8d6);border-radius:10px 13px 11px 14px;font-weight:700;font-size:20px;text-align:center;line-height:1.5}
+.fbox.blue{--fc:#8fbbea;--fb:#eaf4ff}.fbox.pink{--fc:#f0a0b8;--fb:#ffeef4}.fbox.green{--fc:#8fd09b;--fb:#ecfaee}
+.m1{--mc:#e0313b}.m2{--mc:#2c6fd6}.m3{--mc:#3f9d58}.m4{--mc:#8a5cf0}.m5{--mc:#f08a1c}.m6{--mc:#1f9aa8}
+.table{display:grid;grid-template-columns:auto auto auto;gap:2px 16px;justify-content:center;margin:8px 0;font-size:15.5px}
+.table span:nth-child(3n+1){font-weight:600}
+.table span:nth-child(3n+2),.table span:nth-child(3n){font-weight:800;color:var(--blue)}
+.table .th{color:var(--muted)!important;font-weight:600!important;font-size:13.5px}
+.mini-cube{display:block;margin:6px auto;width:150px;height:auto}
+.answer{display:table;margin:18px auto 0;border:3px solid var(--red);background:#fff2f3;border-radius:14px 18px 15px 19px;padding:8px 22px;color:var(--red);font-size:clamp(18px,2.3vw,24px);font-weight:800;text-align:center;line-height:1.4}
+.answer span{color:var(--ink);font-weight:600}
+.bridge{margin-top:16px;border:2.5px solid var(--teal);background:#e9f8fa;border-radius:14px 18px 15px 19px;padding:12px 16px;font-size:15.5px}
+.bridge strong{color:var(--teal)}
+.bridge p{margin:4px 0 0}
+
+/* Ενότητα 5: εργαστήριο */
+.lab-guide{margin:0 0 14px;font-size:15.5px}
+.workspace{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.panel{min-width:0;border:2.5px solid var(--pc);border-radius:16px 20px 15px 19px;background:#fff;overflow:hidden}
+.panel-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:10px 16px;background:var(--ph);border-bottom:2.5px solid var(--pc)}
+.panel-head h3{margin:0;font-size:20px}
+.panel-head p{margin:0;font-size:13.5px;color:var(--muted)}
+.tag{display:inline-block;border:2px solid var(--pc);background:#fff;border-radius:8px;padding:0 10px;font-size:14px;font-weight:700}
+.p-code{--pc:var(--purple);--ph:#f3edff}.p-draw{--pc:var(--blue);--ph:#eaf2ff}
+
+/* Επεξεργάσιμος κώδικας με χρωματισμό σύνταξης, όπως σε IDE. */
+.editor-wrap{position:relative;height:510px;background:#fdfdff;overflow:hidden;border-bottom:2px solid #ece6fb}
+.editor-wrap::before{content:"";position:absolute;top:0;bottom:0;left:10px;width:2px;background:#ffc6d4;z-index:0}
+.editor-wrap .editor,.editor-highlight{position:absolute;inset:0;width:100%;height:100%;margin:0;padding:20px 20px 20px 24px;border:0;font:14px/1.65 Consolas,'Courier New',monospace;tab-size:4;white-space:pre;overflow:auto;box-sizing:border-box}
+.editor-wrap .editor{background:transparent;color:transparent;-webkit-text-fill-color:transparent;caret-color:var(--ink);resize:none;z-index:2;overflow:auto;outline:none}
+.editor-wrap .editor:focus-visible{box-shadow:inset 0 0 0 3px var(--pink)}
+.editor-wrap .editor::selection{background:rgba(44,111,214,.22);-webkit-text-fill-color:transparent}
+.editor-highlight{z-index:1;color:var(--ink);pointer-events:none;scrollbar-width:none;background:transparent}
+.editor-highlight::-webkit-scrollbar{display:none}
+.editor-wrap #highlightCode{display:block;font:inherit;line-height:inherit;letter-spacing:inherit;white-space:inherit;tab-size:inherit;word-spacing:inherit;background:none;color:inherit;padding:0;border-radius:0}
+.editor-wrap .editor,.editor-wrap .editor-highlight,.editor-wrap #highlightCode{font-family:Consolas,'Courier New',monospace;font-size:14px;font-weight:400;line-height:23.1px;letter-spacing:0;word-spacing:0;font-variant-ligatures:none}
+.editor-wrap .editor,.editor-wrap .editor-highlight{overflow-wrap:normal;word-break:normal;text-align:left}
+.py-comment{color:#2f8a4e}.py-keyword{color:#8e3fc4;font-weight:700}.py-string{color:#c4372f}.py-number{color:#d4690f}.py-function{color:#1f64c8}.py-builtin{color:#0f8a8f}.py-operator{color:var(--ink)}
+
+.actions{padding:12px 16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.actions button,.view-actions button{font-size:15px}
+.primary{background:var(--purple);color:#fff;border:2.5px solid #5d3bb8;border-radius:12px 15px 12px 14px;padding:7px 14px;font-weight:800;box-shadow:0 3px 0 #5d3bb8}
+.primary:hover{background:#7748e0}.primary:active{transform:translateY(2px);box-shadow:0 1px 0 #5d3bb8}
+.primary:disabled{opacity:.6;cursor:wait}
+.secondary{background:#fff;color:var(--ink);border:2.5px solid #c9bdf0;border-radius:12px 14px 12px 15px;padding:6px 11px;font-weight:700}
+.secondary:hover{background:#f6f2ff}
+.status{color:var(--muted);font-size:14px;padding:0 16px 14px;min-height:32px}
+.status.error{color:#b3262f}.status.ok{color:#2c7a43}
+.viewer{position:relative;height:380px;background:#fff;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:20px 20px}
+.viewer canvas{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+.viewer canvas:active{cursor:grabbing}
+.viewer .hint{position:absolute;left:10px;bottom:8px;background:#ffffffd9;border:2px solid #cfe0f7;border-radius:9px;padding:1px 9px;font-size:13px;color:var(--muted);pointer-events:none}
+.viewer .fallback{position:absolute;inset:0;display:none;align-items:center;justify-content:center;text-align:center;padding:20px;font-size:15px;color:var(--muted)}
+.viewer.no-3d .fallback{display:flex}.viewer.no-3d canvas,.viewer.no-3d .hint{display:none}
+.view-actions{display:flex;gap:8px;flex-wrap:wrap;padding:10px 16px 0}
+.controls{padding:12px 16px 14px;display:grid;gap:8px}
+.range-label{display:flex;justify-content:space-between;gap:10px;font-weight:700;font-size:16px}
+.range-label strong{display:inline-grid;place-items:center;min-width:34px;height:30px;border:2.5px solid var(--blue);border-radius:9px;color:var(--blue)}
+input[type=range]{width:100%;accent-color:var(--pink)}
+.mini-row{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:13px}
+.callout{padding:12px 16px;border-top:2px solid #e2ecfb;background:#fff9df;font-size:15px}
+
+/* Πλοήγηση ανάμεσα στα εργαστήρια */
+.lab-nav{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 12px;font-size:15px}
+.lab-nav a,.lab-pager a{text-decoration:none;font-weight:700;color:var(--blue);background:#fff;border:2.5px solid #cfe0f7;border-radius:10px 13px 11px 14px;padding:3px 12px}
+.lab-nav a:hover,.lab-pager a:hover{background:#eef5ff}
+.lab-nav a:focus-visible,.lab-pager a:focus-visible{outline:3px solid var(--pink);outline-offset:3px}
+.lab-nav span{color:var(--muted);font-weight:600}
+.lab-pager{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:18px;font-size:16px}
+.lab-pager a{padding:8px 14px}
+.lab-pager .next-lab{margin-left:auto}
+
+/* Κάτω λωρίδα */
+.next{margin-top:26px;display:flex;align-items:center;gap:14px;background:#f1ecff;border:3px solid var(--purple);border-radius:14px 20px 16px 18px;padding:10px 16px}
+.next .go{flex:none;display:grid;place-items:center;width:46px;height:38px;background:#ffe35c;border:2.5px solid #d4a800;border-radius:9px 12px 10px 13px;font-size:22px}
+.next p{margin:0;font-size:clamp(16px,2vw,19px);font-weight:600}
+.next p b{color:var(--red)}
+footer{text-align:center;color:var(--muted);font-size:14px;margin-top:22px}
+
+@media(max-width:850px){
+  .sheet-head,.intro,.workspace,.math-grid{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr}
+  .chips{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .brand-card{min-width:0}
+  .note{margin:0 auto}
+  .editor-wrap{height:340px}
+  .viewer{height:320px}
+  .block{padding:0 14px 16px}
+  .tab{padding-right:12px}
+  .tab h2{font-size:20px}
+}
+
+/* 2D προβολή (καμβάς) */
+.preview{position:relative;height:380px;background:#fff;padding:14px;display:flex;align-items:center;justify-content:center;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:20px 20px}
+.preview canvas{display:block;width:100%;height:100%}
+.fig{display:block;width:100%;height:150px;margin:4px 0}
+.fig-box{border:2px dashed #b9c8e6;border-radius:16px;background:#f8fbff;max-width:340px;margin:0 auto;padding:12px}
+.fig-box svg{display:block;width:100%;height:auto;max-height:320px}
+.param{display:grid;gap:4px}
+.did-you-know{margin-top:14px;border:2.5px dashed var(--orange);background:#fffaf0;border-radius:14px 18px 15px 19px;padding:10px 16px;font-size:15.5px}
+.did-you-know strong{color:var(--orange)}
+.did-you-know p{margin:4px 0 0}
+@media(max-width:850px){.preview{height:320px}}
