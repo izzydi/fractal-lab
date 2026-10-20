@@ -185,3 +185,16 @@ footer{text-align:center;color:var(--muted);font-size:14px;margin-top:22px}
 .did-you-know strong{color:var(--orange)}
 .did-you-know p{margin:4px 0 0}
 @media(max-width:850px){.preview{height:320px}}
+
+/* Λύση της πρόκλησης (πτυσσόμενη) */
+.solution{margin-top:10px;border:2.5px dashed var(--purple);border-radius:14px 18px 15px 19px;background:#fff;padding:0 16px}
+.solution summary{cursor:pointer;list-style:none;padding:10px 0;font-weight:800;color:var(--purple);font-size:17px}
+.solution summary::-webkit-details-marker{display:none}
+.solution summary::before{content:"▸ "}
+.solution[open] summary::before{content:"▾ "}
+.solution summary small{font-weight:600;color:var(--muted);font-size:14px}
+.solution summary:focus-visible{outline:3px solid var(--pink);outline-offset:3px;border-radius:6px}
+.sol-body{padding:0 0 14px;font-size:16px}
+.sol-body p{margin:6px 0}
+.sol-body .fbox{margin:6px 0}
+.sol-body .final{display:inline-block;border:2.5px solid var(--red);background:#fff2f3;color:var(--red);font-weight:800;border-radius:10px 13px 11px 14px;padding:3px 12px;margin-top:6px}
