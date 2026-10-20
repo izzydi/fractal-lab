@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="el"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Εργαστήριο Fractals · Τετράεδρο Sierpinski</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/lab.css">
+</head>
+<body><main class="sheet">
+<nav class="lab-nav" aria-label="Fractal Lab"><a href="../">← Όλα τα εργαστήρια</a><span>Fractal Lab | Εργαστήριο 4</span></nav>
+
+<header class="sheet-head">
+  <div class="title-card">
+    <h1><span class="t1">Εργαστήριο Fractals –</span> <span class="t2">Τετράεδρο Sierpinski</span></h1>
+    <p>Το τρίγωνο Sierpinski στις τρεις διαστάσεις, με Python | 1 διδακτική ώρα</p>
+  </div>
+  <aside class="brand-card" aria-label="Fractal Lab">
+    <strong>Fractal Lab</strong>
+    <span>Μαθηματικά &amp; Python<br>για το Γυμνάσιο</span>
+    <em>Χωρίς λογαριασμό</em>
+  </aside>
+</header>
+
+<section class="block b-pink" aria-labelledby="s1">
+  <div class="tab"><span class="num">1</span><h2 id="s1">Το τρίγωνο Sierpinski στις τρεις διαστάσεις</h2></div>
+  <div class="intro">
+    <div>
+      <p>Στο τρίγωνο Sierpinski κάθε τρίγωνο γινόταν <span class="hl y">3 μικρότερα</span>. Τι γίνεται αν κάνουμε το ίδιο σε ένα στερεό;</p>
+      <p>Ξεκινάμε από ένα <span class="hl b">τετράεδρο</span>, μια πυραμίδα με 4 τριγωνικές έδρες. Βρίσκουμε τα <span class="hl g">μέσα των 6 ακμών</span> του και κρατάμε <span class="hl g">4 μικρότερα τετράεδρα</span>, ένα σε κάθε κορυφή. Το κομμάτι στη μέση μένει άδειο. Μετά κάνουμε το ίδιο σε καθένα, ξανά και ξανά.</p>
+      <p>Το αποτέλεσμα λέγεται <strong>τετράεδρο Sierpinski</strong>, γιατί είναι η τρισδιάστατη εκδοχή του τριγώνου Sierpinski. Έχει μια έκπληξη: σε κάθε βήμα <span class="hl v">ο όγκος του γίνεται μισός</span>, αλλά η επιφάνειά του μένει ίδια!</p>
+      <div class="goals">
+        <h3>Στόχοι του μαθήματος</h3>
+        <ol>
+          <li><b>Σ1</b><span>Να αναγνωρίζεις τις κορυφές, τις ακμές και τις έδρες ενός τετραέδρου.</span></li>
+          <li><b>Σ2</b><span>Να βρίσκεις το μέσο ενός τμήματος στον χώρο, με συντεταγμένες (x, y, z).</span></li>
+          <li><b>Σ3</b><span>Να υπολογίζεις το πλήθος των τετραέδρων (1, 4, 16, …) και τον όγκο με κλάσματα.</span></li>
+          <li><b>Σ4</b><span>Να διαβάζεις και να αλλάζεις κώδικα Python με αναδρομή στις τρεις διαστάσεις.</span></li>
+        </ol>
+      </div>
+    </div>
+    <div class="figure">
+      <p class="note">Κάθε κορυφή είναι ένα μικρότερο τετράεδρο Sierpinski!</p>
+      <svg class="arrow" viewBox="0 0 90 46" aria-hidden="true"><path d="M70 4 C 60 30, 30 36, 12 38" fill="none" stroke="#3f9d58" stroke-width="2.5" stroke-linecap="round"/><path d="M22 30 L11 38.5 L24 43" fill="none" stroke="#3f9d58" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="fig-box"><svg id="fig-hero" role="img" aria-label="Τετράεδρο Sierpinski, επίπεδο 3"></svg></div>
+    </div>
+  </div>
+</section>
+<section class="block b-green" aria-labelledby="s2">
+  <div class="tab"><span class="num">2</span><h2 id="s2">Βασικές ιδέες</h2></div>
+  <div class="chips">
+    <div class="chip c1">Αρχή<small>ένα τετράεδρο</small></div>
+    <div class="chip c2">6 ακμές<small>άρα 6 μέσα</small></div>
+    <div class="chip c3">÷ 2<small>η ακμή σε κάθε βήμα</small></div>
+    <div class="chip c4">1 → 4<small>τετράεδρα, ένα σε κάθε κορυφή</small></div>
+    <div class="chip c5">× 1/2<small>ο όγκος σε κάθε βήμα</small></div>
+    <div class="chip c6">LEVEL 0–5<small>πόσες επαναλήψεις</small></div>
+  </div>
+</section>
+<section class="block b-blue" aria-labelledby="s3">
+  <div class="tab"><span class="num">3</span><h2 id="s3">Πώς χτίζεται το τετράεδρο</h2></div>
+  <div class="steps">
+    <article class="step sA">
+      <div class="step-head"><span class="letter">A</span><h3>Ξεκίνα με τετράεδρο</h3></div>
+      <svg class="fig" id="fig-a" role="img" aria-label="Κανονικό τετράεδρο"></svg>
+      <p>Ένα <span class="hl y">κανονικό τετράεδρο</span> έχει 4 κορυφές, 6 ίσες ακμές και 4 έδρες, ισόπλευρα τρίγωνα. Αυτό είναι το επίπεδο 0.</p>
+    </article>
+    <article class="step sB">
+      <div class="step-head"><span class="letter">B</span><h3>Κράτα τις 4 γωνίες</h3></div>
+      <svg class="fig" id="fig-b" role="img" aria-label="Τετράεδρο Sierpinski, επίπεδο 1"></svg>
+      <p>Βρες το <span class="hl p">μέσο κάθε ακμής</span>. Κράτα τα 4 μικρά τετράεδρα στις κορυφές, με τη μισή ακμή. Η μέση μένει άδεια.</p>
+    </article>
+    <article class="step sC">
+      <div class="step-head"><span class="letter">C</span><h3>Επανάλαβε τον κανόνα</h3></div>
+      <svg class="fig" id="fig-c" role="img" aria-label="Τετράεδρο Sierpinski, επίπεδο 2"></svg>
+      <p>Κάνε το ίδιο σε <span class="hl o">καθένα από τα 4 τετράεδρα</span>, ξανά και ξανά. Αυτό λέγεται <strong>αναδρομή</strong>.</p>
+    </article>
+  </div>
+</section>
+<section class="block b-orange" aria-labelledby="s4">
+  <div class="tab"><span class="num">4</span><h2 id="s4">Τα μαθηματικά πίσω από το σχέδιο</h2></div>
+  <p class="math-lead">Ξεκινάμε με ένα κανονικό τετράεδρο με ακμή <span class="hl y">8 μονάδες</span> και εξηγούμε <strong>γιατί</strong> ο κώδικας κάνει κάθε υπολογισμό.</p>
+  <div class="math-grid">
+    <article class="math-item m1"><h3><span class="q">1</span>Το μέσο στον χώρο</h3>
+      <p>Στον χώρο κάθε σημείο έχει τρεις συντεταγμένες (x, y, z). Το μέσο βρίσκεται με τον <strong>μέσο όρο</strong> και των τριών. Για A(0, 0, 0) και B(8, 0, 0):</p>
+      <div class="fbox">(0 + 8) ÷ 2 = 4 &nbsp;→&nbsp; μέσο (4, 0, 0)</div>
+      <p><strong>Στον κώδικα:</strong> η <code>mid(p, q)</code> κάνει τον μέσο όρο για x, y και z.</p>
+    </article>
+    <article class="math-item m2"><h3><span class="q">2</span>Πόσα μέσα χρειαζόμαστε;</h3>
+      <p>Ένα τετράεδρο έχει 4 κορυφές, 6 ακμές και 4 έδρες. Κάθε ακμή δίνει ένα μέσο:</p>
+      <div class="fbox blue">6 ακμές → 6 μέσα</div>
+      <p><strong>Στον κώδικα:</strong> <code>ab</code>, <code>ac</code>, <code>ad</code>, <code>bc</code>, <code>bd</code>, <code>cd</code>. Το όνομα λέει ποιες δύο κορυφές ενώνει η ακμή.</p>
+    </article>
+    <article class="math-item m3"><h3><span class="q">3</span>Γιατί 4 κλήσεις;</h3>
+      <p>Κάθε μικρό τετράεδρο κρατά <strong>μία κορυφή</strong> του μεγάλου και τα <strong>3 μέσα</strong> των ακμών που ξεκινούν από αυτήν. Π.χ. για την κορυφή a: <code>a, ab, ac, ad</code>.</p>
+      <div class="fbox green">4 κορυφές → 4 μικρά τετράεδρα</div>
+      <p>Το κομμάτι στη μέση δεν το στέλνουμε πουθενά, γι' αυτό μένει άδειο. Έχει 8 τριγωνικές έδρες και λέγεται <strong>οκτάεδρο</strong>.</p>
+    </article>
+    <article class="math-item m4"><h3><span class="q">4</span>Πόσα τετράεδρα έχει κάθε επίπεδο;</h3>
+      <p>Κάθε τετράεδρο γίνεται 4 μικρότερα, άρα κάθε επίπεδο πολλαπλασιάζει επί 4:</p>
+      <div class="table"><span class="th">Επίπεδο</span><span class="th">Τετράεδρα</span><span class="th">Ακμή</span><span>0</span><span>1</span><span>8</span><span>1</span><span>4</span><span>4</span><span>2</span><span>4 × 4 = 16</span><span>2</span><span>3</span><span>16 × 4 = 64</span><span>1</span></div>
+      <p>Το <code>LEVEL</code> λέει στην Python πόσες φορές θα επαναλάβει τον κανόνα.</p>
+    </article>
+    <article class="math-item m5"><h3><span class="q">5</span>Τι γίνεται με τον όγκο;</h3>
+      <p>Όταν η ακμή γίνεται μισή, ο όγκος γίνεται <strong>1/8</strong>, γιατί 2 × 2 × 2 = 8. Κρατάμε 4 τέτοια κομμάτια:</p>
+      <div class="fbox pink">4 × 1/8 = 1/2 &nbsp;→&nbsp; 1 → 1/2 → 1/4 → 1/8</div>
+      <p>Ο όγκος γίνεται μισός σε κάθε βήμα και πλησιάζει το <strong>μηδέν</strong>.</p>
+    </article>
+    <article class="math-item m6"><h3><span class="q">6</span>Και η επιφάνεια;</h3>
+      <p>Όταν η ακμή γίνεται μισή, το εμβαδόν κάθε έδρας γίνεται <strong>1/4</strong>, γιατί 2 × 2 = 4. Κρατάμε 4 τετράεδρα:</p>
+      <div class="fbox blue">4 × 1/4 = 1</div>
+      <p>Η συνολική επιφάνεια <strong>μένει ίδια</strong> σε κάθε επίπεδο, ενώ ο όγκος χάνεται! Όσο ζωγραφίζουμε, χρειαζόμαστε πάντα την ίδια ποσότητα «μπογιάς».</p>
+    </article>
+  </div>
+  <div class="answer">Συμπέρασμα: <span>κάθε επίπεδο έχει 4 φορές περισσότερα τετράεδρα, τον μισό όγκο και την ίδια επιφάνεια</span></div>
+  <div class="bridge"><strong>Από τα μαθηματικά στην Python</strong><p>Η <code>mid</code> βρίσκει τα 6 μέσα με τον μέσο όρο των x, y και z, οι τέσσερις κλήσεις της <code>tetra</code> κρατούν τα τετράεδρα των κορυφών και το οκτάεδρο της μέσης μένει έξω.</p></div>
+  <div class="did-you-know"><strong>Ήξερες ότι;</strong><p>Αν κοιτάξεις το τετράεδρο Sierpinski από το μέσο μιας ακμής προς το μέσο της απέναντι ακμής, δεν φαίνεται καμία τρύπα: μοιάζει με γεμάτο τετράγωνο! Δοκίμασέ το με το κουμπί «Κοίτα από την ακμή» στην ενότητα 5.</p></div>
+</section>
+<section class="block b-purple" aria-labelledby="s5">
+  <div class="tab"><span class="num">5</span><h2 id="s5">Γράψε και τρέξε Python</h2></div>
+  <p class="lab-guide">Οι γραμμές με <code>#</code> είναι σχόλια που εξηγούν κάθε εντολή. Ξεκίνα αλλάζοντας μόνο το <code>COLOR = "teal"</code> και το <code>LEVEL = 3</code>, και πάτησε <strong>«Εκτέλεση Python»</strong>.</p>
+  <div class="workspace">
+    <article class="panel p-code">
+      <div class="panel-head"><div><h3>Ο κώδικάς σου</h3><p>Python 3 στον browser, μέσω Pyodide</p></div><span class="tag">main.py</span></div>
+      <div class="editor-wrap"><pre id="highlight" aria-hidden="true" class="editor-highlight"><code id="highlightCode"></code></pre><textarea class="editor" id="code" spellcheck="false" aria-label="Επεξεργαστής κώδικα Python" wrap="off"></textarea></div>
+      <div class="actions"><button class="primary" id="run">▶ Εκτέλεση Python</button><button class="secondary" id="reset">↺ Αρχικός κώδικας</button><button class="secondary" id="copy">⧉ Αντιγραφή</button></div>
+      <div id="status" class="status" role="status" aria-live="polite">Το σχέδιο εμφανίζεται αμέσως. Για να τρέξει ο κώδικας Python που αλλάζεις, χρειάζεται σύνδεση στο διαδίκτυο.</div>
+    </article>
+    <article class="panel p-draw">
+      <div class="panel-head"><div><h3>Το fractal σου σε 3D</h3><p>Σύρε με το ποντίκι ή το δάχτυλο για να το γυρίσεις.</p></div><span class="tag" id="countBadge">64 τετράεδρα</span></div>
+      <div class="viewer" id="viewer"><canvas id="canvas3d" tabindex="0" aria-label="Τρισδιάστατη προβολή του τετραέδρου Sierpinski. Με τα βέλη του πληκτρολογίου περιστρέφεται."></canvas><span class="hint">↻ Σύρε για περιστροφή</span><div class="fallback">Η τρισδιάστατη προβολή δεν είναι διαθέσιμη σε αυτή τη συσκευή ή χωρίς σύνδεση. Τα σχέδια στις ενότητες 1 και 3 δείχνουν το τετράεδρο.</div></div>
+      <div class="view-actions"><button class="secondary" id="spin">⏸ Σταμάτα την περιστροφή</button><button class="secondary" id="resetView">⟲ Αρχική θέα</button><button class="secondary" id="edgeView">◇ Κοίτα από την ακμή</button></div>
+      <div class="controls">
+        <div class="range-label"><label for="level">Επίπεδο επανάληψης</label><strong id="levelText">3</strong></div><input id="level" type="range" min="0" max="5" value="3"/><div class="mini-row"><span>0 · Ένα τετράεδρο</span><span>5 · 1.024 τετράεδρα</span></div>
+      </div>
+      <div class="callout">💡 Κάθε νέο επίπεδο <strong>τετραπλασιάζει</strong> τα τετράεδρα. Άλλαξε το επίπεδο ή τον κώδικα και δες τη διαφορά.</div>
+    </article>
+  </div>
+</section>
+
+<div class="next"><span class="go" aria-hidden="true">➜</span><p><b>Πρόκληση:</b> Πόσα τετράεδρα έχει το επίπεδο 5 και τι μέρος του αρχικού όγκου μένει; Υπολόγισέ το με το χέρι και έλεγξέ το με το slider!</p></div>
+
+<nav class="lab-pager" aria-label="Άλλα εργαστήρια"><a href="../sierpinski-triangle/">← Προηγούμενο: Τρίγωνο Sierpinski</a><a class="next-lab" href="../">Όλα τα εργαστήρια</a></nav>
+
+<footer>Εκπαιδευτικό εργαστήριο για fractals, γεωμετρία και υπολογιστική σκέψη. Δεν χρειάζεται λογαριασμός.</footer>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="../assets/lab.js"></script>
+<script>
+
+const INITIAL = "# ΤΕΤΡΑΕΔΡΟ SIERPINSKI — ΧΤΙΖΩ ΕΝΑ 3D FRACTAL ΜΕ PYTHON\n# Οι γραμμές που αρχίζουν με # είναι σχόλια.\n# Εξηγούν τον κώδικα, αλλά η Python ΔΕΝ τις εκτελεί.\n\n# ΒΗΜΑ 1: Διαλέγουμε επίπεδο και χρώμα.\n# Δοκίμασε LEVEL = 0, 1, 2, 3, 4 ή 5.\nLEVEL = 3\n# Δοκίμασε \"red\", \"blue\", \"green\", \"purple\" ή \"orange\".\nCOLOR = \"teal\"\n\nfrom math import sqrt\n\n# ΒΗΜΑ 2: Το μέσο ενός τμήματος στον χώρο.\n# Τώρα κάθε σημείο έχει τρεις συντεταγμένες (x, y, z).\ndef mid(p, q):\n    return ((p[0] + q[0]) / 2,\n            (p[1] + q[1]) / 2,\n            (p[2] + q[2]) / 2)\n\n# ΒΗΜΑ 3: Η αναδρομική συνάρτηση.\n# a, b, c, d = οι τέσσερις κορυφές του τετραέδρου.\ndef tetra(a, b, c, d, level):\n    # Αν το επίπεδο είναι 0, κρατάμε το τετράεδρο όπως είναι.\n    if level == 0:\n        return [(a, b, c, d)]\n\n    # Το τετράεδρο έχει 6 ακμές, άρα 6 μέσα.\n    ab = mid(a, b)\n    ac = mid(a, c)\n    ad = mid(a, d)\n    bc = mid(b, c)\n    bd = mid(b, d)\n    cd = mid(c, d)\n\n    # ΑΝΑΔΡΟΜΗ! 4 κλήσεις, μία για κάθε κορυφή.\n    # Κάθε μικρό τετράεδρο έχει μία κορυφή του μεγάλου\n    # και τα 3 μέσα των ακμών που ξεκινούν από αυτήν.\n    # Το κομμάτι στη μέση μένει άδειο.\n    return (tetra(a, ab, ac, ad, level - 1)\n            + tetra(ab, b, bc, bd, level - 1)\n            + tetra(ac, bc, c, cd, level - 1)\n            + tetra(ad, bd, cd, d, level - 1))\n\n# ΒΗΜΑ 4: Ένα κανονικό τετράεδρο με ακμή 8.\n# Η βάση είναι ισόπλευρο τρίγωνο και η κορυφή D βρίσκεται\n# ακριβώς πάνω από το κέντρο της, σε ύψος 8 × sqrt(2/3).\nA = (0, 0, 0)\nB = (8, 0, 0)\nC = (4, 4 * sqrt(3), 0)\nD = (4, 4 * sqrt(3) / 3, 8 * sqrt(2 / 3))\ntetrahedra = tetra(A, B, C, D, LEVEL)\n\n# ΤΕΛΟΣ! Η ιστοσελίδα χτίζει τα tetrahedra σε 3D με το COLOR.\n# ΠΕΙΡΑΜΑ: Άλλαξε COLOR = \"purple\" και LEVEL = 5.\n";
+const $ = s => document.querySelector(s);
+const mid = (p, q) => [(p[0] + q[0]) / 2, (p[1] + q[1]) / 2, (p[2] + q[2]) / 2];
+function tet(a, b, c, d, n) {
+  if (n === 0) return [[a, b, c, d]];
+  const ab = mid(a, b), ac = mid(a, c), ad = mid(a, d), bc = mid(b, c), bd = mid(b, d), cd = mid(c, d);
+  return [...tet(a, ab, ac, ad, n - 1), ...tet(ab, b, bc, bd, n - 1), ...tet(ac, bc, c, cd, n - 1), ...tet(ad, bd, cd, d, n - 1)];
+}
+const S3 = Math.sqrt(3), V = [[0, 0, 0], [8, 0, 0], [4, 4 * S3, 0], [4, 4 * S3 / 3, 8 * Math.sqrt(2 / 3)]];
+const tetras = n => tet(V[0], V[1], V[2], V[3], n);
+const FACES = [[0, 1, 2, 3], [0, 1, 3, 2], [0, 2, 3, 1], [1, 2, 3, 0]]; // τρεις κορυφές της έδρας + η απέναντι κορυφή
+const sub = (p, q) => [p[0] - q[0], p[1] - q[1], p[2] - q[2]];
+const cross = (u, v) => [u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0]];
+const dot = (u, v) => u[0] * v[0] + u[1] * v[1] + u[2] * v[2];
+const norm = u => { const l = Math.hypot(u[0], u[1], u[2]) || 1; return [u[0] / l, u[1] / l, u[2] / l]; };
+
+// Σχέδια για τις ενότητες 1 και 3 (SVG, με απλή προοπτική από ψηλά-πλάγια).
+function shade(hex, f) { const n = parseInt(hex.slice(1), 16), r = n >> 16, g = n >> 8 & 255, b = n & 255; const m = c => Math.round(f >= 1 ? c + (255 - c) * (f - 1) : c * f); return 'rgb(' + m(r) + ',' + m(g) + ',' + m(b) + ')'; }
+function tetraSVG(svg, items, base) {
+  const th = -0.62, ph = 0.62, ct = Math.cos(th), st = Math.sin(th), cp = Math.cos(ph), sp = Math.sin(ph);
+  const view = p => { const x = p[0] - 4, y = p[1] - 2.3, z = p[2] - 2; const x1 = x * ct - y * st, y1 = x * st + y * ct; return [x1, z * cp + y1 * sp, y1 * cp - z * sp]; };
+  const L = norm([-0.5, -0.8, 0.9]);
+  const faces = [];
+  for (const t of items) for (const [i, j, k, o] of FACES) {
+    let n = norm(cross(sub(t[j], t[i]), sub(t[k], t[i])));
+    if (dot(n, sub(t[o], t[i])) > 0) n = n.map(v => -v);
+    const pts = [t[i], t[j], t[k]].map(view);
+    faces.push({ pts, depth: (pts[0][2] + pts[1][2] + pts[2][2]) / 3, light: 0.5 + 0.75 * Math.max(0, dot(n, L)) });
+  }
+  faces.sort((a, b) => b.depth - a.depth);
+  let minX = 1e9, maxX = -1e9, minY = 1e9, maxY = -1e9;
+  const html = faces.map(f => { for (const p of f.pts) { minX = Math.min(minX, p[0]); maxX = Math.max(maxX, p[0]); minY = Math.min(minY, -p[1]); maxY = Math.max(maxY, -p[1]); }
+    return '<polygon points="' + f.pts.map(p => p[0].toFixed(3) + ',' + (-p[1]).toFixed(3)).join(' ') + '" fill="' + shade(base, f.light) + '"/>'; }).join('');
+  const pad = 0.3;
+  svg.setAttribute('viewBox', (minX - pad) + ' ' + (minY - pad) + ' ' + (maxX - minX + 2 * pad) + ' ' + (maxY - minY + 2 * pad));
+  svg.innerHTML = '<g stroke="' + shade(base, 0.55) + '" stroke-width="' + (items.length > 20 ? 0.025 : 0.05) + '" stroke-linejoin="round">' + html + '</g>';
+}
+tetraSVG($('#fig-hero'), tetras(3), '#1f9aa8');
+tetraSVG($('#fig-a'), tetras(0), '#e0313b');
+tetraSVG($('#fig-b'), tetras(1), '#e2508c');
+tetraSVG($('#fig-c'), tetras(2), '#f08a1c');
+
+// Τρισδιάστατη προβολή με three.js.
+const viewer = $('#viewer'), canvas = $('#canvas3d');
+let three = null, spinning = !matchMedia('(prefers-reduced-motion: reduce)').matches, drag = null, lastFrame = 0, lastItems = [];
+const DEFAULT_ROT = { x: 0.35, y: -0.55 };
+function init3D() {
+  if (!window.THREE) return null;
+  try {
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    const scene = new THREE.Scene();
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 100); camera.position.set(0, 0, 5);
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x6f7896, 0.55));
+    const sun = new THREE.DirectionalLight(0xffffff, 0.6); sun.position.set(2.5, 3.5, 4); scene.add(sun);
+    const group = new THREE.Group(); group.rotation.set(DEFAULT_ROT.x, DEFAULT_ROT.y, 0); scene.add(group);
+    return { renderer, scene, camera, group, mesh: null, map: null };
+  } catch (e) { return null; }
+}
+function render3D() { if (three) three.renderer.render(three.scene, three.camera); }
+function resize3D() { if (!three) return; const r = viewer.getBoundingClientRect(); three.renderer.setSize(r.width, r.height, false); const a = r.width / Math.max(1, r.height), H = 0.78; Object.assign(three.camera, { left: -H * a, right: H * a, top: H, bottom: -H }); three.camera.updateProjectionMatrix(); render3D(); }
+function build3D(items, color) {
+  lastItems = items;
+  if (!three) return;
+  if (three.mesh) { three.group.remove(three.mesh); three.mesh.geometry.dispose(); three.mesh.material.dispose(); three.mesh = null; }
+  if (!items.length) { render3D(); return; }
+  let lo = [1e9, 1e9, 1e9], hi = [-1e9, -1e9, -1e9];
+  for (const t of items) for (const p of t) for (let k = 0; k < 3; k++) { lo[k] = Math.min(lo[k], p[k]); hi[k] = Math.max(hi[k], p[k]); }
+  const c = [(lo[0] + hi[0]) / 2, (lo[1] + hi[1]) / 2, (lo[2] + hi[2]) / 2], s = 1.05 / Math.max(hi[0] - lo[0], hi[1] - lo[1], hi[2] - lo[2], 1e-9);
+  const map = p => [(p[0] - c[0]) * s, (p[2] - c[2]) * s, -(p[1] - c[1]) * s]; // ο άξονας z της Python γίνεται «πάνω»
+  three.map = map;
+  const pos = new Float32Array(items.length * 4 * 9); let k = 0;
+  for (const t of items) {
+    const m = t.map(map);
+    for (const [i, j, l, o] of FACES) {
+      let a = m[i], b = m[j], d = m[l];
+      if (dot(cross(sub(b, a), sub(d, a)), sub(m[o], a)) > 0) { const tmp = b; b = d; d = tmp; } // η έδρα να «κοιτάζει» προς τα έξω
+      for (const p of [a, b, d]) { pos[k++] = p[0]; pos[k++] = p[1]; pos[k++] = p[2]; }
+    }
+  }
+  const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(pos, 3)); geo.computeVertexNormals();
+  three.mesh = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({ color: new THREE.Color(color) }));
+  three.group.add(three.mesh); render3D();
+}
+function loop(t) { if (!three) return; if (spinning && !drag) { const dt = lastFrame ? Math.min(50, t - lastFrame) : 16; three.group.rotation.y += dt * 0.00035; render3D(); } lastFrame = t; if (spinning) requestAnimationFrame(loop); else lastFrame = 0; }
+function setSpin(on) { spinning = on; $('#spin').textContent = on ? '⏸ Σταμάτα την περιστροφή' : '▶ Περιστροφή'; if (on && three) requestAnimationFrame(loop); }
+three = init3D();
+if (!three) viewer.classList.add('no-3d'); else { new ResizeObserver(resize3D).observe(viewer); resize3D(); }
+canvas.addEventListener('pointerdown', e => { if (!three) return; drag = { x: e.clientX, y: e.clientY }; canvas.setPointerCapture(e.pointerId); });
+canvas.addEventListener('pointermove', e => { if (!drag) return; const g = three.group; g.rotation.y += (e.clientX - drag.x) * 0.01; g.rotation.x = Math.max(-1.4, Math.min(1.4, g.rotation.x + (e.clientY - drag.y) * 0.01)); drag = { x: e.clientX, y: e.clientY }; render3D(); });
+const endDrag = () => { drag = null; }; canvas.addEventListener('pointerup', endDrag); canvas.addEventListener('pointercancel', endDrag);
+canvas.addEventListener('keydown', e => { if (!three) return; const g = three.group, step = 0.12; if (e.key === 'ArrowLeft') g.rotation.y -= step; else if (e.key === 'ArrowRight') g.rotation.y += step; else if (e.key === 'ArrowUp') g.rotation.x = Math.max(-1.4, g.rotation.x - step); else if (e.key === 'ArrowDown') g.rotation.x = Math.min(1.4, g.rotation.x + step); else return; e.preventDefault(); render3D(); });
+$('#spin').addEventListener('click', () => setSpin(!spinning));
+$('#resetView').addEventListener('click', () => { if (!three) return; three.group.rotation.set(DEFAULT_ROT.x, DEFAULT_ROT.y, 0); render3D(); });
+// «Κοίτα από την ακμή»: η ματιά περνά από το μέσο της ακμής AB και το μέσο της απέναντι ακμής CD.
+$('#edgeView').addEventListener('click', () => {
+  if (!three || !three.map) return;
+  setSpin(false);
+  const m = V.map(three.map), axis = new THREE.Vector3(...sub(mid(m[2], m[3]), mid(m[0], m[1]))).normalize();
+  const q = new THREE.Quaternion().setFromUnitVectors(axis, new THREE.Vector3(0, 0, 1));
+  const ab = new THREE.Vector3(...sub(m[1], m[0])).applyQuaternion(q);
+  const qz = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI / 4 - Math.atan2(ab.y, ab.x));
+  three.group.quaternion.copy(qz.multiply(q)); render3D();
+});
+setSpin(spinning);
+
+FractalLab.start({
+  initial: INITIAL, outputVar: 'tetrahedra', level: { min: 0, max: 5, value: 3 }, color: 'teal', maxItems: 4100,
+  preview: v => tetras(v.LEVEL),
+  validate: items => items.every(t => Array.isArray(t) && t.length === 4 && t.every(p => Array.isArray(p) && p.length === 3 && p.every(Number.isFinite))) ? null : 'Κάθε τετράεδρο πρέπει να είναι τέσσερα σημεία (x, y, z).',
+  render: (items, color) => build3D(items, color),
+  countLabel: items => items.length.toLocaleString('el-GR') + (items.length === 1 ? ' τετράεδρο' : ' τετράεδρα')
+});
+
+</script></body></html>
