@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="el"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Fractal Lab · Εργαστήρια Μαθηματικών & Python</title>
+<meta name="description" content="Διαδραστικά εργαστήρια fractals για το Γυμνάσιο: μαθηματικά, γεωμετρία και Python στον browser, χωρίς εγκατάσταση και χωρίς λογαριασμό.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400..800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1f2a5c;--muted:#4b5682;--paper:#ffffff;--grid:#e6eefa;
+  --red:#e0313b;--blue:#2c6fd6;--pink:#e2508c;--green:#3f9d58;--purple:#8a5cf0;--orange:#f08a1c;--teal:#1f9aa8;
+  --hl-yellow:#fff27a;--hl-green:#c9f4c0;--hl-pink:#ffd3e4;--hl-blue:#cfe6ff;--hl-orange:#ffe1b8;--hl-purple:#e8dcff;
+  --hand:'Playpen Sans','Comic Sans MS','Segoe Print',cursive;
+  --wobble:18px 26px 20px 24px / 24px 18px 26px 20px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;color:var(--ink);font:400 17px/1.6 var(--hand);background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:26px 26px}
+a{color:inherit}
+a:focus-visible{outline:3px solid var(--pink);outline-offset:3px}
+.sheet{max-width:1180px;margin:0 auto;padding:22px 18px 40px}
+
+.sheet-head{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:stretch}
+.title-card{background:#fffbe8;border:3px solid var(--orange);border-radius:var(--wobble);padding:14px 22px}
+.title-card h1{margin:0;font-size:clamp(28px,4.2vw,46px);line-height:1.15;font-weight:800;letter-spacing:-.5px}
+.title-card h1 .t1{color:var(--red)}.title-card h1 .t2{color:var(--blue)}
+.title-card p{margin:6px 0 0;font-size:clamp(16px,2vw,21px);font-weight:600}
+.brand-card{background:#fff;border:3px solid var(--red);border-radius:16px 22px 18px 20px / 20px 16px 22px 18px;padding:10px 18px;text-align:center;display:flex;flex-direction:column;justify-content:center;min-width:200px}
+.brand-card strong{color:var(--red);font-size:28px;line-height:1.1;font-weight:800}
+.brand-card span{font-size:14px;line-height:1.35}
+.brand-card em{font-style:normal;color:var(--blue);font-weight:700;border-top:2px solid var(--red);margin-top:6px;padding-top:4px;font-size:14px}
+
+.block{position:relative;background:var(--paper);border:3px solid var(--c,var(--pink));border-radius:var(--wobble);padding:0 22px 22px;margin-top:40px}
+.tab{position:relative;top:-24px;margin:0 0 -8px -6px;max-width:calc(100% + 6px);display:inline-flex;align-items:center;gap:10px;background:var(--tab,#ffe6ef);border:3px solid var(--c,var(--pink));border-radius:14px 20px 16px 18px;padding:2px 18px 2px 4px}
+.tab .num{display:grid;place-items:center;flex:none;width:40px;height:40px;border-radius:50%;background:var(--c,var(--pink));color:#fff;font-weight:800;font-size:22px;border:3px solid #fff;margin:-8px 0 -8px -12px;box-shadow:0 0 0 3px var(--c,var(--pink))}
+.tab h2{margin:0;font-size:clamp(21px,2.6vw,29px);font-weight:800;line-height:1.3}
+.b-pink{--c:var(--pink);--tab:#ffe6ef}.b-green{--c:var(--green);--tab:#e3f7e4}.b-blue{--c:var(--blue);--tab:#e2eeff}
+
+.hl{padding:0 .18em;border-radius:3px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.hl.y{background:linear-gradient(transparent 12%,var(--hl-yellow) 12% 90%,transparent 90%)}
+.hl.g{background:linear-gradient(transparent 12%,var(--hl-green) 12% 90%,transparent 90%)}
+.hl.p{background:linear-gradient(transparent 12%,var(--hl-pink) 12% 90%,transparent 90%)}
+.hl.b{background:linear-gradient(transparent 12%,var(--hl-blue) 12% 90%,transparent 90%)}
+.hl.o{background:linear-gradient(transparent 12%,var(--hl-orange) 12% 90%,transparent 90%)}
+
+/* Ενότητα 1 */
+.about{display:grid;grid-template-columns:1.3fr .7fr;gap:22px;align-items:center}
+.about p{margin:0 0 12px}
+.pillars{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.pillars li{display:flex;gap:10px;align-items:center;border:2.5px solid var(--pc);background:var(--pb);border-radius:12px 15px 13px 16px;padding:6px 12px;font-size:16px;font-weight:600}
+.pillars li span{flex:none;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--pc);color:#fff;font-weight:800;font-size:15px}
+.p1{--pc:#e0313b;--pb:#ffeceb}.p2{--pc:#2c6fd6;--pb:#eaf2ff}.p3{--pc:#8a5cf0;--pb:#f3edff}.p4{--pc:#3f9d58;--pb:#ecfaee}
+
+/* Ενότητα 2: κάρτες εργαστηρίων */
+.labs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.lab{display:flex;flex-direction:column;border:3px solid var(--lc);border-radius:18px 24px 16px 22px / 22px 16px 24px 18px;background:#fff;overflow:hidden}
+.lab-art{position:relative;background:var(--lb);border-bottom:2.5px solid var(--lc);padding:16px;height:250px;display:flex;align-items:center;justify-content:center;
+  background-image:linear-gradient(#ffffffaa 1px,transparent 1px),linear-gradient(90deg,#ffffffaa 1px,transparent 1px);background-size:20px 20px}
+.lab-art svg{width:auto;height:100%;max-width:100%}
+.lab-art .badge{position:absolute;top:12px;left:12px;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--lc);color:#fff;font-weight:800;font-size:22px;border:3px solid #fff;box-shadow:0 0 0 3px var(--lc)}
+.lab-art .dim{position:absolute;top:14px;right:14px;background:#fff;border:2.5px solid var(--lc);border-radius:9px;padding:0 10px;font-weight:800;color:var(--lc)}
+.lab-body{padding:14px 18px 18px;display:flex;flex-direction:column;gap:10px;flex:1}
+.lab h3{margin:0;font-size:26px;line-height:1.2;font-weight:800;color:var(--lc)}
+.lab .meta{margin:-4px 0 0;font-size:14.5px;color:var(--muted);font-weight:600}
+.lab p{margin:0;font-size:16px}
+.tags{display:flex;flex-wrap:wrap;gap:7px;margin:2px 0}
+.tags span{border:2px solid var(--tc);background:var(--tb);border-radius:8px 10px 9px 11px;padding:0 9px;font-size:14px;font-weight:600}
+.t1{--tc:#f0a0b8;--tb:#ffeef4}.t2{--tc:#8fbbea;--tb:#eaf4ff}.t3{--tc:#b49be8;--tb:#f2ecff}.t4{--tc:#8fd09b;--tb:#ecfaee}.t5{--tc:#f3b46b;--tb:#fff4e6}
+.lab-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:auto;padding-top:4px}
+.open{display:inline-block;text-decoration:none;background:var(--lc);color:#fff;border:2.5px solid var(--ld);border-radius:12px 15px 12px 14px;padding:7px 16px;font-weight:800;box-shadow:0 3px 0 var(--ld)}
+.open:hover{filter:brightness(1.07)}.open:active{transform:translateY(2px);box-shadow:0 1px 0 var(--ld)}
+.src{display:inline-block;text-decoration:none;background:#fff;border:2.5px solid #cdd6ea;border-radius:12px 14px 12px 15px;padding:6px 12px;font-weight:700}
+.src:hover{background:#f4f7ff}
+.koch{--lc:#2c6fd6;--ld:#1d4fa3;--lb:#eef5ff}.menger{--lc:#e2741a;--ld:#b4560c;--lb:#fff4e8}
+.order{margin:16px auto 0;max-width:820px;font-weight:600;font-size:16px;text-align:center}
+.order b{color:var(--red)}
+
+/* Ενότητα 3: για τον εκπαιδευτικό */
+.teach{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.note-card{border:2.5px solid var(--nc);border-radius:16px 20px 15px 19px;padding:12px 16px;background:#fff}
+.note-card h3{margin:0 0 6px;font-size:19px;line-height:1.3}
+.note-card h3 .q{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--nc);color:#fff;font-size:16px;margin-right:6px;vertical-align:1px}
+.note-card p,.note-card li{font-size:15.5px;line-height:1.5}
+.note-card p{margin:6px 0}
+.note-card ol,.note-card ul{margin:6px 0 0;padding-left:20px}
+.note-card li{margin:3px 0}
+.n1{--nc:#e0313b}.n2{--nc:#2c6fd6}.n3{--nc:#8a5cf0}
+
+.next{margin-top:26px;display:flex;align-items:center;gap:14px;background:#f1ecff;border:3px solid var(--purple);border-radius:14px 20px 16px 18px;padding:10px 16px}
+.next .go{flex:none;display:grid;place-items:center;width:46px;height:38px;background:#ffe35c;border:2.5px solid #d4a800;border-radius:9px 12px 10px 13px;font-size:22px}
+.next p{margin:0;font-size:clamp(16px,2vw,19px);font-weight:600}
+.next p b{color:var(--red)}
+footer{text-align:center;color:var(--muted);font-size:14px;margin-top:22px}
+footer a{color:var(--blue);font-weight:700}
+
+@media(max-width:850px){
+  .sheet-head,.about,.labs,.teach{grid-template-columns:1fr}
+  .brand-card{min-width:0}
+  .block{padding:0 14px 16px}
+  .tab{padding-right:12px}.tab h2{font-size:20px}
+  .lab-art{height:210px}
+}
+</style></head>
+<body><main class="sheet">
+
+<header class="sheet-head">
+  <div class="title-card">
+    <h1><span class="t1">Fractal Lab –</span> <span class="t2">Εργαστήρια Μαθηματικών &amp; Python</span></h1>
+    <p>Fractals, γεωμετρία και προγραμματισμός για το Γυμνάσιο | κάθε εργαστήριο σε 1 διδακτική ώρα</p>
+  </div>
+  <aside class="brand-card" aria-label="Fractal Lab">
+    <strong>Fractal Lab</strong>
+    <span>Μαθηματικά &amp; Python<br>για το Γυμνάσιο</span>
+    <em>Χωρίς λογαριασμό</em>
+  </aside>
+</header>
+
+<section class="block b-pink" aria-labelledby="s1">
+  <div class="tab"><span class="num">1</span><h2 id="s1">Τι είναι το Fractal Lab;</h2></div>
+  <div class="about">
+    <div>
+      <p>Το Fractal Lab είναι μια σειρά από <span class="hl y">διαδραστικά εργαστήρια</span> για μαθητές Γυμνασίου. Κάθε εργαστήριο είναι μία σελίδα που ανοίγει σε οποιονδήποτε browser, <span class="hl g">χωρίς εγκατάσταση και χωρίς λογαριασμό</span>.</p>
+      <p>Τα fractals είναι σχήματα που φτιάχνονται επαναλαμβάνοντας <span class="hl p">ξανά και ξανά τον ίδιο απλό κανόνα</span>. Γι' αυτό είναι ιδανικά για να συνδέσουμε τη γεωμετρία με την ιδέα της <span class="hl b">αναδρομής</span> στον προγραμματισμό: ο ίδιος κανόνας γράφεται στα μαθηματικά, στο χαρτί και σε Python.</p>
+    </div>
+    <ul class="pillars" aria-label="Τι κάνουν οι μαθητές σε κάθε εργαστήριο">
+      <li class="p1"><span>1</span>Γνωρίζουν ένα fractal</li>
+      <li class="p2"><span>2</span>Κατανοούν τα μαθηματικά του</li>
+      <li class="p3"><span>3</span>Διαβάζουν και αλλάζουν κώδικα Python</li>
+      <li class="p4"><span>4</span>Βλέπουν αμέσως το αποτέλεσμα</li>
+    </ul>
+  </div>
+</section>
+
+<section class="block b-blue" aria-labelledby="s2">
+  <div class="tab"><span class="num">2</span><h2 id="s2">Τα εργαστήρια</h2></div>
+  <div class="labs">
+    <article class="lab koch">
+      <div class="lab-art"><span class="badge">1</span><span class="dim">2D</span><svg id="art-koch" role="img" aria-label="Χιονονιφάδα Koch, επίπεδο 4"></svg></div>
+      <div class="lab-body">
+        <h3>Χιονονιφάδα Koch</h3>
+        <p class="meta">Γυμνάσιο | 1 διδακτική ώρα</p>
+        <p>Από ένα <span class="hl b">τρίγωνο</span> σε μια χιονονιφάδα με όλο και περισσότερες λεπτομέρειες. Κάθε ευθύγραμμο τμήμα γίνεται 4 μικρότερα.</p>
+        <div class="tags"><span class="t1">÷ 3</span><span class="t2">60° και √3</span><span class="t3">× 4 τμήματα</span><span class="t4">αναδρομή</span><span class="t5">συντεταγμένες</span></div>
+        <div class="lab-actions"><a class="open" href="https://izzydi.github.io/koch-fractal/">▶ Άνοιξε το εργαστήριο</a><a class="src" href="https://github.com/izzydi/koch-fractal">Κώδικας στο GitHub</a></div>
+      </div>
+    </article>
+    <article class="lab menger">
+      <div class="lab-art"><span class="badge">2</span><span class="dim">3D</span><svg id="art-menger" role="img" aria-label="Σφουγγάρι Menger, επίπεδο 2"></svg></div>
+      <div class="lab-body">
+        <h3>Σφουγγάρι Menger</h3>
+        <p class="meta">Γυμνάσιο | 1 διδακτική ώρα</p>
+        <p>Από έναν <span class="hl o">κύβο</span> σε ένα σφουγγάρι με όλο και περισσότερες τρύπες, που οι μαθητές γυρίζουν σε 3D. Κάθε κυβάκι γίνεται 20 μικρότερα.</p>
+        <div class="tags"><span class="t1">3 × 3 × 3 = 27</span><span class="t2">27 − 7 = 20</span><span class="t3">× 20 κυβάκια</span><span class="t4">όγκος με κλάσματα</span><span class="t5">εμφωλευμένα for</span></div>
+        <div class="lab-actions"><a class="open" href="https://izzydi.github.io/menger-sponge/">▶ Άνοιξε το εργαστήριο</a><a class="src" href="https://github.com/izzydi/menger-sponge">Κώδικας στο GitHub</a></div>
+      </div>
+    </article>
+  </div>
+  <p class="order"><b>Προτεινόμενη σειρά:</b> πρώτα η χιονονιφάδα (γραμμές, 2D), μετά το σφουγγάρι (κύβοι, 3D). Η ιδέα της αναδρομής είναι η ίδια, σε μία διάσταση παραπάνω.</p>
+</section>
+
+<section class="block b-green" aria-labelledby="s3">
+  <div class="tab"><span class="num">3</span><h2 id="s3">Για τον εκπαιδευτικό</h2></div>
+  <div class="teach">
+    <article class="note-card n1"><h3><span class="q">1</span>Τι χρειάζεται</h3>
+      <ul>
+        <li>Υπολογιστή ή tablet με σύγχρονο browser.</li>
+        <li>Σύνδεση στο διαδίκτυο για να τρέξει ο κώδικας Python. Τα σχέδια εμφανίζονται και χωρίς σύνδεση.</li>
+        <li>Τίποτα άλλο: ούτε εγκατάσταση, ούτε λογαριασμοί μαθητών.</li>
+      </ul>
+    </article>
+    <article class="note-card n2"><h3><span class="q">2</span>Ενδεικτική ροή μιας ώρας</h3>
+      <ol>
+        <li>Τι είναι το fractal και πώς χτίζεται (ενότητες 1–3).</li>
+        <li>Τα μαθηματικά πίσω από το σχέδιο (ενότητα 4).</li>
+        <li>Πειράματα με τον κώδικα Python (ενότητα 5).</li>
+        <li>Η πρόκληση στο τέλος της σελίδας.</li>
+      </ol>
+    </article>
+    <article class="note-card n3"><h3><span class="q">3</span>Πώς το μοιράζομαι</h3>
+      <p>Στείλτε στους μαθητές το link του εργαστηρίου ή προβάλετέ το στην τάξη. Ο κώδικας κάθε σελίδας είναι ανοιχτός στο GitHub, οπότε μπορείτε να τον προσαρμόσετε στην τάξη σας.</p>
+    </article>
+  </div>
+</section>
+
+<div class="next"><span class="go" aria-hidden="true">➜</span><p><b>Ξεκινήστε:</b> ανοίξτε το <a href="https://izzydi.github.io/koch-fractal/">εργαστήριο 1, τη χιονονιφάδα Koch</a>, και δοκιμάστε να αλλάξετε το <code style="font-family:Consolas,'Courier New',monospace;background:#fff;border-radius:5px;padding:1px 5px;color:#5b3fb8">LEVEL</code>.</p></div>
+
+<footer>Fractal Lab: εκπαιδευτικά εργαστήρια για fractals, γεωμετρία και υπολογιστική σκέψη. <a href="https://github.com/izzydi/fractal-lab">Κώδικας στο GitHub</a></footer>
+</main>
+<script>
+// Ίδιοι κανόνες με τα εργαστήρια, για τα σχέδια στις κάρτες.
+function kochJS(a,b,n){if(n===0)return [[a,b]];const dx=(b[0]-a[0])/3,dy=(b[1]-a[1])/3,p=[a[0]+dx,a[1]+dy],q=[a[0]+2*dx,a[1]+2*dy],peak=[p[0]+dx/2+Math.sqrt(3)*dy/2,p[1]+dy/2-Math.sqrt(3)*dx/2];return [...kochJS(a,p,n-1),...kochJS(p,peak,n-1),...kochJS(peak,q,n-1),...kochJS(q,b,n-1)]}
+function kochSVG(svg,n,color){const h=Math.sqrt(3)/3,t=[[-1,-h],[1,-h],[0,2*h]];const segs=t.flatMap((p,i)=>kochJS(p,t[(i+1)%3],n));
+  const d=segs.map(s=>'M'+s[0][0].toFixed(4)+' '+(-s[0][1]).toFixed(4)+'L'+s[1][0].toFixed(4)+' '+(-s[1][1]).toFixed(4)).join('');
+  svg.setAttribute('viewBox','-1.25 -1.25 2.5 2.5');svg.innerHTML='<path d="'+d+'" fill="none" stroke="'+color+'" stroke-width="0.022" stroke-linejoin="round" stroke-linecap="round"/>'}
+function mengerJS(x,y,z,size,n){if(n===0)return [[x,y,z,size]];const s=size/3,out=[];for(let i=0;i<3;i++)for(let j=0;j<3;j++)for(let k=0;k<3;k++){if((i===1)+(j===1)+(k===1)>=2)continue;out.push(...mengerJS(x+i*s,y+j*s,z+k*s,s,n-1))}return out}
+function shade(hex,f){const n=parseInt(hex.slice(1),16);let r=n>>16,g=n>>8&255,b=n&255;const m=c=>Math.round(f>=1?c+(255-c)*(f-1):c*f);return 'rgb('+m(r)+','+m(g)+','+m(b)+')'}
+function isoSVG(svg,cubes,base){
+  const P=(x,y,z)=>[(x-y)*0.8660254,(x+y)*0.5-z];
+  const sorted=cubes.slice().sort((a,b)=>(a[0]+a[1]+a[2])-(b[0]+b[1]+b[2]));
+  const top=shade(base,1.35),right=shade(base,0.95),left=shade(base,0.72),edge=shade(base,0.5);
+  let minX=1e9,maxX=-1e9,minY=1e9,maxY=-1e9,parts=[];
+  const poly=(pts,fill)=>{for(const[px,py] of pts){minX=Math.min(minX,px);maxX=Math.max(maxX,px);minY=Math.min(minY,py);maxY=Math.max(maxY,py)}parts.push('<polygon points="'+pts.map(p=>p[0].toFixed(4)+','+p[1].toFixed(4)).join(' ')+'" fill="'+fill+'"/>')};
+  for(const[x,y,z,s] of sorted){
+    poly([P(x,y,z+s),P(x+s,y,z+s),P(x+s,y+s,z+s),P(x,y+s,z+s)],top);
+    poly([P(x+s,y,z),P(x+s,y+s,z),P(x+s,y+s,z+s),P(x+s,y,z+s)],right);
+    poly([P(x,y+s,z),P(x+s,y+s,z),P(x+s,y+s,z+s),P(x,y+s,z+s)],left);
+  }
+  const pad=0.06;svg.setAttribute('viewBox',(minX-pad)+' '+(minY-pad)+' '+(maxX-minX+2*pad)+' '+(maxY-minY+2*pad));
+  svg.innerHTML='<g stroke="'+edge+'" stroke-width="'+(0.0035+0.01*cubes[0][3])+'" stroke-linejoin="round">'+parts.join('')+'</g>';
+}
+kochSVG(document.querySelector('#art-koch'),4,'#2c6fd6');
+isoSVG(document.querySelector('#art-menger'),mengerJS(0,0,0,1,2),'#f08a1c');
+</script></body></html>
