@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="el"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Εργαστήριο Fractals · Καμπύλη του δράκου</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/lab.css">
+<style>
+.stat-line{padding:8px 16px;border-top:2px solid #e2ecfb;font-size:15px;display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.stat-line b{color:var(--blue);text-align:right}
+.stat-line.turns b{font-size:14px;color:var(--muted);font-weight:600}.stat-line.turns b.seq{font-weight:700;word-break:break-all}
+.seq{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:700;letter-spacing:.5px}
+.seq .r{color:var(--red)}.seq .l{color:var(--blue)}
+</style>
+</head>
+<body><main class="sheet">
+<nav class="lab-nav" aria-label="Fractal Lab"><a href="../">← Όλα τα εργαστήρια</a><span>Fractal Lab | Εργαστήριο 7</span></nav>
+
+<header class="sheet-head">
+  <div class="title-card">
+    <h1><span class="t1">Εργαστήριο Fractals –</span> <span class="t2">Καμπύλη του δράκου</span></h1>
+    <p>Διπλώνουμε χαρτί με τη σκέψη, με Python | 1 διδακτική ώρα</p>
+  </div>
+  <aside class="brand-card" aria-label="Fractal Lab">
+    <strong>Fractal Lab</strong>
+    <span>Μαθηματικά &amp; Python<br>για το Γυμνάσιο</span>
+    <em>Χωρίς λογαριασμό</em>
+  </aside>
+</header>
+
+<section class="block b-pink" aria-labelledby="s1">
+  <div class="tab"><span class="num">1</span><h2 id="s1">Ένας δράκος από χαρτί</h2></div>
+  <div class="intro">
+    <div>
+      <p>Πάρε μια <span class="hl y">λωρίδα χαρτί</span> και δίπλωσέ τη στη μέση. Δίπλωσέ τη ξανά στη μέση, προς την ίδια μεριά, και ξανά. Μετά ξεδίπλωσέ τη, ώστε κάθε τσάκιση να σχηματίζει <span class="hl b">ορθή γωνία (90°)</span>.</p>
+      <p>Το σχήμα που εμφανίζεται λέγεται <strong>καμπύλη του δράκου</strong>. Τη μελέτησαν πρώτοι οι φυσικοί της NASA <strong>John Heighway, Bruce Banks και William Harter</strong>, τη δεκαετία του 1960.</p>
+      <p>Κάθε νέα δίπλωση <span class="hl o">διπλασιάζει</span> τα κομμάτια του χαρτιού. Όσο κι αν μεγαλώσει, η καμπύλη <span class="hl v">δεν περνά ποτέ δύο φορές από το ίδιο τμήμα</span>: μόνο αγγίζει τις γωνίες της!</p>
+      <div class="goals">
+        <h3>Στόχοι του μαθήματος</h3>
+        <ol>
+          <li><b>Σ1</b><span>Να εξηγείς γιατί κάθε δίπλωση διπλασιάζει τα κομμάτια, με δυνάμεις του 2.</span></li>
+          <li><b>Σ2</b><span>Να εφαρμόζεις έναν κανόνα για να γράφεις τις στροφές R και L του επόμενου επιπέδου.</span></li>
+          <li><b>Σ3</b><span>Να στρίβεις μια κατεύθυνση κατά 90° με συντεταγμένες.</span></li>
+          <li><b>Σ4</b><span>Να υπολογίζεις αποστάσεις με το Πυθαγόρειο θεώρημα και τη √2.</span></li>
+        </ol>
+      </div>
+    </div>
+    <div class="figure">
+      <p class="note">Μόνο διπλώσεις στη μέση, και φτιάχνεις έναν δράκο!</p>
+      <svg class="arrow" viewBox="0 0 90 46" aria-hidden="true"><path d="M70 4 C 60 30, 30 36, 12 38" fill="none" stroke="#3f9d58" stroke-width="2.5" stroke-linecap="round"/><path d="M22 30 L11 38.5 L24 43" fill="none" stroke="#3f9d58" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="fig-box"><svg id="fig-hero" role="img" aria-label="Καμπύλη του δράκου, επίπεδο 12"></svg></div>
+    </div>
+  </div>
+</section>
+<section class="block b-green" aria-labelledby="s2">
+  <div class="tab"><span class="num">2</span><h2 id="s2">Βασικές ιδέες</h2></div>
+  <div class="chips">
+    <div class="chip c1">Αρχή<small>ένα ευθύγραμμο τμήμα</small></div>
+    <div class="chip c2">× 2<small>κομμάτια σε κάθε δίπλωση</small></div>
+    <div class="chip c3">R και L<small>δεξιά ή αριστερά</small></div>
+    <div class="chip c4">90°<small>κάθε τσάκιση</small></div>
+    <div class="chip c5">√2 ≈ 1,41<small>η απόσταση μεγαλώνει</small></div>
+    <div class="chip c6">LEVEL 0–14<small>πόσες διπλώσεις</small></div>
+  </div>
+</section>
+<section class="block b-blue" aria-labelledby="s3">
+  <div class="tab"><span class="num">3</span><h2 id="s3">Πώς φτιάχνεται ο δράκος</h2></div>
+  <div class="steps">
+    <article class="step sA">
+      <div class="step-head"><span class="letter">A</span><h3>Μία δίπλωση</h3></div>
+      <svg class="fig" id="fig-a" role="img" aria-label="Δύο τμήματα με μία στροφή δεξιά"></svg>
+      <p>Δίπλωσε το χαρτί μία φορά και άνοιξέ το σε ορθή γωνία. Έχει <span class="hl y">2 κομμάτια</span> και μία στροφή δεξιά: <span class="seq"><span class="r">R</span></span>.</p>
+    </article>
+    <article class="step sB">
+      <div class="step-head"><span class="letter">B</span><h3>Δεύτερη δίπλωση</h3></div>
+      <svg class="fig" id="fig-b" role="img" aria-label="Τέσσερα τμήματα με στροφές R, R, L"></svg>
+      <p>Δίπλωσε άλλη μία φορά πριν το ανοίξεις. Τώρα έχει <span class="hl p">4 κομμάτια</span> και στροφές <span class="seq"><span class="r">R</span> <span class="r">R</span> <span class="l">L</span></span>.</p>
+    </article>
+    <article class="step sC">
+      <div class="step-head"><span class="letter">C</span><h3>Ξανά και ξανά</h3></div>
+      <svg class="fig" id="fig-c" role="img" aria-label="Καμπύλη του δράκου, επίπεδο 8"></svg>
+      <p>Μετά από <span class="hl o">8 διπλώσεις</span> το χαρτί έχει 256 κομμάτια. Στον υπολογιστή «διπλώνουμε» με <strong>αναδρομή</strong>.</p>
+    </article>
+  </div>
+</section>
+<section class="block b-orange" aria-labelledby="s4">
+  <div class="tab"><span class="num">4</span><h2 id="s4">Τα μαθηματικά πίσω από το σχέδιο</h2></div>
+  <p class="math-lead">Κάθε κομμάτι του χαρτιού έχει μήκος <span class="hl y">1 μονάδα</span> και κάθε τσάκιση είναι <span class="hl b">90°</span>. Ας δούμε <strong>γιατί</strong> ο κώδικας κάνει κάθε υπολογισμό.</p>
+  <div class="math-grid">
+    <article class="math-item m1"><h3><span class="q">1</span>Πόσα κομμάτια μετά από ν διπλώσεις;</h3>
+      <p>Κάθε δίπλωση στη μέση κάνει κάθε κομμάτι <strong>δύο</strong> κομμάτια. Άρα πολλαπλασιάζουμε επί 2 σε κάθε δίπλωση:</p>
+      <div class="fbox">1 → 2 → 4 → 8 → 16 &nbsp;&nbsp; 2 × 2 × 2 × 2 = 2⁴</div>
+      <p>Μετά από ν διπλώσεις έχουμε 2<sup>ν</sup> κομμάτια και 2<sup>ν</sup> − 1 τσακίσεις, γιατί ανάμεσα σε κάθε δύο κομμάτια υπάρχει μία τσάκιση.</p>
+    </article>
+    <article class="math-item m2"><h3><span class="q">2</span>Ο κανόνας των στροφών</h3>
+      <p>Για το επόμενο επίπεδο κρατάμε τις παλιές στροφές, βάζουμε μία <span class="seq"><span class="r">R</span></span> στη μέση και μετά γράφουμε τις παλιές <strong>ανάποδα</strong> και με <strong>αντίθετη φορά</strong>:</p>
+      <div class="fbox green"><span class="seq"><span class="r">R</span> <span class="r">R</span> <span class="l">L</span></span> &nbsp;+&nbsp; <span class="seq"><span class="r">R</span></span> &nbsp;+&nbsp; <span class="seq"><span class="r">R</span> <span class="l">L</span> <span class="l">L</span></span></div>
+      <p>Ανάποδα, το <span class="seq"><span class="r">R</span> <span class="r">R</span> <span class="l">L</span></span> γίνεται <span class="seq"><span class="l">L</span> <span class="r">R</span> <span class="r">R</span></span> και με αντίθετη φορά <span class="seq"><span class="r">R</span> <span class="l">L</span> <span class="l">L</span></span>. <strong>Στον κώδικα:</strong> <code>old + ["R"] + back</code>.</p>
+    </article>
+    <article class="math-item m3"><h3><span class="q">3</span>Στροφή 90° με συντεταγμένες</h3>
+      <p>Η κατεύθυνση (dx, dy) λέει πόσο προχωράμε σε κάθε βήμα. Για να στρίψουμε 90°, αλλάζουμε θέση στους αριθμούς και ένα πρόσημο:</p>
+      <div class="fbox blue">δεξιά: (dx, dy) → (dy, −dx)<br>αριστερά: (dx, dy) → (−dy, dx)</div>
+      <p>Παράδειγμα: κοιτάμε δεξιά (1, 0) και στρίβουμε δεξιά, οπότε κοιτάμε κάτω (0, −1). Είναι η ίδια στροφή με το δέντρο του Πυθαγόρα!</p>
+    </article>
+    <article class="math-item m4"><h3><span class="q">4</span>Πόσες R και πόσες L;</h3>
+      <p>Μετράμε τις στροφές σε κάθε επίπεδο:</p>
+      <div class="table"><span class="th">Επίπεδο</span><span class="th">R</span><span class="th">L</span><span>1</span><span>1</span><span>0</span><span>2</span><span>2</span><span>1</span><span>3</span><span>4</span><span>3</span><span>4</span><span>8</span><span>7</span></div>
+      <p>Υπάρχει πάντα <strong>μία R παραπάνω</strong>: το δεύτερο μισό αλλάζει κάθε R σε L και κάθε L σε R. Έτσι τα δύο μισά μαζί έχουν τόσες R όσες L, και η μεσαία στροφή είναι η R που περισσεύει.</p>
+    </article>
+    <article class="math-item m5"><h3><span class="q">5</span>Πόσο μακριά φτάνει η καμπύλη;</h3>
+      <p>Στο επίπεδο 1 πάμε 1 δεξιά και 1 κάτω. Με το Πυθαγόρειο θεώρημα, η απόσταση από την αρχή ως το τέλος είναι:</p>
+      <div class="fbox pink">√(1² + 1²) = √2 ≈ 1,41</div>
+      <p>Σε κάθε επίπεδο η απόσταση γίνεται × √2: 1 → 1,41 → 2 → 2,83 → 4. Κάθε δύο επίπεδα διπλασιάζεται, γιατί √2 × √2 = 2.</p>
+    </article>
+    <article class="math-item m6"><h3><span class="q">6</span>Δύο ίδια μισά</h3>
+      <svg class="fig" id="fig-halves" role="img" aria-label="Καμπύλη του δράκου επιπέδου 7, με το πρώτο μισό σκούρο και το δεύτερο ανοιχτό, και το μεσαίο σημείο σημειωμένο" style="height:150px"></svg>
+      <p>Το ανοιχτό μισό είναι το σκούρο μισό <strong>γυρισμένο κατά 90°</strong> γύρω από το κίτρινο σημείο. Είναι η μεσαία τσάκιση του χαρτιού: εκεί το διπλώσαμε την τελευταία φορά!</p>
+    </article>
+  </div>
+  <div class="answer">Συμπέρασμα: <span>κάθε δίπλωση διπλασιάζει τα κομμάτια, και το δεύτερο μισό είναι το πρώτο γυρισμένο κατά 90°</span></div>
+  <div class="bridge"><strong>Από τα μαθηματικά στην Python</strong><p>Η <code>folds</code> γράφει τις στροφές με τον κανόνα «παλιές + R + ανάποδες αντίθετες», και ο βρόχος <code>for</code> τις ακολουθεί, στρίβοντας το (dx, dy) κατά 90° σε κάθε τσάκιση.</p></div>
+  <div class="did-you-know"><strong>Ήξερες ότι;</strong><p>Στο μυθιστόρημα «Jurassic Park» του Μάικλ Κράιτον, κάθε μέρος του βιβλίου ξεκινά με την καμπύλη του δράκου, σε όλο και μεγαλύτερο επίπεδο. Γι' αυτό τη λένε και «δράκο του Jurassic Park».</p></div>
+</section>
+<section class="block b-purple" aria-labelledby="s5">
+  <div class="tab"><span class="num">5</span><h2 id="s5">Γράψε και τρέξε Python</h2></div>
+  <p class="lab-guide">Οι γραμμές με <code>#</code> είναι σχόλια που εξηγούν κάθε εντολή. Ξεκίνα αλλάζοντας μόνο το <code>COLOR = "red"</code> και το <code>LEVEL = 10</code>, και πάτησε <strong>«Εκτέλεση Python»</strong>.</p>
+  <div class="workspace">
+    <article class="panel p-code">
+      <div class="panel-head"><div><h3>Ο κώδικάς σου</h3><p>Python 3 στον browser, μέσω Pyodide</p></div><span class="tag">main.py</span></div>
+      <div class="editor-wrap"><pre id="highlight" aria-hidden="true" class="editor-highlight"><code id="highlightCode"></code></pre><textarea class="editor" id="code" spellcheck="false" aria-label="Επεξεργαστής κώδικα Python" wrap="off"></textarea></div>
+      <div class="actions"><button class="primary" id="run">▶ Εκτέλεση Python</button><button class="secondary" id="reset">↺ Αρχικός κώδικας</button><button class="secondary" id="copy">⧉ Αντιγραφή</button></div>
+      <div id="status" class="status" role="status" aria-live="polite">Το σχέδιο εμφανίζεται αμέσως. Για να τρέξει ο κώδικας Python που αλλάζεις, χρειάζεται σύνδεση στο διαδίκτυο.</div>
+    </article>
+    <article class="panel p-draw">
+      <div class="panel-head"><div><h3>Ο δράκος σου</h3><p>Δοκίμασε διαφορετικά επίπεδα επανάληψης.</p></div><span class="tag" id="countBadge">1.024 τμήματα</span></div>
+      <div class="preview"><canvas id="canvas" aria-label="Η καμπύλη του δράκου σου"></canvas></div>
+      <div class="stat-line"><span>Απόσταση αρχής – τέλους</span><b id="dist">…</b></div>
+      <div class="stat-line turns"><span>Στροφές</span><b id="turns">…</b></div>
+      <div class="controls">
+        <div class="range-label"><label for="level">Επίπεδο επανάληψης</label><strong id="levelText">10</strong></div><input id="level" type="range" min="0" max="14" value="10"/><div class="mini-row"><span>0 · Ένα τμήμα</span><span>14 · 16.384 τμήματα</span></div>
+      </div>
+      <div class="callout">💡 Το πρώτο μισό της καμπύλης είναι <strong>σκούρο</strong> και το δεύτερο <strong>ανοιχτό</strong>. Μέχρι το επίπεδο 5 βλέπεις από κάτω και όλες τις στροφές.</div>
+    </article>
+  </div>
+</section>
+
+<div class="next"><span class="go" aria-hidden="true">➜</span><p><b>Πρόκληση:</b> Γράψε με τον κανόνα τις στροφές του επιπέδου 4. Πόσα τμήματα έχει η καμπύλη, πόσες στροφές είναι R και πόσο μακριά από την αρχή τελειώνει; Έλεγξέ το με το slider!</p></div>
+<details class="solution"><summary>Δες τη λύση <small>(δοκίμασε πρώτα μόνος σου!)</small></summary>
+<div class="sol-body">
+<p><strong>Οι στροφές.</strong> Ξεκινάμε από το επίπεδο 3: <span class="seq"><span class="r">R</span> <span class="r">R</span> <span class="l">L</span> <span class="r">R</span> <span class="r">R</span> <span class="l">L</span> <span class="l">L</span></span>. Τις γράφουμε ανάποδα, <span class="seq"><span class="l">L</span> <span class="l">L</span> <span class="r">R</span> <span class="r">R</span> <span class="l">L</span> <span class="r">R</span> <span class="r">R</span></span>, και αλλάζουμε τη φορά τους, <span class="seq"><span class="r">R</span> <span class="r">R</span> <span class="l">L</span> <span class="l">L</span> <span class="r">R</span> <span class="l">L</span> <span class="l">L</span></span>. Τώρα τα ενώνουμε με μία <span class="seq"><span class="r">R</span></span> στη μέση:</p>
+<div class="fbox"><span class="seq"><span class="r">R</span> <span class="r">R</span> <span class="l">L</span> <span class="r">R</span> <span class="r">R</span> <span class="l">L</span> <span class="l">L</span></span> &nbsp;+&nbsp; <span class="seq"><span class="r">R</span></span> &nbsp;+&nbsp; <span class="seq"><span class="r">R</span> <span class="r">R</span> <span class="l">L</span> <span class="l">L</span> <span class="r">R</span> <span class="l">L</span> <span class="l">L</span></span></div>
+<p>Δηλαδή 7 + 1 + 7 = 15 στροφές.</p>
+<p><strong>Πόσα τμήματα;</strong> Τέσσερις διπλώσεις: 2⁴ = 2 × 2 × 2 × 2 = 16 τμήματα, μία στροφή ανάμεσα σε κάθε δύο: 16 − 1 = 15. ✓</p>
+<p><strong>Πόσες R;</strong> Μετράμε: 8 στροφές R και 7 στροφές L, δηλαδή μία R παραπάνω, όπως πάντα.</p>
+<p><strong>Πόσο μακριά;</strong> Σε κάθε επίπεδο η απόσταση γίνεται × √2:</p>
+<div class="fbox pink">(√2)⁴ = √2 × √2 × √2 × √2 = 2 × 2 = 4</div>
+<p>Το βλέπεις και στη γραμμή «Απόσταση αρχής – τέλους» κάτω από τον δράκο.</p>
+<p class="final">Απάντηση: R R L R R L L R R R L L R L L, 16 τμήματα, 8 R και 7 L, απόσταση 4</p>
+</div></details>
+
+<nav class="lab-pager" aria-label="Άλλα εργαστήρια"><a href="../fractal-tree/">← Προηγούμενο: Fractal δέντρο</a><a class="next-lab" href="../">Όλα τα εργαστήρια</a></nav>
+
+<footer>Εκπαιδευτικό εργαστήριο για fractals, γεωμετρία και υπολογιστική σκέψη. Δεν χρειάζεται λογαριασμός.</footer>
+</main>
+<script src="../assets/draw2d.js"></script>
+<script src="../assets/lab.js"></script>
+<script>
+
+const INITIAL = "# ΚΑΜΠΥΛΗ ΤΟΥ ΔΡΑΚΟΥ — ΜΑΘΑΙΝΩ PYTHON ΒΗΜΑ ΒΗΜΑ\n# Οι γραμμές που αρχίζουν με # είναι σχόλια.\n# Εξηγούν τον κώδικα, αλλά η Python ΔΕΝ τις εκτελεί.\n\n# ΒΗΜΑ 1: Διαλέγουμε επίπεδο (πόσες διπλώσεις) και χρώμα.\n# Δοκίμασε LEVEL = 0, 1, 2, ... έως 14.\nLEVEL = 10\n# Δοκίμασε \"red\", \"blue\", \"green\", \"purple\" ή \"orange\".\nCOLOR = \"red\"\n\n# ΒΗΜΑ 2: Οι στροφές του χαρτιού.\n# \"R\" = στρίψε δεξιά 90° (Right), \"L\" = στρίψε αριστερά 90° (Left).\ndef folds(level):\n    # Χωρίς δίπλωση, το χαρτί δεν έχει καμία στροφή.\n    if level == 0:\n        return []\n    # ΑΝΑΔΡΟΜΗ! Οι στροφές του προηγούμενου επιπέδου.\n    old = folds(level - 1)\n    # Το δεύτερο μισό: οι ίδιες στροφές, ανάποδα\n    # και με αντίθετη φορά (R γίνεται L, L γίνεται R).\n    back = []\n    for turn in reversed(old):\n        if turn == \"R\":\n            back.append(\"L\")\n        else:\n            back.append(\"R\")\n    # Παλιές στροφές + μία νέα στη μέση + το δεύτερο μισό.\n    return old + [\"R\"] + back\n\nturns = folds(LEVEL)\n\n# ΒΗΜΑ 3: Περπατάμε πάνω στο ξεδιπλωμένο χαρτί.\n# Ξεκινάμε από το (0, 0) και κοιτάμε προς τα δεξιά: (dx, dy) = (1, 0).\nx, y = 0, 0\ndx, dy = 1, 0\npoints = [(x, y)]\nx, y = x + dx, y + dy\npoints.append((x, y))\n\nfor turn in turns:\n    # Στροφή 90°: δεξιά (dx, dy) γίνεται (dy, -dx),\n    # αριστερά (dx, dy) γίνεται (-dy, dx).\n    if turn == \"R\":\n        dx, dy = dy, -dx\n    else:\n        dx, dy = -dy, dx\n    # Ένα βήμα μπροστά στη νέα κατεύθυνση.\n    x, y = x + dx, y + dy\n    points.append((x, y))\n\n# ΤΕΛΟΣ! Η ιστοσελίδα ενώνει τα points με το COLOR.\n# ΠΕΙΡΑΜΑ: Βάλε return old + [\"L\"] + back και δες τι αλλάζει.\n";
+const $ = s => document.querySelector(s);
+function folds(n) {
+  if (n === 0) return [];
+  const old = folds(n - 1);
+  return [...old, 'R', ...old.slice().reverse().map(t => t === 'R' ? 'L' : 'R')];
+}
+function walk(turns) {
+  let x = 1, y = 0, dx = 1, dy = 0;
+  const pts = [[0, 0], [1, 0]];
+  for (const t of turns) {
+    if (t === 'R') [dx, dy] = [dy, -dx]; else [dx, dy] = [-dy, dx];
+    x += dx; y += dy; pts.push([x, y]);
+  }
+  return pts;
+}
+const dragon = n => walk(folds(n));
+const RED = '#d63447', NICE = { red: RED };
+// Το πρώτο μισό σκούρο, το δεύτερο ανοιχτό: φαίνεται ότι είναι το ίδιο σχήμα γυρισμένο κατά 90°.
+function halves(pts) {
+  if (pts.length < 3) return [pts, []];
+  const h = Math.floor((pts.length - 1) / 2);
+  return [pts.slice(0, h + 1), pts.slice(h)];
+}
+function dragonSVG(svg, pts, color, width, viewBox) {
+  const b = FL2D.bounds({ path: pts }), pad = Math.max(0.6, 0.05 * Math.max(b.maxX - b.minX, b.maxY - b.minY));
+  svg.setAttribute('viewBox', viewBox || ((b.minX - pad) + ' ' + (-(b.maxY + pad)) + ' ' + (b.maxX - b.minX + 2 * pad) + ' ' + (b.maxY - b.minY + 2 * pad)));
+  const d = p => p.length > 1 ? 'M' + p.map(q => q[0] + ' ' + (-q[1])).join('L') : '';
+  const [a, c] = halves(pts);
+  svg.innerHTML = '<g fill="none" stroke-width="' + width + '" stroke-linecap="round" stroke-linejoin="round">'
+    + '<path d="' + d(c) + '" stroke="' + color + '" stroke-opacity="0.42"/><path d="' + d(a) + '" stroke="' + color + '"/></g>';
+}
+function drawDragon(canvas, pts, color) {
+  const rect = canvas.getBoundingClientRect(), ratio = window.devicePixelRatio || 1;
+  canvas.width = Math.round(rect.width * ratio); canvas.height = Math.round(rect.height * ratio);
+  const ctx = canvas.getContext('2d'); ctx.scale(ratio, ratio);
+  const b = FL2D.bounds({ path: pts }); if (!b || pts.length < 2) return;
+  const w = rect.width, h = rect.height, pad = 24;
+  const scale = Math.min((w - 2 * pad) / Math.max(1, b.maxX - b.minX), (h - 2 * pad) / Math.max(1, b.maxY - b.minY));
+  ctx.translate(w / 2, h / 2); ctx.scale(scale, -scale); ctx.translate(-(b.minX + b.maxX) / 2, -(b.minY + b.maxY) / 2);
+  ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.lineWidth = Math.min(7, Math.max(0.8, scale * 0.55)) / scale; ctx.strokeStyle = color;
+  const [a, c] = halves(pts);
+  for (const [part, alpha] of [[c, 0.42], [a, 1]]) {
+    if (part.length < 2) continue;
+    ctx.globalAlpha = alpha; ctx.beginPath(); part.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+}
+const turnsOf = pts => {
+  let s = '';
+  for (let i = 1; i < pts.length - 1; i++) {
+    const ax = pts[i][0] - pts[i - 1][0], ay = pts[i][1] - pts[i - 1][1], bx = pts[i + 1][0] - pts[i][0], by = pts[i + 1][1] - pts[i][1], c = ax * by - ay * bx;
+    s += c < 0 ? 'R' : c > 0 ? 'L' : '·';
+  }
+  return s;
+};
+const label = (svg, x, y, t, size, fill = '#1f2a5c') => svg.insertAdjacentHTML('beforeend', '<text x="' + x + '" y="' + (-y) + '" font-size="' + size + '" text-anchor="middle" dominant-baseline="central" font-family="Playpen Sans, cursive" font-weight="800" fill="' + fill + '">' + t + '</text>');
+const start = (svg, color) => svg.insertAdjacentHTML('beforeend', '<circle cx="0" cy="0" r="0.09" fill="#fff" stroke="' + color + '" stroke-width="0.05"/>');
+dragonSVG($('#fig-hero'), dragon(12), RED, 0.62);
+{ const svg = $('#fig-a'); dragonSVG(svg, dragon(1), '#e0313b', 0.12, '-0.4 -0.35 1.9 1.6'); start(svg, '#e0313b'); label(svg, 1.18, 0.15, 'R', 0.24); }
+{ const svg = $('#fig-b'); dragonSVG(svg, dragon(2), '#e2508c', 0.12, '-0.5 -0.35 2.0 2.55'); start(svg, '#e2508c'); label(svg, 1.18, 0.15, 'R', 0.22); label(svg, 1.18, -1.15, 'R', 0.22); label(svg, -0.18, -0.85, 'L', 0.22); }
+dragonSVG($('#fig-c'), dragon(8), '#f08a1c', 0.55);
+{
+  const svg = $('#fig-halves'), pts = dragon(7), mid = pts[(pts.length - 1) / 2];
+  dragonSVG(svg, pts, '#2c6fd6', 0.5);
+  svg.insertAdjacentHTML('beforeend', '<circle cx="' + mid[0] + '" cy="' + (-mid[1]) + '" r="0.55" fill="#ffd84d" stroke="#1f2a5c" stroke-width="0.15"/>');
+}
+const canvas = $('#canvas'), distEl = $('#dist'), turnsEl = $('#turns');
+const fmt = v => v.toLocaleString('el-GR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+FractalLab.start({
+  initial: INITIAL, outputVar: 'points', level: { min: 0, max: 14, value: 10 }, color: 'red', maxItems: 16500,
+  preview: v => dragon(v.LEVEL),
+  validate: items => items.length >= 2 && items.every(p => Array.isArray(p) && p.length === 2 && p.every(Number.isFinite)) ? null : 'Η λίστα points πρέπει να έχει τουλάχιστον δύο σημεία (x, y).',
+  render: (items, color) => {
+    drawDragon(canvas, items, NICE[color] || color);
+    const a = items[0], z = items[items.length - 1];
+    distEl.textContent = fmt(Math.hypot(z[0] - a[0], z[1] - a[1]));
+    const t = turnsOf(items);
+    if (t.length > 0 && t.length <= 31) { turnsEl.className = 'seq'; turnsEl.innerHTML = t.split('').map(c => '<span class="' + (c === 'R' ? 'r' : 'l') + '">' + c + '</span>').join(' '); }
+    else { turnsEl.className = ''; turnsEl.textContent = t.length === 0 ? 'καμία' : t.length.toLocaleString('el-GR') + ' στροφές (τις γράφουμε έως το επίπεδο 5)'; }
+  },
+  countLabel: items => (items.length - 1).toLocaleString('el-GR') + (items.length === 2 ? ' τμήμα' : ' τμήματα')
+});
+
+</script></body></html>
