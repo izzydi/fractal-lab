@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="el"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Εργαστήριο Fractals · Mandelbulb (3D)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/lab.css">
+<link rel="stylesheet" href="../assets/explorer.css">
+<style>
+.pow-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0}
+.pow-row figure{margin:0;text-align:center}
+.pow-row svg{display:block;width:100%;height:96px;border-radius:10px;background:#05070f}
+.pow-row figcaption{font-size:13px;font-weight:700;color:var(--muted)}
+.fig-box svg#fig-hero{border-radius:10px}
+.step svg#fig-c{border-radius:10px}
+.to-bulb{margin-top:4px;border:2px solid var(--purple);background:#f6f1ff;color:#5b3fb8;border-radius:11px;padding:6px 12px;font-weight:800;font-size:15px}
+.to-bulb:hover{background:#ece2ff}
+</style>
+</head>
+<body><main class="sheet">
+<nav class="lab-nav" aria-label="Fractal Lab"><a href="../">← Όλα τα εργαστήρια</a><span>Fractal Lab | Εργαστήριο 9</span></nav>
+
+<header class="sheet-head">
+  <div class="title-card">
+    <h1><span class="t1">Εργαστήριο Fractals –</span> <span class="t2">Mandelbulb (3D)</span></h1>
+    <p>Σφαιρικές συντεταγμένες, ray marching και Python | Λύκειο &amp; πανεπιστήμιο</p>
+  </div>
+  <aside class="brand-card" aria-label="Fractal Lab">
+    <strong>Fractal Lab</strong>
+    <span>Μαθηματικά &amp; Python<br>για Λύκειο &amp; πανεπιστήμιο</span>
+    <em>Χωρίς λογαριασμό</em>
+  </aside>
+</header>
+
+<section class="block b-pink" aria-labelledby="s1">
+  <div class="tab"><span class="num">1</span><h2 id="s1">Ένα Mandelbrot για τον χώρο</h2></div>
+  <div class="intro">
+    <div>
+      <p>Το σύνολο Mandelbrot ζει στο επίπεδο, γιατί στηρίζεται στον <span class="hl y">πολλαπλασιασμό των μιγαδικών</span>. Για χρόνια οι λάτρεις των fractals έψαχναν ένα «τρισδιάστατο Mandelbrot», αλλά στον χώρο δεν υπάρχει πολλαπλασιασμός με τις ίδιες καλές ιδιότητες.</p>
+      <p>Το 2009 οι <strong>Daniel White</strong> και <strong>Paul Nylander</strong> δοκίμασαν μια «τριπλή» δύναμη με <span class="hl b">σφαιρικές συντεταγμένες</span>: υψώνουμε το μέτρο στη δύναμη n και πολλαπλασιάζουμε τις γωνίες επί n. Με n = 8 εμφανίστηκε ο <strong>Mandelbulb</strong>, ένα σχήμα με λεπτομέρειες σε κάθε κλίμακα.</p>
+      <p>Δεν φτιάχνεται από τρίγωνα, όπως τα άλλα 3D σχήματα. Ο browser τον ζωγραφίζει με <span class="hl o">ray marching</span>: για κάθε pixel στέλνει μια ακτίνα και την προχωρά προσεκτικά, ώσπου να «ακουμπήσει» την επιφάνεια.</p>
+      <div class="goals">
+        <h3>Στόχοι του μαθήματος</h3>
+        <ol>
+          <li><b>Σ1</b><span>Να εξηγείς γιατί η δύναμη ενός μιγαδικού υψώνει το μέτρο και πολλαπλασιάζει τη γωνία.</span></li>
+          <li><b>Σ2</b><span>Να μετατρέπεις καρτεσιανές συντεταγμένες σε σφαιρικές και αντίστροφα.</span></li>
+          <li><b>Σ3</b><span>Να περιγράφεις πώς η «τριπλή» δύναμη ορίζει τον Mandelbulb.</span></li>
+          <li><b>Σ4</b><span>Να εξηγείς πώς ένας υπολογιστής σχεδιάζει ένα fractal με ray marching και εκτιμητή απόστασης.</span></li>
+        </ol>
+      </div>
+    </div>
+    <div class="figure">
+      <p class="note">Ο ίδιος κανόνας, μία διάσταση πάνω!</p>
+      <svg class="arrow" viewBox="0 0 90 46" aria-hidden="true"><path d="M70 4 C 60 30, 30 36, 12 38" fill="none" stroke="#3f9d58" stroke-width="2.5" stroke-linecap="round"/><path d="M22 30 L11 38.5 L24 43" fill="none" stroke="#3f9d58" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="fig-box"><svg id="fig-hero" role="img" aria-label="Ο Mandelbulb με δύναμη 8"></svg></div>
+    </div>
+  </div>
+</section>
+<section class="block b-blue" aria-labelledby="s2">
+  <div class="tab"><span class="num">2</span><h2 id="s2">Εξερεύνησε τον Mandelbulb</h2></div>
+  <p class="lab-guide">Σύρε για να τον γυρίσεις και γύρνα τη ροδέλα (ή τσίμπησε στην οθόνη αφής) για zoom. Ο Mandelbulb σχεδιάζεται <strong>ζωντανά</strong> από την κάρτα γραφικών του υπολογιστή σου, με φως, σκιές και χρώματα.</p>
+  <div class="xp" id="xp">
+    <canvas id="bulb" tabindex="0" aria-label="Ο Mandelbulb σε 3D. Σύρε για περιστροφή, ροδέλα ή διπλό κλικ για zoom, βελάκια και + − από το πληκτρολόγιο."></canvas>
+    <div class="xp-hint" id="xpHint">Σύρε για να τον γυρίσεις · ροδέλα, τσίμπημα ή διπλό κλικ για zoom</div>
+    <div class="xp-tools"><button id="xIn" title="Μεγέθυνση" aria-label="Μεγέθυνση"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></button><button id="xOut" title="Σμίκρυνση" aria-label="Σμίκρυνση"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M5 12h14" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></button><button id="xHome" title="Αρχική θέα" aria-label="Αρχική θέα"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 11.5 12 5l8 6.5M6.5 10v9h11v-9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button id="xShot" title="Αποθήκευση εικόνας (PNG)" aria-label="Αποθήκευση εικόνας (PNG)"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button id="xFull" title="Πλήρης οθόνη" aria-label="Πλήρης οθόνη"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    <div class="xp-hud"><span id="hudPower"></span><span id="hudIter"></span><span id="hudRes"></span></div>
+    <div class="xp-fallback"><div><img src="../assets/mandelbulb.jpg" alt="Ο Mandelbulb με δύναμη 8"><p>Ο browser σου δεν υποστηρίζει WebGL, οπότε βλέπεις μια έτοιμη εικόνα. Άνοιξε τη σελίδα σε άλλον browser ή υπολογιστή για τη ζωντανή εκδοχή.</p></div></div>
+  </div>
+  <div class="xp-bar">
+    <div class="xp-row"><b>Θέα:</b><button class="xp-chip" type="button" data-view="whole" aria-pressed="false">Όλος ο Mandelbulb</button><button class="xp-chip" type="button" data-view="top" aria-pressed="false">Από πάνω</button><button class="xp-chip" type="button" data-view="equator" aria-pressed="false">Στον ισημερινό</button><button class="xp-chip" type="button" data-view="close" aria-pressed="false">Κοντά στην επιφάνεια</button></div>
+    <div class="xp-row"><b>Χρώματα:</b><button class="xp-chip" type="button" data-pal="coral" aria-pressed="false">Κοράλλι</button><button class="xp-chip" type="button" data-pal="lava" aria-pressed="false">Λάβα</button><button class="xp-chip" type="button" data-pal="ice" aria-pressed="false">Πάγος</button><button class="xp-chip" type="button" data-pal="gold" aria-pressed="false">Χρυσός</button><button class="xp-chip" type="button" data-pal="rainbow" aria-pressed="false">Ιριδίζον</button></div>
+    <div class="xp-row"><div class="xp-slider"><label for="power">Δύναμη n</label><input id="power" type="range" min="2" max="16" step="0.1" value="8"><output id="powerOut" for="power">8,0</output></div><div class="xp-slider"><label for="iters">Επαναλήψεις</label><input id="iters" type="range" min="3" max="16" step="1" value="9"><output id="itersOut" for="iters">9</output></div></div>
+    <div class="xp-row"><label class="xp-check"><input type="checkbox" id="auto" checked> Αυτόματη περιστροφή</label><label class="xp-check"><input type="checkbox" id="shadows" checked> Σκιές</label><label class="xp-check"><input type="checkbox" id="sliceOn"> Τομή</label><div class="xp-slider"><label for="slice">στο ύψος z =</label><input id="slice" type="range" min="-1.2" max="1.2" step="0.01" value="0"><output id="sliceOut" for="slice">0,00</output></div><button class="xp-go" id="morph" type="button" aria-pressed="false">▶ Ζωντανή δύναμη</button></div>
+  </div>
+  <p class="xp-help">Η «Ζωντανή δύναμη» αλλάζει συνεχώς το n από 2 έως 8, και ο Mandelbulb μεταμορφώνεται μπροστά σου. Η «Τομή» κόβει ό,τι βρίσκεται πάνω από ένα ύψος z, για να φανεί το εσωτερικό του. Όσο το σχήμα κινείται, ο εξερευνητής χαμηλώνει μόνος του την ανάλυση αν χρειάζεται, και όταν σταματήσει το ζωγραφίζει σε πλήρη ανάλυση.</p>
+</section>
+<section class="block b-green" aria-labelledby="s3">
+  <div class="tab"><span class="num">3</span><h2 id="s3">Βασικές ιδέες</h2></div>
+  <div class="chips">
+    <div class="chip c1">(r, θ, φ)<small>σφαιρικές συντεταγμένες</small></div>
+    <div class="chip c2">rⁿ, nθ, nφ<small>η «τριπλή» δύναμη</small></div>
+    <div class="chip c3">v → vⁿ + c<small>ο κανόνας</small></div>
+    <div class="chip c4">n = 8<small>ο κλασικός Mandelbulb</small></div>
+    <div class="chip c5">ray marching<small>μία ακτίνα ανά pixel</small></div>
+    <div class="chip c6">GPU<small>εκατομμύρια πράξεις ανά καρέ</small></div>
+  </div>
+</section>
+<section class="block b-blue" aria-labelledby="s4">
+  <div class="tab"><span class="num">4</span><h2 id="s4">Από το επίπεδο στον χώρο</h2></div>
+  <div class="steps">
+    <article class="step sA">
+      <div class="step-head"><span class="letter">A</span><h3>Ένα σημείο στον χώρο</h3></div>
+      <svg class="fig" id="fig-a" role="img" aria-label="Σημείο P με απόσταση r από την αρχή, γωνία θ από τον άξονα z και γωνία φ στο επίπεδο xy"></svg>
+      <p>Κάθε σημείο P(x, y, z) περιγράφεται και με την <span class="hl y">απόσταση r</span> από την αρχή και δύο γωνίες: τη <span class="hl b">θ</span> από τον άξονα z και τη <span class="hl g">φ</span> στο επίπεδο xy.</p>
+    </article>
+    <article class="step sB">
+      <div class="step-head"><span class="letter">B</span><h3>Η δύναμη ενός σημείου</h3></div>
+      <svg class="fig" id="fig-b" role="img" aria-label="Στο επίπεδο, το z² έχει διπλάσια γωνία από το z και μέτρο |z|²"></svg>
+      <p>Στο επίπεδο, το z² έχει <span class="hl p">διπλάσια γωνία</span> και μέτρο |z|². Στον χώρο κάνουμε το ίδιο: r → rⁿ, θ → nθ, φ → nφ.</p>
+    </article>
+    <article class="step sC">
+      <div class="step-head"><span class="letter">C</span><h3>Πρόσθεσε c και επανάλαβε</h3></div>
+      <svg class="fig" id="fig-c" role="img" aria-label="Ο Mandelbulb με δύναμη 8"></svg>
+      <p>Όπως στο σύνολο Mandelbrot: v → vⁿ + c, ξανά και ξανά. Τα c που <span class="hl o">δεν ξεφεύγουν</span> σχηματίζουν τον Mandelbulb.</p>
+    </article>
+  </div>
+</section>
+<section class="block b-orange" aria-labelledby="s5">
+  <div class="tab"><span class="num">5</span><h2 id="s5">Τα μαθηματικά πίσω από το σχέδιο</h2></div>
+  <p class="math-lead">Στο εργαστήριο 8 ο κανόνας z → z² + c δούλευε χάρη στον πολλαπλασιασμό των μιγαδικών. Για να πάμε στις <span class="hl y">τρεις διαστάσεις</span> χρειαζόμαστε μια «δύναμη» για σημεία του χώρου, και έναν τρόπο να σχεδιάσουμε κάτι που δεν έχει επίπεδες έδρες.</p>
+  <div class="math-grid">
+    <article class="math-item m1"><h3><span class="q">1</span>Η δύναμη ενός μιγαδικού</h3>
+      <p>Σε πολικές συντεταγμένες z = r(cos φ + i·sin φ). Με τον τύπο του De Moivre:</p>
+      <div class="fbox">zⁿ = rⁿ · (cos nφ + i·sin nφ)</div>
+      <p>Δηλαδή η δύναμη <strong>υψώνει το μέτρο</strong> και <strong>πολλαπλασιάζει τη γωνία</strong>. Αυτή την ιδέα θα μεταφέρουμε στον χώρο.</p>
+    </article>
+    <article class="math-item m2"><h3><span class="q">2</span>Γιατί όχι «μιγαδικοί του χώρου»;</h3>
+      <p>Ο William Rowan Hamilton προσπάθησε για χρόνια να πολλαπλασιάσει τριάδες αριθμών, χωρίς επιτυχία. Το 1877 ο Frobenius απέδειξε γιατί:</p>
+      <div class="fbox green">ℝ (1D), ℂ (2D), ℍ (4D)</div>
+      <p>Αυτά είναι τα μόνα συστήματα αριθμών πεπερασμένης διάστασης με προσεταιριστικό πολλαπλασιασμό και διαίρεση. Στις 3 διαστάσεις δεν υπάρχει, γι' αυτό ο Mandelbulb «μιμείται» τον De Moivre.</p>
+    </article>
+    <article class="math-item m3"><h3><span class="q">3</span>Σφαιρικές συντεταγμένες</h3>
+      <p>Ένα σημείο (x, y, z) γράφεται με την απόσταση r και δύο γωνίες:</p>
+      <div class="fbox blue">r = √(x² + y² + z²)<br>θ = arccos(z / r) &nbsp;&nbsp; φ = atan2(y, x)</div>
+      <p>Και αντίστροφα: (x, y, z) = r · (sin θ cos φ, sin θ sin φ, cos θ). <strong>Στον κώδικα:</strong> <code>acos(z / r)</code> και <code>atan2(y, x)</code>.</p>
+    </article>
+    <article class="math-item m4"><h3><span class="q">4</span>Η «τριπλή» δύναμη</h3>
+      <div class="pow-row"><figure><svg id="fig-n2" role="img" aria-label="Mandelbulb με δύναμη 2"></svg><figcaption>n = 2</figcaption></figure><figure><svg id="fig-n4" role="img" aria-label="Mandelbulb με δύναμη 4"></svg><figcaption>n = 4</figcaption></figure><figure><svg id="fig-n8" role="img" aria-label="Mandelbulb με δύναμη 8"></svg><figcaption>n = 8</figcaption></figure></div>
+      <div class="fbox pink">vⁿ = rⁿ · (sin nθ cos nφ, sin nθ sin nφ, cos nθ)</div>
+      <p>Ο κανόνας είναι v → vⁿ + c με v₀ = 0, και σταματάμε όταν |v| > 2. Όσο μεγαλύτερο το n, τόσο περισσότεροι «λοβοί» εμφανίζονται.</p>
+    </article>
+    <article class="math-item m5"><h3><span class="q">5</span>Ray marching</h3>
+      <p>Από την κάμερα ξεκινά μια ακτίνα p(t) = o + t·d για κάθε pixel. Αν ξέρουμε ότι η επιφάνεια απέχει τουλάχιστον δ(p), μπορούμε να προχωρήσουμε τόσο χωρίς να την προσπεράσουμε:</p>
+      <div class="fbox">t ← t + δ(o + t·d), &nbsp; ώσπου δ &lt; ε</div>
+      <p>Συνήθως αρκούν 50 έως 150 βήματα ανά pixel. Αν η ακτίνα βγει από τη σφαίρα ακτίνας 1,25 που περικλείει τον Mandelbulb, το pixel είναι φόντο.</p>
+    </article>
+    <article class="math-item m6"><h3><span class="q">6</span>Ο εκτιμητής απόστασης</h3>
+      <p>Μαζί με το v υπολογίζουμε και την παράγωγο dr, που μετρά πόσο «τεντώνει» ο κανόνας τον χώρο:</p>
+      <div class="fbox green">dr ← n · rⁿ⁻¹ · dr + 1 &nbsp;&nbsp; δ ≈ ½ · r · ln r / dr</div>
+      <p>Ο τύπος προκύπτει από το «δυναμικό» G = lim ln|vₖ| / nᵏ, με δ ≈ G / |∇G|. Από το ίδιο δ βρίσκουμε και το κάθετο διάνυσμα της επιφάνειας, που χρειάζεται για το φως και τις σκιές.</p>
+    </article>
+  </div>
+  <div class="answer">Συμπέρασμα: <span>ο Mandelbulb είναι τα σημεία c του χώρου για τα οποία η ακολουθία v → vⁿ + c μένει φραγμένη, και η κάρτα γραφικών τον ζωγραφίζει με ray marching</span></div>
+  <div class="bridge"><strong>Από τα μαθηματικά στην Python</strong><p>Η Python κάνει τον υπολογισμό για τα 120 × 120 = 14.400 σημεία μιας τομής. Η κάρτα γραφικών τρέχει τον ίδιο τύπο, γραμμένο στη γλώσσα GLSL, για κάθε pixel: περίπου 100 βήματα ray marching × 9 επαναλήψεις, δηλαδή εκατομμύρια υπολογισμούς σε κάθε καρέ.</p></div>
+  <div class="did-you-know"><strong>Ήξερες ότι;</strong><p>Στις 16 Οκτωβρίου 1843, περπατώντας στο Δουβλίνο, ο Hamilton βρήκε επιτέλους πώς να πολλαπλασιάζει: όχι τριάδες, αλλά τετράδες αριθμών, τα <strong>τετραδόνια</strong>. Από τον ενθουσιασμό του χάραξε τον τύπο i² = j² = k² = ijk = −1 πάνω στη γέφυρα Brougham, όπου σήμερα υπάρχει αναμνηστική πλάκα.</p></div>
+</section>
+<section class="block b-purple" aria-labelledby="s6">
+  <div class="tab"><span class="num">6</span><h2 id="s6">Γράψε και τρέξε Python</h2></div>
+  <p class="lab-guide">Η Python κόβει τον Mandelbulb με το οριζόντιο επίπεδο z = <code>SLICE</code> και ελέγχει 120 × 120 σημεία της τομής. Άλλαξε το ύψος ή τη δύναμη, πάτησε <strong>«Εκτέλεση Python»</strong> και μετά <strong>«Δείξε την τομή στο 3D»</strong> για να δεις την ίδια τομή από πάνω.</p>
+  <div class="workspace">
+    <article class="panel p-code">
+      <div class="panel-head"><div><h3>Ο κώδικάς σου</h3><p>Python 3 στον browser, μέσω Pyodide</p></div><span class="tag">main.py</span></div>
+      <div class="editor-wrap"><pre id="highlight" aria-hidden="true" class="editor-highlight"><code id="highlightCode"></code></pre><textarea class="editor" id="code" spellcheck="false" aria-label="Επεξεργαστής κώδικα Python" wrap="off"></textarea></div>
+      <div class="actions"><button class="primary" id="run">▶ Εκτέλεση Python</button><button class="secondary" id="reset">↺ Αρχικός κώδικας</button><button class="secondary" id="copy">⧉ Αντιγραφή</button></div>
+      <div id="status" class="status" role="status" aria-live="polite">Το σχέδιο εμφανίζεται αμέσως. Για να τρέξει ο κώδικας Python που αλλάζεις, χρειάζεται σύνδεση στο διαδίκτυο.</div>
+    </article>
+    <article class="panel p-draw">
+      <div class="panel-head"><div><h3>Η τομή της Python</h3><p>Τα μαύρα σημεία ανήκουν στον Mandelbulb.</p></div><span class="tag" id="countBadge">120 × 120 σημεία</span></div>
+      <div class="preview"><canvas id="canvas" aria-label="Η τομή του Mandelbulb όπως την υπολογίζει η Python"></canvas></div>
+      <div class="controls">
+        <div class="param"><div class="range-label"><label for="pslice">Ύψος τομής SLICE</label><strong id="psliceText">0.00</strong></div><input id="pslice" type="range" min="-1.2" max="1.2" step="0.05" value="0"/><div class="mini-row"><span>−1,2 · κάτω</span><span>1,2 · πάνω</span></div></div>
+        <div class="param"><div class="range-label"><label for="ppower">Δύναμη POWER</label><strong id="ppowerText">8</strong></div><input id="ppower" type="range" min="2" max="12" step="1" value="8"/><div class="mini-row"><span>2</span><span>12</span></div></div>
+        <button class="to-bulb" id="toBulb" type="button">↑ Δείξε την τομή στο 3D</button>
+      </div>
+      <div class="callout">💡 Η εικόνα δείχνει το επίπεδο από πάνω: ο άξονας x προς τα δεξιά και ο y προς τα πάνω. Στο 3D, η επιλογή «Από πάνω» με ενεργή την «Τομή» δείχνει ακριβώς το ίδιο σχήμα.</div>
+    </article>
+  </div>
+</section>
+
+<nav class="lab-pager" aria-label="Άλλα εργαστήρια"><a href="../mandelbrot/">← Προηγούμενο: Σύνολο Mandelbrot</a><a class="next-lab" href="../">Όλα τα εργαστήρια</a></nav>
+
+<footer>Εκπαιδευτικό εργαστήριο για fractals, γεωμετρία και υπολογιστική σκέψη. Δεν χρειάζεται λογαριασμός.</footer>
+</main>
+<script src="../assets/mandelbrot.js"></script>
+<script src="../assets/mandelbulb.js"></script>
+<script src="../assets/lab.js"></script>
+<script>
+
+const INITIAL = "# MANDELBULB — ΜΙΑ ΤΟΜΗ ΤΟΥ 3D FRACTAL ΜΕ PYTHON\nfrom math import sqrt, acos, atan2, sin, cos\n\n# ΒΗΜΑ 1: Οι ρυθμίσεις.\nPOWER = 8          # η δύναμη n (δοκίμασε 2, 3, 4, ..., 12)\nSLICE = 0.0        # σε ποιο ύψος z κόβουμε τον Mandelbulb (από -1.2 έως 1.2)\nMAX_ITER = 10      # μέγιστος αριθμός επαναλήψεων\n# Δοκίμασε \"purple\", \"blue\", \"orange\", \"green\" ή \"gray\".\nCOLOR = \"purple\"\n\n# ΒΗΜΑ 2: Η «τριπλή» δύναμη των White και Nylander.\n# Σφαιρικές συντεταγμένες: r = μέτρο, theta και phi = γωνίες.\ndef triplex_power(x, y, z, n):\n    r = sqrt(x * x + y * y + z * z)\n    if r == 0:\n        return 0.0, 0.0, 0.0\n    theta = acos(z / r)        # γωνία από τον άξονα z\n    phi = atan2(y, x)          # γωνία στο επίπεδο xy\n    rn = r ** n                # το μέτρο υψώνεται στη δύναμη n\n    return (rn * sin(n * theta) * cos(n * phi),   # και οι δύο γωνίες\n            rn * sin(n * theta) * sin(n * phi),   # πολλαπλασιάζονται επί n\n            rn * cos(n * theta))\n\n# ΒΗΜΑ 3: Ο κανόνας v → vⁿ + c, όπως στο σύνολο Mandelbrot.\ndef escape_time(cx, cy, cz):\n    x, y, z = 0.0, 0.0, 0.0\n    for i in range(MAX_ITER):\n        x, y, z = triplex_power(x, y, z, POWER)\n        x, y, z = x + cx, y + cy, z + cz\n        if x * x + y * y + z * z > 4:     # |v| > 2: ξεφεύγει\n            return i\n    return MAX_ITER                      # μένει: ανήκει στον Mandelbulb\n\n# ΒΗΜΑ 4: Ένα πλέγμα 120 × 120 σημείων στο επίπεδο z = SLICE.\nSIZE = 120\nimage = []\nfor row in range(SIZE):\n    cy = 1.2 - 2.4 * row / (SIZE - 1)\n    line = []\n    for col in range(SIZE):\n        cx = -1.2 + 2.4 * col / (SIZE - 1)\n        line.append(escape_time(cx, cy, SLICE))\n    image.append(line)\n\n# ΤΕΛΟΣ! Η ιστοσελίδα χρωματίζει την τομή: τα μαύρα σημεία ανήκουν στον Mandelbulb.\n# ΠΕΙΡΑΜΑ: Άλλαξε το SLICE και πάτησε «Δείξε την τομή στο 3D».\n";
+const $ = s => document.querySelector(s);
+const VIEWS = {
+  whole: { yaw: 0.75, pitch: 0.38, zoom: 1.3 },
+  top: { yaw: -Math.PI / 2, pitch: 1.48, zoom: 1.05 },
+  equator: { yaw: 0.3, pitch: 0.02, zoom: 1.15 },
+  close: { yaw: 0, pitch: 1.2, zoom: 4 }
+};
+const label = (svg, x, y, t, size, fill = '#1f2a5c', anchor = 'middle') => svg.insertAdjacentHTML('beforeend', '<text x="' + x + '" y="' + y + '" font-size="' + size + '" text-anchor="' + anchor + '" dominant-baseline="central" font-family="Playpen Sans, cursive" font-weight="800" fill="' + fill + '">' + t + '</text>');
+const pathOf = pts => 'M' + pts.map(p => p[0].toFixed(3) + ' ' + p[1].toFixed(3)).join('L');
+// A: σφαιρικές συντεταγμένες, σε πλάγια προβολή (x προς τα κάτω αριστερά, y δεξιά, z πάνω).
+{
+  const svg = $('#fig-a'), P = (x, y, z) => [y - 0.5 * x, -(z - 0.32 * x)];
+  const th = 50 * Math.PI / 180, ph = 35 * Math.PI / 180, p = [Math.sin(th) * Math.cos(ph), Math.sin(th) * Math.sin(ph), Math.cos(th)];
+  svg.setAttribute('viewBox', '-0.85 -1.3 2.2 1.75');
+  let h = '';
+  for (const [a, b, t] of [[[0, 0, 0], [1.25, 0, 0], 'x'], [[0, 0, 0], [0, 1.2, 0], 'y'], [[0, 0, 0], [0, 0, 1.15], 'z']]) {
+    const q = P(...b); h += '<path d="' + pathOf([P(...a), q]) + '" stroke="#1f2a5c" stroke-width="0.02" opacity=".7"/>';
+    h += '<text x="' + (q[0] + (t === 'x' ? -0.06 : 0.07)).toFixed(3) + '" y="' + (q[1] + (t === 'z' ? -0.06 : 0.05)).toFixed(3) + '" font-size="0.13" font-family="Playpen Sans, cursive" font-weight="800" fill="#1f2a5c" text-anchor="middle">' + t + '</text>';
+  }
+  const q = [p[0], p[1], 0], arcT = [], arcP = [];
+  for (let i = 0; i <= 20; i++) { const t = th * i / 20; arcT.push(P(0.38 * Math.sin(t) * Math.cos(ph), 0.38 * Math.sin(t) * Math.sin(ph), 0.38 * Math.cos(t))); }
+  for (let i = 0; i <= 20; i++) { const t = ph * i / 20; arcP.push(P(0.42 * Math.cos(t), 0.42 * Math.sin(t), 0)); }
+  h += '<path d="' + pathOf([P(...p), P(...q), P(0, 0, 0)]) + '" fill="none" stroke="#8a5cf0" stroke-width="0.016" stroke-dasharray="0.04 0.03"/>'
+    + '<path d="' + pathOf([P(0, 0, 0), P(...p)]) + '" stroke="#e0313b" stroke-width="0.03" stroke-linecap="round"/>'
+    + '<path d="' + pathOf(arcT) + '" fill="none" stroke="#2c6fd6" stroke-width="0.018"/><path d="' + pathOf(arcP) + '" fill="none" stroke="#3f9d58" stroke-width="0.018"/>'
+    + '<circle cx="' + P(...p)[0].toFixed(3) + '" cy="' + P(...p)[1].toFixed(3) + '" r="0.045" fill="#e0313b"/>';
+  svg.innerHTML = h;
+  const pp = P(...p), mt = P(0.5 * Math.sin(th / 2) * Math.cos(ph), 0.5 * Math.sin(th / 2) * Math.sin(ph), 0.5 * Math.cos(th / 2)), mp = P(0.56 * Math.cos(ph / 2), 0.56 * Math.sin(ph / 2), 0);
+  label(svg, pp[0] + 0.05, pp[1] - 0.1, 'P(x, y, z)', 0.12, '#e0313b', 'start');
+  label(svg, (pp[0] / 2) + 0.07, (pp[1] / 2) - 0.07, 'r', 0.13, '#e0313b');
+  label(svg, mt[0] + 0.03, mt[1] - 0.04, 'θ', 0.13, '#2c6fd6'); label(svg, mp[0] - 0.02, mp[1] + 0.08, 'φ', 0.13, '#3f9d58');
+}
+// B: η δύναμη στο επίπεδο: το μέτρο υψώνεται, η γωνία διπλασιάζεται.
+{
+  const svg = $('#fig-b'), a = 28 * Math.PI / 180, r = 0.9;
+  svg.setAttribute('viewBox', '-0.35 -1.12 1.5 1.3');
+  const v1 = [r * Math.cos(a), -r * Math.sin(a)], v2 = [r * r * Math.cos(2 * a), -r * r * Math.sin(2 * a)];
+  const arc = (rad, ang) => { const s = []; for (let i = 0; i <= 20; i++) { const t = ang * i / 20; s.push([rad * Math.cos(t), -rad * Math.sin(t)]); } return pathOf(s); };
+  svg.innerHTML = '<path d="M-0.3 0H1.1M0 0.12V-1.08" stroke="#1f2a5c" stroke-width="0.014" opacity=".6"/>'
+    + '<path d="' + arc(1, Math.PI / 2) + '" fill="none" stroke="#b9c8e6" stroke-width="0.012" stroke-dasharray="0.03 0.025"/>'
+    + '<path d="' + arc(0.3, a) + '" fill="none" stroke="#2c6fd6" stroke-width="0.016"/><path d="' + arc(0.46, 2 * a) + '" fill="none" stroke="#e2508c" stroke-width="0.016"/>'
+    + '<path d="M0 0L' + v1[0] + ' ' + v1[1] + '" stroke="#2c6fd6" stroke-width="0.03" stroke-linecap="round"/><circle cx="' + v1[0] + '" cy="' + v1[1] + '" r="0.035" fill="#2c6fd6"/>'
+    + '<path d="M0 0L' + v2[0] + ' ' + v2[1] + '" stroke="#e2508c" stroke-width="0.03" stroke-linecap="round"/><circle cx="' + v2[0] + '" cy="' + v2[1] + '" r="0.035" fill="#e2508c"/>';
+  label(svg, v1[0] + 0.08, v1[1], 'z', 0.12, '#2c6fd6', 'start'); label(svg, v2[0] + 0.06, v2[1] - 0.04, 'z²', 0.12, '#e2508c', 'start');
+  label(svg, 0.36, -0.08, 'φ', 0.1, '#2c6fd6'); label(svg, 0.36, -0.42, '2φ', 0.1, '#e2508c');
+}
+
+// ---------- 3D ----------
+let renderer = null, xp = null;
+const setPic = (svg, canvas, w, h) => { svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h); svg.setAttribute('preserveAspectRatio', 'xMidYMid slice'); svg.innerHTML = '<image href="' + canvas.toDataURL() + '" width="' + w + '" height="' + h + '"/>'; };
+const fallbackPic = svg => { svg.setAttribute('viewBox', '0 0 520 340'); svg.setAttribute('preserveAspectRatio', 'xMidYMid slice'); svg.innerHTML = '<image href="../assets/mandelbulb.jpg" width="520" height="340"/>'; };
+try { renderer = new MBB.Renderer($('#bulb')); } catch (e) { $('#xp').classList.add('no-gl'); }
+const base = { yaw: 0.75, pitch: 0.38, zoom: 1.3, power: 8, iter: 9, palette: 'coral', sliceOn: false, slice: 0, shadows: true };
+if (renderer) {
+  const snap = (svg, w, h, s) => { const c = document.createElement('canvas'); c.width = w; c.height = h; renderer.snapshot({ ...base, ...s }, c); setPic(svg, c, w, h); };
+  snap($('#fig-hero'), 340, 290, { zoom: 1.12, yaw: 0.9, pitch: 0.42 });
+  snap($('#fig-c'), 300, 170, { zoom: 1.35, yaw: 0.6, pitch: 0.3, palette: 'lava' });
+  snap($('#fig-n2'), 200, 150, { power: 2, zoom: 0.95, pitch: 0.5, palette: 'ice' });
+  snap($('#fig-n4'), 200, 150, { power: 4, zoom: 1.05, pitch: 0.5, palette: 'ice' });
+  snap($('#fig-n8'), 200, 150, { power: 8, zoom: 1.05, pitch: 0.5, palette: 'ice' });
+  xp = new MBB.Explorer({ power: $('#hudPower'), iter: $('#hudIter'), res: $('#hudRes'), hint: $('#xpHint') }, renderer);
+} else {
+  ['#fig-hero', '#fig-c'].forEach(s => fallbackPic($(s)));
+  document.querySelector('.pow-row').style.display = 'none';
+  ['.xp-bar', '.xp-help', '#toBulb'].forEach(s => { const e = document.querySelector(s); if (e) e.style.display = 'none'; });
+}
+setTimeout(() => $('#xpHint').classList.add('gone'), 9000);
+const press = (sel, attr, val) => document.querySelectorAll(sel).forEach(b => b.setAttribute('aria-pressed', String(b.getAttribute(attr) === val)));
+const fmt1 = v => Number(v).toFixed(1).replace('.', ','), fmt2 = v => Number(v).toFixed(2).replace('.', ',');
+const powerIn = $('#power'), iterIn = $('#iters'), sliceIn = $('#slice'), morph = $('#morph'), MORPH = morph.textContent;
+function stopMorph() { if (xp && xp.animate) { xp.animate = false; morph.setAttribute('aria-pressed', 'false'); morph.textContent = MORPH; } }
+if (xp) {
+  xp.onPower = v => { powerIn.value = v.toFixed(1); $('#powerOut').textContent = fmt1(v); };
+  document.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => { xp.set(VIEWS[b.dataset.view]); press('[data-view]', 'data-view', b.dataset.view); $('#xpHint').classList.add('gone'); }));
+  document.querySelectorAll('[data-pal]').forEach(b => {
+    const sw = MBB.PALETTES[b.dataset.pal].swatch;
+    b.insertAdjacentHTML('afterbegin', '<span class="sw" style="background:linear-gradient(90deg,' + sw.join(',') + ')"></span>');
+    b.addEventListener('click', () => { xp.set({ palette: b.dataset.pal }); press('[data-pal]', 'data-pal', b.dataset.pal); });
+  });
+  press('[data-view]', 'data-view', 'whole'); press('[data-pal]', 'data-pal', 'coral');
+  powerIn.addEventListener('input', () => { stopMorph(); xp.set({ power: Number(powerIn.value) }); $('#powerOut').textContent = fmt1(powerIn.value); xp.hud(); });
+  iterIn.addEventListener('input', () => { xp.set({ iter: Number(iterIn.value) }); $('#itersOut').textContent = iterIn.value; xp.hud(); });
+  sliceIn.addEventListener('input', () => {
+    $('#sliceOut').textContent = fmt2(sliceIn.value); xp.set({ slice: Number(sliceIn.value) });
+    // Το ίδιο ύψος και στην Python.
+    const py = $('#pslice'), v = (Math.round(Number(sliceIn.value) * 20) / 20).toFixed(2);
+    if (py.value !== v) { py.value = v; py.dispatchEvent(new Event('input')); }
+  });
+  $('#sliceOn').addEventListener('change', e => xp.set({ sliceOn: e.target.checked }));
+  $('#auto').addEventListener('change', e => { xp.autoRotate = e.target.checked; xp.dirty = true; xp.still = false; });
+  $('#shadows').addEventListener('change', e => xp.set({ shadows: e.target.checked }));
+  morph.addEventListener('click', () => {
+    if (xp.animate) { stopMorph(); xp.dirty = true; xp.still = false; return; }
+    xp.phase = Math.acos(Math.max(-1, Math.min(1, (5 - xp.s.power) / 3))); xp.animate = true;
+    morph.setAttribute('aria-pressed', 'true'); morph.textContent = '■ Σταμάτα τη μεταμόρφωση';
+  });
+  $('#xIn').addEventListener('click', () => xp.set({ zoom: Math.min(40, xp.s.zoom * 1.5) }));
+  $('#xOut').addEventListener('click', () => xp.set({ zoom: Math.max(0.6, xp.s.zoom / 1.5) }));
+  $('#xHome').addEventListener('click', () => { xp.set(VIEWS.whole); press('[data-view]', 'data-view', 'whole'); });
+  $('#xShot').addEventListener('click', () => xp.shot('mandelbulb.png'));
+  $('#xFull').addEventListener('click', () => {
+    const el = $('#xp');
+    if (document.fullscreenElement || document.webkitFullscreenElement) (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+    else (el.requestFullscreen || el.webkitRequestFullscreen || (() => {})).call(el);
+  });
+  xp.hud();
+}
+
+// ---------- Python: η τομή ----------
+const SIZE = 120, pyCanvas = $('#canvas'), tmp = document.createElement('canvas');
+function slice(v) {
+  const out = [];
+  for (let r = 0; r < SIZE; r++) {
+    const cy = 1.2 - 2.4 * r / (SIZE - 1), line = [];
+    for (let c = 0; c < SIZE; c++) line.push(MBB.escapeCount3(-1.2 + 2.4 * c / (SIZE - 1), cy, v.SLICE, v.POWER, 10));
+    out.push(line);
+  }
+  return out;
+}
+function drawSlice(items, color) {
+  const rows = items.length, cols = items[0].length, vals = new Float32Array(rows * cols);
+  let M = 0; for (const line of items) for (const n of line) if (n > M) M = n;
+  items.forEach((line, r) => line.forEach((n, c) => { vals[r * cols + c] = n >= M ? -1 : n + 1; }));
+  tmp.width = cols; tmp.height = rows;
+  const img = tmp.getContext('2d').createImageData(cols, rows);
+  MB.colorize(vals, img.data, MB.lut(MB.paletteFor(color)), [0, 0, 0]);
+  tmp.getContext('2d').putImageData(img, 0, 0);
+  const rect = pyCanvas.getBoundingClientRect(), ratio = window.devicePixelRatio || 1;
+  pyCanvas.width = Math.round(rect.width * ratio); pyCanvas.height = Math.round(rect.height * ratio);
+  const ctx = pyCanvas.getContext('2d'), s = Math.min(pyCanvas.width / cols, pyCanvas.height / rows);
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(tmp, (pyCanvas.width - cols * s) / 2, (pyCanvas.height - rows * s) / 2, cols * s, rows * s);
+}
+FractalLab.start({
+  initial: INITIAL, outputVar: 'image', level: null, color: 'purple', maxItems: 300,
+  params: [
+    { name: 'SLICE', input: '#pslice', text: '#psliceText', value: 0, format: v => v.toFixed(2) },
+    { name: 'POWER', input: '#ppower', text: '#ppowerText', value: 8 }
+  ],
+  preview: slice,
+  validate: items => items.length && items.every(r => Array.isArray(r) && r.length === items[0].length && r.length > 0 && r.length <= 400 && r.every(Number.isFinite)) ? null : 'Η image πρέπει να είναι λίστα από γραμμές με ίσο πλήθος αριθμών.',
+  render: drawSlice,
+  countLabel: items => items.length ? items[0].length + ' × ' + items.length + ' σημεία' : '0 σημεία'
+});
+$('#toBulb').addEventListener('click', () => {
+  if (!xp) return;
+  const sl = Number($('#pslice').value), pw = Number($('#ppower').value);
+  stopMorph(); $('#sliceOn').checked = true; $('#auto').checked = false; xp.autoRotate = false;
+  sliceIn.value = sl; $('#sliceOut').textContent = fmt2(sl); powerIn.value = pw; $('#powerOut').textContent = fmt1(pw);
+  xp.set({ ...VIEWS.top, sliceOn: true, slice: sl, power: pw }); press('[data-view]', 'data-view', 'top'); xp.hud();
+  $('#xp').scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
+
+</script></body></html>

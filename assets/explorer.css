@@ -17,10 +17,12 @@
 .xp-hint{position:absolute;top:10px;left:10px;max-width:min(60%,420px);background:rgba(5,8,20,.68);color:#eef3ff;border-radius:10px;
   padding:6px 10px;font-size:13px;line-height:1.45;pointer-events:none;transition:opacity .6s}
 .xp-hint.gone{opacity:0}
-.xp-fallback{position:absolute;inset:0;display:none;place-items:center;text-align:center;padding:20px;color:#eef3ff}
-.xp-fallback img{max-width:100%;max-height:70%;border-radius:12px;display:block;margin:0 auto 10px}
-.xp.no-gl .xp-fallback{display:grid}
-.xp.no-gl canvas,.xp.no-gl .xp-tools,.xp.no-gl .xp-hud{display:none}
+.xp-fallback{position:absolute;inset:0;display:none;text-align:center;padding:16px;color:#eef3ff;font-size:15px}
+.xp-fallback > div{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.xp-fallback img{flex:1 1 auto;min-height:0;max-width:100%;object-fit:contain;border-radius:12px;display:block}
+.xp-fallback p{margin:0;max-width:640px}
+.xp.no-gl .xp-fallback{display:block}
+.xp.no-gl canvas,.xp.no-gl .xp-tools,.xp.no-gl .xp-hud,.xp.no-gl .xp-hint{display:none}
 
 .xp-bar{display:grid;gap:10px;margin-top:12px}
 .xp-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
