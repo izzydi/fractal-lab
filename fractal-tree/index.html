@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="el"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Εργαστήριο Fractals · Fractal δέντρο</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/lab.css">
+<style>
+.mini-trees{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0}
+.mini-trees figure{margin:0;text-align:center}
+.mini-trees svg{display:block;width:100%;height:110px}
+.mini-trees figcaption{font-size:13px;font-weight:700;color:var(--muted)}
+.stat-line{padding:8px 16px;border-top:2px solid #e2ecfb;font-size:15px;display:flex;justify-content:space-between;gap:10px}
+.stat-line b{color:var(--blue)}
+</style>
+</head>
+<body><main class="sheet">
+<nav class="lab-nav" aria-label="Fractal Lab"><a href="../">← Όλα τα εργαστήρια</a><span>Fractal Lab | Εργαστήριο 6</span></nav>
+
+<header class="sheet-head">
+  <div class="title-card">
+    <h1><span class="t1">Εργαστήριο Fractals –</span> <span class="t2">Fractal δέντρο</span></h1>
+    <p>Ημίτονο, συνημίτονο και αναδρομή, με Python | 1 διδακτική ώρα</p>
+  </div>
+  <aside class="brand-card" aria-label="Fractal Lab">
+    <strong>Fractal Lab</strong>
+    <span>Μαθηματικά &amp; Python<br>για το Γυμνάσιο</span>
+    <em>Χωρίς λογαριασμό</em>
+  </aside>
+</header>
+
+<section class="block b-pink" aria-labelledby="s1">
+  <div class="tab"><span class="num">1</span><h2 id="s1">Ένα δέντρο που μοιάζει αληθινό</h2></div>
+  <div class="intro">
+    <div>
+      <p>Κοίταξε ένα <span class="hl o">δέντρο</span> τον χειμώνα, χωρίς φύλλα. Ο κορμός χωρίζεται σε δύο κλαδιά, κάθε κλαδί χωρίζεται ξανά σε δύο, και ούτω καθεξής.</p>
+      <p>Κάθε κλαδί μοιάζει με ένα <span class="hl g">μικρότερο δέντρο</span>. Αυτή η ιδιότητα λέγεται <strong>αυτοομοιότητα</strong> και είναι το χαρακτηριστικό κάθε fractal.</p>
+      <p>Τέτοια διακλάδωση βρίσκουμε παντού στη φύση: στα ποτάμια, στους κεραυνούς, στα αιμοφόρα αγγεία και στους πνεύμονές μας, όπου οι αεραγωγοί <span class="hl b">διακλαδίζονται περίπου 23 φορές</span>. Σήμερα θα φτιάξουμε ένα τέτοιο δέντρο με <span class="hl v">ημίτονο, συνημίτονο</span> και δύο απλούς κανόνες.</p>
+      <div class="goals">
+        <h3>Στόχοι του μαθήματος</h3>
+        <ol>
+          <li><b>Σ1</b><span>Να βρίσκεις πού τελειώνει ένα κλαδί με το ημίτονο και το συνημίτονο.</span></li>
+          <li><b>Σ2</b><span>Να υπολογίζεις τις γωνίες των νέων κλαδιών με πρόσθεση και αφαίρεση.</span></li>
+          <li><b>Σ3</b><span>Να υπολογίζεις πόσα κλαδιά έχει το δέντρο και πόσο μικραίνουν, με δυνάμεις.</span></li>
+          <li><b>Σ4</b><span>Να αλλάζεις τις παραμέτρους ANGLE και SCALE και να εξηγείς τι αλλάζει στο σχήμα.</span></li>
+        </ol>
+      </div>
+    </div>
+    <div class="figure">
+      <p class="note">Δύο κανόνες: στρίψε και μίκρυνε!</p>
+      <svg class="arrow" viewBox="0 0 90 46" aria-hidden="true"><path d="M70 4 C 60 30, 30 36, 12 38" fill="none" stroke="#3f9d58" stroke-width="2.5" stroke-linecap="round"/><path d="M22 30 L11 38.5 L24 43" fill="none" stroke="#3f9d58" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="fig-box"><svg id="fig-hero" role="img" aria-label="Fractal δέντρο, επίπεδο 9"></svg></div>
+    </div>
+  </div>
+</section>
+<section class="block b-green" aria-labelledby="s2">
+  <div class="tab"><span class="num">2</span><h2 id="s2">Βασικές ιδέες</h2></div>
+  <div class="chips">
+    <div class="chip c1">Αρχή<small>ένας κορμός</small></div>
+    <div class="chip c2">1 → 2<small>δύο κλαδιά κάθε φορά</small></div>
+    <div class="chip c3">± ANGLE<small>στρίβουμε αριστερά και δεξιά</small></div>
+    <div class="chip c4">× SCALE<small>κάθε κλαδί μικραίνει</small></div>
+    <div class="chip c5">ημ και συν<small>πού τελειώνει το κλαδί</small></div>
+    <div class="chip c6">LEVEL 0–12<small>πόσες επαναλήψεις</small></div>
+  </div>
+</section>
+<section class="block b-blue" aria-labelledby="s3">
+  <div class="tab"><span class="num">3</span><h2 id="s3">Πώς μεγαλώνει το δέντρο</h2></div>
+  <div class="steps">
+    <article class="step sA">
+      <div class="step-head"><span class="letter">A</span><h3>Ξεκίνα με τον κορμό</h3></div>
+      <svg class="fig" id="fig-a" role="img" aria-label="Ένας κάθετος κορμός με μήκος 1"></svg>
+      <p>Ένα <span class="hl y">ευθύγραμμο τμήμα</span> με μήκος 1, που δείχνει ευθεία πάνω (90°). Αυτό είναι το επίπεδο 0.</p>
+    </article>
+    <article class="step sB">
+      <div class="step-head"><span class="letter">B</span><h3>Δύο κλαδιά</h3></div>
+      <svg class="fig" id="fig-b" role="img" aria-label="Κορμός με δύο κλαδιά που στρίβουν 30° αριστερά και 30° δεξιά"></svg>
+      <p>Από την άκρη φύτρωσε δύο <span class="hl p">μικρότερα κλαδιά</span>: ένα στρίβει 30° αριστερά και ένα 30° δεξιά.</p>
+    </article>
+    <article class="step sC">
+      <div class="step-head"><span class="letter">C</span><h3>Επανάλαβε τον κανόνα</h3></div>
+      <svg class="fig" id="fig-c" role="img" aria-label="Fractal δέντρο, επίπεδο 5"></svg>
+      <p>Κάνε το ίδιο στην άκρη <span class="hl o">κάθε νέου κλαδιού</span>, ξανά και ξανά. Αυτό λέγεται <strong>αναδρομή</strong>.</p>
+    </article>
+  </div>
+</section>
+<section class="block b-orange" aria-labelledby="s4">
+  <div class="tab"><span class="num">4</span><h2 id="s4">Τα μαθηματικά πίσω από το σχέδιο</h2></div>
+  <p class="math-lead">Ο κορμός έχει μήκος <span class="hl y">1 μονάδα</span>, κάθε κλαδί στρίβει <span class="hl g">30°</span> και μικραίνει στο <span class="hl b">0,7</span> του προηγούμενου. Ας δούμε <strong>γιατί</strong> ο κώδικας κάνει κάθε υπολογισμό.</p>
+  <div class="math-grid">
+    <article class="math-item m1"><h3><span class="q">1</span>Πού τελειώνει ένα κλαδί;</h3>
+      <svg class="fig" id="fig-trig" role="img" aria-label="Κλαδί μήκους 1 με γωνία 60°, ως υποτείνουσα ορθογωνίου τριγώνου με κάθετες πλευρές Δx = 0,5 και Δy περίπου 0,87" style="height:160px"></svg>
+      <p>Το κλαδί είναι η <strong>υποτείνουσα</strong> ενός ορθογωνίου τριγώνου. Από τον ορισμό: συν ω = προσκείμενη / υποτείνουσα και ημ ω = απέναντι / υποτείνουσα. Άρα:</p>
+      <div class="fbox">Δx = μήκος · συν ω &nbsp;&nbsp; Δy = μήκος · ημ ω</div>
+      <p>Για ω = 60°: Δx = 1 · 0,5 = 0,5 και Δy = 1 · 0,87 ≈ 0,87. <strong>Στον κώδικα:</strong> <code>x2 = x + length * cos(radians(direction))</code>.</p>
+    </article>
+    <article class="math-item m2"><h3><span class="q">2</span>Οι γωνίες των κλαδιών</h3>
+      <p>Ο κορμός δείχνει ευθεία πάνω, στις 90°. Κάθε νέο κλαδί <strong>προσθέτει</strong> ή <strong>αφαιρεί</strong> τη γωνία ANGLE:</p>
+      <div class="fbox green">90° + 30° = 120° &nbsp;&nbsp; 90° − 30° = 60°</div>
+      <p>Στο επόμενο επίπεδο: 120° ± 30° δίνει 150° και 90°, ενώ 60° ± 30° δίνει 90° και 30°. <strong>Στον κώδικα:</strong> <code>direction + ANGLE</code> και <code>direction - ANGLE</code>.</p>
+    </article>
+    <article class="math-item m3"><h3><span class="q">3</span>Πόσο μικραίνει κάθε κλαδί;</h3>
+      <p>Κάθε νέο κλαδί έχει μήκος × 0,7. Σε κάθε επίπεδο έχουμε και διπλάσια κλαδιά:</p>
+      <div class="table"><span class="th">Επίπεδο</span><span class="th">Μήκος κλαδιού</span><span class="th">Νέα κλαδιά</span><span>0</span><span>1</span><span>1</span><span>1</span><span>0,7</span><span>2</span><span>2</span><span>0,49</span><span>4</span><span>3</span><span>≈ 0,34</span><span>8</span><span>4</span><span>≈ 0,24</span><span>16</span></div>
+      <p>Γενικά, στο επίπεδο ν το μήκος είναι 0,7<sup>ν</sup>. <strong>Στον κώδικα:</strong> <code>new_length = length * SCALE</code>.</p>
+    </article>
+    <article class="math-item m4"><h3><span class="q">4</span>Πόσα κλαδιά έχει το δέντρο;</h3>
+      <p>Κάθε κλαδί φυτρώνει <strong>2</strong> νέα, όπως τα τετράγωνα στο δέντρο του Πυθαγόρα. Τα νέα κλαδιά είναι 1, 2, 4, 8, … και τα προσθέτουμε:</p>
+      <div class="fbox pink">1 + 2 + 4 + 8 = 15 &nbsp;(επίπεδο 3)</div>
+      <p>Γενικά, στο επίπεδο ν το δέντρο έχει 2<sup>ν+1</sup> − 1 κλαδιά, από τα οποία 2<sup>ν</sup> είναι οι άκρες. <strong>Στον κώδικα:</strong> οι δύο κλήσεις <code>left</code> και <code>right</code>.</p>
+    </article>
+    <article class="math-item m5"><h3><span class="q">5</span>Το μήκος κάθε «γενιάς»</h3>
+      <p>Δύο κλαδιά με μήκος 0,7 το καθένα έχουν μαζί μήκος <strong>μεγαλύτερο</strong> από το κλαδί που τα γέννησε:</p>
+      <div class="fbox blue">2 × 0,7 = 1,4 &nbsp;&nbsp; 2 × 0,5 = 1</div>
+      <p>Με SCALE = 0,7 κάθε γενιά είναι 1,4 φορές μακρύτερη από την προηγούμενη. Με SCALE = 0,5 όμως κάθε γενιά έχει μήκος <strong>ακριβώς 1</strong>, όσο και ο κορμός!</p>
+    </article>
+    <article class="math-item m6"><h3><span class="q">6</span>Πειράματα με τα sliders</h3>
+      <div class="mini-trees"><figure><svg id="fig-m1" role="img" aria-label="Δέντρο με γωνία 15°"></svg><figcaption>ANGLE = 15</figcaption></figure><figure><svg id="fig-m2" role="img" aria-label="Δέντρο με γωνία 50°"></svg><figcaption>ANGLE = 50</figcaption></figure><figure><svg id="fig-m3" role="img" aria-label="Δέντρο με γωνία 90°"></svg><figcaption>ANGLE = 90</figcaption></figure></div>
+      <p>Μικρή γωνία δίνει ψηλό και στενό δέντρο, μεγάλη γωνία δίνει φαρδύ δέντρο. Με 90° τα κλαδιά στρίβουν κάθετα και σχηματίζουν γράμματα <strong>Η</strong> μέσα σε γράμματα Η.</p>
+    </article>
+  </div>
+  <div class="answer">Συμπέρασμα: <span>κάθε κλαδί γεννά 2 μικρότερα, που στρίβουν κατά ± ANGLE και μικραίνουν κατά SCALE</span></div>
+  <div class="bridge"><strong>Από τα μαθηματικά στην Python</strong><p>Τα <code>cos</code> και <code>sin</code> βρίσκουν την άκρη κάθε κλαδιού, το <code>direction ± ANGLE</code> στρίβει αριστερά και δεξιά, και το <code>length * SCALE</code> μικραίνει τα νέα κλαδιά.</p></div>
+  <div class="did-you-know"><strong>Ήξερες ότι;</strong><p>Το δέντρο με ANGLE = 90 μοιάζει με το <strong>δέντρο Η</strong>, που χρησιμοποιείται στα τσιπ των υπολογιστών. Η διαδρομή πάνω στα κλαδιά, από τη ρίζα ως κάθε άκρη, έχει το ίδιο μήκος, οπότε ένα σήμα που ξεκινά από τη ρίζα φτάνει την ίδια στιγμή σε όλες τις άκρες.</p></div>
+</section>
+<section class="block b-purple" aria-labelledby="s5">
+  <div class="tab"><span class="num">5</span><h2 id="s5">Γράψε και τρέξε Python</h2></div>
+  <p class="lab-guide">Οι γραμμές με <code>#</code> είναι σχόλια που εξηγούν κάθε εντολή. Ξεκίνα αλλάζοντας το <code>ANGLE = 30</code>, το <code>SCALE = 0.7</code> ή το <code>COLOR = "brown"</code>, και πάτησε <strong>«Εκτέλεση Python»</strong>.</p>
+  <div class="workspace">
+    <article class="panel p-code">
+      <div class="panel-head"><div><h3>Ο κώδικάς σου</h3><p>Python 3 στον browser, μέσω Pyodide</p></div><span class="tag">main.py</span></div>
+      <div class="editor-wrap"><pre id="highlight" aria-hidden="true" class="editor-highlight"><code id="highlightCode"></code></pre><textarea class="editor" id="code" spellcheck="false" aria-label="Επεξεργαστής κώδικα Python" wrap="off"></textarea></div>
+      <div class="actions"><button class="primary" id="run">▶ Εκτέλεση Python</button><button class="secondary" id="reset">↺ Αρχικός κώδικας</button><button class="secondary" id="copy">⧉ Αντιγραφή</button></div>
+      <div id="status" class="status" role="status" aria-live="polite">Το σχέδιο εμφανίζεται αμέσως. Για να τρέξει ο κώδικας Python που αλλάζεις, χρειάζεται σύνδεση στο διαδίκτυο.</div>
+    </article>
+    <article class="panel p-draw">
+      <div class="panel-head"><div><h3>Το δέντρο σου</h3><p>Άλλαξε το επίπεδο, τη γωνία και τη μείωση.</p></div><span class="tag" id="countBadge">511 κλαδιά</span></div>
+      <div class="preview"><canvas id="canvas" aria-label="Το fractal δέντρο σου"></canvas></div>
+      <div class="stat-line"><span>Συνολικό μήκος όλων των κλαδιών</span><b id="totalLen">…</b></div>
+      <div class="controls">
+        <div class="range-label"><label for="level">Επίπεδο επανάληψης</label><strong id="levelText">8</strong></div><input id="level" type="range" min="0" max="12" value="8"/><div class="mini-row"><span>0 · Μόνο ο κορμός</span><span>12 · 8.191 κλαδιά</span></div>
+        <div class="param"><div class="range-label"><label for="angle">Γωνία ANGLE</label><strong id="angleText">30°</strong></div><input id="angle" type="range" min="0" max="90" step="5" value="30"/><div class="mini-row"><span>0°</span><span>90°</span></div></div>
+        <div class="param"><div class="range-label"><label for="scale">Μείωση SCALE</label><strong id="scaleText">0.7</strong></div><input id="scale" type="range" min="0.4" max="0.8" step="0.05" value="0.7"/><div class="mini-row"><span>0.4 · πολύ μικρότερα</span><span>0.8 · λίγο μικρότερα</span></div></div>
+      </div>
+      <div class="callout">💡 Με <strong>SCALE = 0.5</strong> κάθε γενιά κλαδιών έχει μήκος 1. Δες πώς μεγαλώνει το συνολικό μήκος σε κάθε επίπεδο!</div>
+    </article>
+  </div>
+</section>
+
+<div class="next"><span class="go" aria-hidden="true">➜</span><p><b>Πρόκληση:</b> Βάλε ANGLE = 30 και SCALE = 0.5. Πόσα κλαδιά έχει το δέντρο στο επίπεδο 4, πόσο μήκος έχουν τα μικρότερα κλαδιά και πόσο είναι το συνολικό μήκος όλων των κλαδιών; Υπολόγισέ το με το χέρι και έλεγξέ το με τα sliders!</p></div>
+<details class="solution"><summary>Δες τη λύση <small>(δοκίμασε πρώτα μόνος σου!)</small></summary>
+<div class="sol-body">
+<p><strong>Πόσα κλαδιά;</strong> Προσθέτουμε τα νέα κλαδιά κάθε επιπέδου, από το 0 έως το 4. Κάθε φορά είναι διπλάσια:</p>
+<div class="fbox">1 + 2 + 4 + 8 + 16 = 31</div>
+<p>Με δυνάμεις: 2⁵ − 1 = 32 − 1 = 31. Από αυτά, τα 2⁴ = 16 είναι οι άκρες.</p>
+<p><strong>Πόσο μήκος έχουν τα μικρότερα;</strong> Κάθε επίπεδο κόβει το μήκος στο μισό:</p>
+<div class="fbox pink">1 → 0,5 → 0,25 → 0,125 → 0,0625</div>
+<p>Δηλαδή (1/2)⁴ = 1/16 = 0,0625. Η γωνία ANGLE = 30 δεν αλλάζει κανένα μήκος, μόνο τις κατευθύνσεις!</p>
+<p><strong>Πόσο είναι το συνολικό μήκος;</strong> Πολλαπλασιάζουμε το πλήθος με το μήκος σε κάθε γενιά:</p>
+<div class="fbox blue">1 × 1 = 1 &nbsp; 2 × 0,5 = 1 &nbsp; 4 × 0,25 = 1 &nbsp; 8 × 0,125 = 1 &nbsp; 16 × 0,0625 = 1</div>
+<p>Πέντε γενιές με μήκος 1 η καθεμία: 5 × 1 = 5. Το βλέπεις και στη γραμμή «Συνολικό μήκος» κάτω από το δέντρο.</p>
+<p class="final">Απάντηση: 31 κλαδιά, μικρότερα κλαδιά 1/16 = 0,0625, συνολικό μήκος 5</p>
+</div></details>
+
+<nav class="lab-pager" aria-label="Άλλα εργαστήρια"><a href="../pythagoras-tree/">← Προηγούμενο: Δέντρο Πυθαγόρα</a><a class="next-lab" href="../">Όλα τα εργαστήρια</a></nav>
+
+<footer>Εκπαιδευτικό εργαστήριο για fractals, γεωμετρία και υπολογιστική σκέψη. Δεν χρειάζεται λογαριασμός.</footer>
+</main>
+<script src="../assets/draw2d.js"></script>
+<script src="../assets/lab.js"></script>
+<script>
+
+const INITIAL = "# FRACTAL ΔΕΝΤΡΟ — ΜΑΘΑΙΝΩ PYTHON ΒΗΜΑ ΒΗΜΑ\n# Οι γραμμές που αρχίζουν με # είναι σχόλια.\n# Εξηγούν τον κώδικα, αλλά η Python ΔΕΝ τις εκτελεί.\n\n# ΒΗΜΑ 1: Φέρνουμε τα εργαλεία για ημίτονο και συνημίτονο.\nfrom math import cos, sin, radians\n\n# ΒΗΜΑ 2: Διαλέγουμε επίπεδο, γωνία, μείωση και χρώμα.\n# Δοκίμασε LEVEL = 0, 1, 2, ... έως 12.\nLEVEL = 8\n# Πόσες μοίρες στρίβει κάθε νέο κλαδί (από 0 έως 90).\nANGLE = 30\n# Πόσο μικραίνει κάθε νέο κλαδί (από 0.4 έως 0.8).\nSCALE = 0.7\n# Δοκίμασε \"brown\", \"green\", \"red\", \"blue\" ή \"purple\".\nCOLOR = \"brown\"\n\n# ΒΗΜΑ 3: Η αναδρομική συνάρτηση.\n# (x, y) = πού ξεκινά το κλαδί\n# length = πόσο μακρύ είναι\n# direction = προς τα πού δείχνει, σε μοίρες (90 = ευθεία πάνω)\ndef branch(x, y, length, direction, level):\n    # Πού τελειώνει το κλαδί; Με συνημίτονο και ημίτονο!\n    # Η Python θέλει τις γωνίες σε ακτίνια, γι' αυτό το radians().\n    x2 = x + length * cos(radians(direction))\n    y2 = y + length * sin(radians(direction))\n    segment = [(x, y), (x2, y2)]\n\n    # Αν το επίπεδο είναι 0, κρατάμε μόνο αυτό το κλαδί.\n    if level == 0:\n        return [segment]\n\n    # ΑΝΑΔΡΟΜΗ! Από την άκρη φυτρώνουν δύο μικρότερα κλαδιά:\n    # ένα στρίβει αριστερά (+ ANGLE) και ένα δεξιά (- ANGLE).\n    new_length = length * SCALE\n    left = branch(x2, y2, new_length, direction + ANGLE, level - 1)\n    right = branch(x2, y2, new_length, direction - ANGLE, level - 1)\n    return [segment] + left + right\n\n# ΒΗΜΑ 4: Ο κορμός ξεκινά από το (0, 0), έχει μήκος 1\n# και δείχνει ευθεία πάνω (90 μοίρες).\nbranches = branch(0, 0, 1, 90, LEVEL)\n\n# ΤΕΛΟΣ! Η ιστοσελίδα ζωγραφίζει τα branches με το COLOR.\n# ΠΕΙΡΑΜΑ: Δοκίμασε ANGLE = 90 και SCALE = 0.7.\n";
+const $ = s => document.querySelector(s);
+function branch(x, y, len, dir, n, angle, scale, out) {
+  const a = dir * Math.PI / 180, x2 = x + len * Math.cos(a), y2 = y + len * Math.sin(a);
+  out.push([[x, y], [x2, y2]]);
+  if (n > 0) { branch(x2, y2, len * scale, dir + angle, n - 1, angle, scale, out); branch(x2, y2, len * scale, dir - angle, n - 1, angle, scale, out); }
+  return out;
+}
+const tree = (n, angle, scale) => branch(0, 0, 1, 90, n, angle, scale, []);
+const totalLength = segs => segs.reduce((s, g) => s + Math.hypot(g[1][0] - g[0][0], g[1][1] - g[0][1]), 0);
+const BROWN = '#8a5a2b', LEAF = '#3f9d58';
+// Κορμός και κλαδιά καφέ, τα πιο μικρά κλαδιά πράσινα σαν φύλλα.
+function leafyTree(svg, segs, w) {
+  FL2D.drawSVG(svg, { segments: segs }, BROWN, { widthByLength: w, pad: 0.05 });
+  const tmp = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  const minLen = Math.min(...segs.map(g => Math.hypot(g[1][0] - g[0][0], g[1][1] - g[0][1])));
+  FL2D.drawSVG(tmp, { segments: segs.filter(g => Math.hypot(g[1][0] - g[0][0], g[1][1] - g[0][1]) < minLen * 2.1) }, LEAF, { widthByLength: w * 1.6 });
+  svg.insertAdjacentHTML('beforeend', tmp.innerHTML);
+}
+leafyTree($('#fig-hero'), tree(9, 25, 0.72), 0.06);
+const label = (svg, x, y, t, size, anchor = 'middle', fill = '#1f2a5c') => svg.insertAdjacentHTML('beforeend', '<text x="' + x + '" y="' + (-y) + '" font-size="' + size + '" text-anchor="' + anchor + '" dominant-baseline="central" font-family="Playpen Sans, cursive" font-weight="800" fill="' + fill + '">' + t + '</text>');
+// Βήμα A: ο κορμός.
+{
+  const svg = $('#fig-a');
+  FL2D.drawSVG(svg, { segments: tree(0, 30, 0.7) }, '#e0313b', { widthByLength: 0.07 });
+  svg.setAttribute('viewBox', '-0.75 -1.12 1.5 1.24');
+  svg.insertAdjacentHTML('afterbegin', '<path d="M-0.45 0L0.45 0" stroke="#b9c8e6" stroke-width="0.025" stroke-linecap="round"/>');
+  label(svg, 0.1, 0.5, 'μήκος 1', 0.1, 'start', '#e0313b');
+  svg.insertAdjacentHTML('beforeend', '<path d="M0.1 0L0.1 -0.1L0.035 -0.1" fill="none" stroke="#1f2a5c" stroke-width="0.014"/>');
+  label(svg, 0.16, 0.13, '90°', 0.085, 'start');
+}
+// Βήμα B: δύο κλαδιά με γωνία ± 30°.
+{
+  const svg = $('#fig-b');
+  FL2D.drawSVG(svg, { segments: tree(1, 30, 0.7) }, '#e2508c', { widthByLength: 0.07, pad: 0.12 });
+  svg.insertAdjacentHTML('afterbegin', '<path d="M0 -1L0 -1.68" stroke="#e2508c" stroke-width="0.012" stroke-dasharray="0.04 0.03"/>'
+    + '<path d="M0 -1.3A0.3 0.3 0 0 0 -0.15 -1.26M0 -1.3A0.3 0.3 0 0 1 0.15 -1.26" fill="none" stroke="#1f2a5c" stroke-width="0.012"/>');
+  label(svg, -0.15, 1.52, '30°', 0.085); label(svg, 0.15, 1.52, '30°', 0.085);
+}
+leafyTree($('#fig-c'), tree(5, 30, 0.7), 0.07);
+// Τριγωνομετρία: πού τελειώνει ένα κλαδί με γωνία 60°.
+{
+  const svg = $('#fig-trig'), c = Math.cos(Math.PI / 3), s = Math.sin(Math.PI / 3);
+  svg.setAttribute('viewBox', '-0.3 -1.02 1.45 1.17');
+  svg.innerHTML = '<path d="M0 0L' + c + ' 0L' + c + ' ' + (-s) + '" fill="#eef5ff" stroke="#2c6fd6" stroke-width="0.012" stroke-dasharray="0.035 0.025"/>'
+    + '<path d="M' + (c - 0.07) + ' 0L' + (c - 0.07) + ' -0.07L' + c + ' -0.07" fill="none" stroke="#2c6fd6" stroke-width="0.01"/>'
+    + '<path d="M0 0L' + c + ' ' + (-s) + '" stroke="' + BROWN + '" stroke-width="0.05" stroke-linecap="round"/>'
+    + '<path d="M0.2 0A0.2 0.2 0 0 0 ' + (0.2 * c) + ' ' + (-0.2 * s) + '" fill="none" stroke="#1f2a5c" stroke-width="0.012"/>';
+  label(svg, 0.27, 0.12, '60°', 0.075);
+  label(svg, 0.17, 0.52, '1', 0.09, 'end', BROWN);
+  label(svg, c / 2, -0.08, 'Δx = 0,5', 0.075, 'middle', '#2c6fd6');
+  label(svg, c + 0.05, s / 2, 'Δy ≈ 0,87', 0.075, 'start', '#2c6fd6');
+}
+// Πειράματα με τη γωνία και το SCALE.
+FL2D.drawSVG($('#fig-m1'), { segments: tree(8, 15, 0.7) }, BROWN, { widthByLength: 0.07 });
+FL2D.drawSVG($('#fig-m2'), { segments: tree(8, 50, 0.7) }, BROWN, { widthByLength: 0.07 });
+FL2D.drawSVG($('#fig-m3'), { segments: tree(6, 90, 0.7) }, '#2c6fd6', { widthByLength: 0.07 });
+const canvas = $('#canvas'), total = $('#totalLen');
+const fmt = v => v.toLocaleString('el-GR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+FractalLab.start({
+  initial: INITIAL, outputVar: 'branches', level: { min: 0, max: 12, value: 8 }, color: 'brown', maxItems: 8200,
+  params: [
+    { name: 'ANGLE', input: '#angle', text: '#angleText', value: 30, format: v => v + '°' },
+    { name: 'SCALE', input: '#scale', text: '#scaleText', value: 0.7, format: v => String(v) }
+  ],
+  preview: v => tree(v.LEVEL, v.ANGLE, v.SCALE),
+  validate: items => items.every(s => Array.isArray(s) && s.length === 2 && s.every(p => Array.isArray(p) && p.length === 2 && p.every(Number.isFinite))) ? null : 'Κάθε κλαδί πρέπει να είναι μια λίστα με δύο σημεία (x, y).',
+  render: (items, color) => {
+    // Το CSS «brown» βγαίνει κοκκινωπό, οπότε δείχνουμε ένα πιο ζεστό καφέ.
+    FL2D.drawCanvas(canvas, { segments: items }, color === 'brown' ? BROWN : color, { widthByLength: 0.06 });
+    total.textContent = fmt(totalLength(items));
+  },
+  countLabel: items => items.length.toLocaleString('el-GR') + (items.length === 1 ? ' κλαδί' : ' κλαδιά')
+});
+
+</script></body></html>
