@@ -1,0 +1,49 @@
+/* Fractal Lab: εξερευνητές πλήρους πλάτους (Mandelbrot, Mandelbulb). */
+.xp{position:relative;border:3px solid var(--ink);border-radius:18px 22px 16px 20px;overflow:hidden;background:#05070f;
+  height:min(66vh,640px);min-height:340px;touch-action:none;user-select:none;-webkit-user-select:none}
+.xp canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab}
+.xp canvas:active{cursor:grabbing}
+.xp:fullscreen{border:0;border-radius:0;height:100vh;max-height:none}
+.xp:-webkit-full-screen{border:0;border-radius:0;height:100vh;max-height:none}
+.xp-hud{position:absolute;left:10px;bottom:10px;right:10px;display:flex;flex-wrap:wrap;gap:6px;pointer-events:none}
+.xp-hud span{background:rgba(5,8,20,.68);color:#eef3ff;border:1px solid rgba(255,255,255,.18);border-radius:9px;padding:3px 9px;
+  font-size:13px;line-height:1.4;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.xp-hud .busy{color:#ffd84d}
+.xp-hud .busy:empty{display:none}
+.xp-tools{position:absolute;top:10px;right:10px;display:flex;gap:6px}
+.xp-tools button{width:40px;height:40px;border-radius:11px;border:1px solid rgba(255,255,255,.25);background:rgba(5,8,20,.68);color:#fff;
+  font-size:19px;line-height:1;display:grid;place-items:center;padding:0;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.xp-tools button:hover{background:rgba(44,111,214,.85)}
+.xp-hint{position:absolute;top:10px;left:10px;max-width:min(60%,420px);background:rgba(5,8,20,.68);color:#eef3ff;border-radius:10px;
+  padding:6px 10px;font-size:13px;line-height:1.45;pointer-events:none;transition:opacity .6s}
+.xp-hint.gone{opacity:0}
+.xp-fallback{position:absolute;inset:0;display:none;place-items:center;text-align:center;padding:20px;color:#eef3ff}
+.xp-fallback img{max-width:100%;max-height:70%;border-radius:12px;display:block;margin:0 auto 10px}
+.xp.no-gl .xp-fallback{display:grid}
+.xp.no-gl canvas,.xp.no-gl .xp-tools,.xp.no-gl .xp-hud{display:none}
+
+.xp-bar{display:grid;gap:10px;margin-top:12px}
+.xp-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.xp-row > b{font-size:15px;margin-right:2px}
+.xp-chip{border:2px solid #c9d6ef;background:#fff;color:var(--ink);border-radius:999px;padding:4px 12px;font-size:14.5px;font-weight:600;line-height:1.3}
+.xp-chip:hover{border-color:var(--blue)}
+.xp-chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.xp-chip .sw{display:inline-block;width:34px;height:12px;border-radius:6px;vertical-align:-1px;margin-right:6px;border:1px solid rgba(0,0,0,.15)}
+.xp-go{border:0;border-radius:12px;padding:8px 16px;font-weight:800;color:#fff;background:linear-gradient(135deg,#8a5cf0,#2c6fd6);
+  box-shadow:0 3px 0 #1d3f86;font-size:15.5px}
+.xp-go:hover{filter:brightness(1.08)}
+.xp-go[aria-pressed="true"]{background:linear-gradient(135deg,#e0313b,#f08a1c);box-shadow:0 3px 0 #8a2a12}
+.xp-slider{display:flex;align-items:center;gap:10px;flex:1 1 260px;min-width:220px}
+.xp-slider label{font-size:15px;font-weight:700;white-space:nowrap}
+.xp-slider input{flex:1;accent-color:var(--pink)}
+.xp-slider output{min-width:46px;text-align:right;font-weight:800;color:var(--blue)}
+.xp-check{display:inline-flex;align-items:center;gap:6px;font-size:15px;font-weight:600}
+.xp-check input{width:18px;height:18px;accent-color:var(--purple)}
+.xp-help{margin:8px 0 0;font-size:14.5px;color:var(--muted)}
+
+/* Πεδία αριθμών στον χώρο εργασίας */
+.num-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.num-grid label{display:grid;gap:2px;font-size:13.5px;font-weight:700}
+.num-grid input{width:100%;min-width:0;border:2px solid #c9d6ef;border-radius:9px;padding:4px 8px;font-family:Consolas,'Courier New',monospace;font-size:14px;color:var(--ink)}
+.num-grid input:focus{border-color:var(--blue);outline:none}
+@media(max-width:600px){.num-grid{grid-template-columns:1fr 1fr}.xp{height:58vh}.xp-hint{top:58px;max-width:calc(100% - 20px)}}

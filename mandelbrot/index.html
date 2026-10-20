@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="el"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Εργαστήριο Fractals · Σύνολο Mandelbrot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/lab.css">
+<link rel="stylesheet" href="../assets/explorer.css">
+</head>
+<body><main class="sheet">
+<nav class="lab-nav" aria-label="Fractal Lab"><a href="../">← Όλα τα εργαστήρια</a><span>Fractal Lab | Εργαστήριο 8</span></nav>
+
+<header class="sheet-head">
+  <div class="title-card">
+    <h1><span class="t1">Εργαστήριο Fractals –</span> <span class="t2">Σύνολο Mandelbrot</span></h1>
+    <p>Μιγαδικοί αριθμοί, άπειρη λεπτομέρεια και Python | Λύκειο &amp; πανεπιστήμιο</p>
+  </div>
+  <aside class="brand-card" aria-label="Fractal Lab">
+    <strong>Fractal Lab</strong>
+    <span>Μαθηματικά &amp; Python<br>για Λύκειο &amp; πανεπιστήμιο</span>
+    <em>Χωρίς λογαριασμό</em>
+  </aside>
+</header>
+
+<section class="block b-pink" aria-labelledby="s1">
+  <div class="tab"><span class="num">1</span><h2 id="s1">Ένας κανόνας, άπειρη λεπτομέρεια</h2></div>
+  <div class="intro">
+    <div>
+      <p>Πάρε έναν μιγαδικό αριθμό c, ξεκίνα από το 0 και εφάρμοσε ξανά και ξανά τον κανόνα <span class="hl y">z → z² + c</span>. Η ακολουθία που προκύπτει είτε <span class="hl g">μένει κοντά στο 0</span> είτε <span class="hl p">ξεφεύγει στο άπειρο</span>.</p>
+      <p>Το <strong>σύνολο Mandelbrot</strong> είναι όλα τα c για τα οποία η ακολουθία μένει φραγμένη. Ο κανόνας χωράει σε μία γραμμή, αλλά το σύνορο του συνόλου έχει <span class="hl b">άπειρη λεπτομέρεια</span>: όσο κι αν μεγεθύνεις, βρίσκεις νέες σπείρες, «ιππόκαμπους» και μικρά αντίγραφα του ίδιου του συνόλου.</p>
+      <p>Το 1980 ο <strong>Benoît Mandelbrot</strong>, στο ερευνητικό κέντρο της IBM, ήταν από τους πρώτους που το είδαν στην οθόνη υπολογιστή. Το 1975 είχε επινοήσει και τη λέξη <span class="hl o">fractal</span>, από το λατινικό <em>fractus</em> (σπασμένος).</p>
+      <div class="goals">
+        <h3>Στόχοι του μαθήματος</h3>
+        <ol>
+          <li><b>Σ1</b><span>Να αναπαριστάς μιγαδικούς αριθμούς ως σημεία του επιπέδου και να υπολογίζεις το z² και το |z|.</span></li>
+          <li><b>Σ2</b><span>Να εξετάζεις αν η ακολουθία z → z² + c μένει φραγμένη για συγκεκριμένα c.</span></li>
+          <li><b>Σ3</b><span>Να αποδεικνύεις γιατί αρκεί να ελέγχουμε αν |z| > 2.</span></li>
+          <li><b>Σ4</b><span>Να γράφεις σε Python έναν αλγόριθμο «χρόνου διαφυγής» με τον τύπο complex.</span></li>
+        </ol>
+      </div>
+    </div>
+    <div class="figure">
+      <p class="note">Ένας κανόνας μιας γραμμής, και δεν τελειώνει ποτέ!</p>
+      <svg class="arrow" viewBox="0 0 90 46" aria-hidden="true"><path d="M70 4 C 60 30, 30 36, 12 38" fill="none" stroke="#3f9d58" stroke-width="2.5" stroke-linecap="round"/><path d="M22 30 L11 38.5 L24 43" fill="none" stroke="#3f9d58" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="fig-box"><svg id="fig-hero" role="img" aria-label="Λεπτομέρεια του συνόλου Mandelbrot: η κοιλάδα των ιππόκαμπων"></svg></div>
+    </div>
+  </div>
+</section>
+<section class="block b-blue" aria-labelledby="s2">
+  <div class="tab"><span class="num">2</span><h2 id="s2">Εξερεύνησε το σύνολο</h2></div>
+  <p class="lab-guide">Σύρε για να μετακινηθείς και γύρνα τη ροδέλα του ποντικιού (ή τσίμπησε στην οθόνη αφής) για zoom. Κάθε pixel είναι ένας μιγαδικός αριθμός c: τα <strong>μαύρα</strong> σημεία ανήκουν στο σύνολο και τα <strong>χρώματα</strong> δείχνουν πόσο γρήγορα ξεφεύγουν τα υπόλοιπα.</p>
+  <div class="xp" id="xp">
+    <canvas id="mset" tabindex="0" aria-label="Εξερευνητής του συνόλου Mandelbrot. Σύρε για μετακίνηση, ροδέλα ή διπλό κλικ για zoom, βελάκια και + − από το πληκτρολόγιο."></canvas>
+    <div class="xp-hint" id="xpHint">Σύρε για να μετακινηθείς · ροδέλα, τσίμπημα ή διπλό κλικ για zoom</div>
+    <div class="xp-tools"><button id="xIn" title="Μεγέθυνση" aria-label="Μεγέθυνση"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></button><button id="xOut" title="Σμίκρυνση" aria-label="Σμίκρυνση"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M5 12h14" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></button><button id="xHome" title="Αρχική θέα" aria-label="Αρχική θέα"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 11.5 12 5l8 6.5M6.5 10v9h11v-9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button id="xShot" title="Αποθήκευση εικόνας (PNG)" aria-label="Αποθήκευση εικόνας (PNG)"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button id="xFull" title="Πλήρης οθόνη" aria-label="Πλήρης οθόνη"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    <div class="xp-hud"><span id="hudPos"></span><span id="hudZoom"></span><span id="hudIter"></span><span class="busy" id="hudBusy"></span></div>
+  </div>
+  <div class="xp-bar">
+    <div class="xp-row"><b>Πήγαινε:</b><button class="xp-chip" type="button" data-place="home" aria-pressed="false">Όλο το σύνολο</button><button class="xp-chip" type="button" data-place="seahorse" aria-pressed="false">Κοιλάδα των ιππόκαμπων</button><button class="xp-chip" type="button" data-place="elephant" aria-pressed="false">Κοιλάδα των ελεφάντων</button><button class="xp-chip" type="button" data-place="mini" aria-pressed="false">Ένα μικρό αντίγραφο</button><button class="xp-chip" type="button" data-place="star" aria-pressed="false">Δενδρίτες</button><button class="xp-chip" type="button" data-place="spiral" aria-pressed="false">Διπλή σπείρα × 100.000</button></div>
+    <div class="xp-row"><b>Χρώματα:</b><button class="xp-chip" type="button" data-pal="ocean" aria-pressed="false">Ωκεανός</button><button class="xp-chip" type="button" data-pal="fire" aria-pressed="false">Φωτιά</button><button class="xp-chip" type="button" data-pal="violet" aria-pressed="false">Νεφέλωμα</button><button class="xp-chip" type="button" data-pal="forest" aria-pressed="false">Δάσος</button><button class="xp-chip" type="button" data-pal="gray" aria-pressed="false">Μολύβι</button></div>
+    <div class="xp-row"><div class="xp-slider"><label for="detail">Λεπτομέρεια</label><input id="detail" type="range" min="100" max="1000" step="50" value="250"><output id="detailOut" for="detail">250</output></div><button class="xp-go" id="journey" type="button" aria-pressed="false">▶ Ταξίδι σε βάθος: μεγέθυνση × 10¹⁰</button></div>
+  </div>
+  <p class="xp-help">Στο «Ταξίδι σε βάθος» ο εξερευνητής ζουμάρει μόνος του προς ένα σημείο της κοιλάδας των ιππόκαμπων, ώσπου η οθόνη να δείχνει ένα κομμάτι δέκα δισεκατομμύρια φορές μικρότερο. Όσο βαθύτερα πηγαίνεις, τόσο περισσότερες επαναλήψεις χρειάζονται, και ο εξερευνητής τις αυξάνει μόνος του.</p>
+</section>
+<section class="block b-green" aria-labelledby="s3">
+  <div class="tab"><span class="num">3</span><h2 id="s3">Βασικές ιδέες</h2></div>
+  <div class="chips">
+    <div class="chip c1">z → z² + c<small>ο κανόνας</small></div>
+    <div class="chip c2">z₀ = 0<small>η αρχή της ακολουθίας</small></div>
+    <div class="chip c3">|z| > 2<small>τότε ξεφεύγει</small></div>
+    <div class="chip c4">μαύρο<small>ανήκει στο σύνολο</small></div>
+    <div class="chip c5">χρώμα<small>πόσο γρήγορα ξεφεύγει</small></div>
+    <div class="chip c6">× 10¹⁰<small>και ακόμα λεπτομέρειες</small></div>
+  </div>
+</section>
+<section class="block b-blue" aria-labelledby="s4">
+  <div class="tab"><span class="num">4</span><h2 id="s4">Πώς φτιάχνεται η εικόνα</h2></div>
+  <div class="steps">
+    <article class="step sA">
+      <div class="step-head"><span class="letter">A</span><h3>Ένα σημείο c</h3></div>
+      <svg class="fig" id="fig-a" role="img" aria-label="Το μιγαδικό επίπεδο με σημειωμένο το c = −0,5 + 0,5i"></svg>
+      <p>Κάθε σημείο (x, y) του επιπέδου είναι ένας <span class="hl y">μιγαδικός αριθμός</span> c = x + yi. Εδώ c = −0,5 + 0,5i.</p>
+    </article>
+    <article class="step sB">
+      <div class="step-head"><span class="letter">B</span><h3>Η ακολουθία του c</h3></div>
+      <svg class="fig" id="fig-b" role="img" aria-label="Δύο ακολουθίες: μία γυρίζει σε κύκλο μέσα στον δίσκο ακτίνας 2 και μία βγαίνει έξω"></svg>
+      <p>Για c = −0,12 + 0,75i η ακολουθία <span class="hl g">γυρίζει σε κύκλο</span> τριών σημείων. Για c = 0,35 + 0,45i <span class="hl p">βγαίνει από τον δίσκο</span> στο 12ο βήμα.</p>
+    </article>
+    <article class="step sC">
+      <div class="step-head"><span class="letter">C</span><h3>Χρωμάτισε κάθε pixel</h3></div>
+      <svg class="fig" id="fig-c" role="img" aria-label="Το σύνολο Mandelbrot σε πλέγμα 60 × 40 pixel"></svg>
+      <p>Κάνε το ίδιο για κάθε pixel. Αν δεν ξεφύγει, το βάφουμε μαύρο, αλλιώς το χρώμα του δείχνει <span class="hl o">σε πόσα βήματα</span> ξέφυγε.</p>
+    </article>
+  </div>
+</section>
+<section class="block b-orange" aria-labelledby="s5">
+  <div class="tab"><span class="num">5</span><h2 id="s5">Τα μαθηματικά πίσω από την εικόνα</h2></div>
+  <p class="math-lead">Ένας μιγαδικός αριθμός γράφεται <span class="hl y">z = x + yi</span>, όπου <span class="hl b">i² = −1</span>. Ας δούμε τι κάνει ο κανόνας και <strong>γιατί</strong> ο κώδικας σταματά στο 2.</p>
+  <div class="math-grid">
+    <article class="math-item m1"><h3><span class="q">1</span>Μιγαδικοί ως σημεία</h3>
+      <p>Ο αριθμός x + yi αντιστοιχεί στο σημείο (x, y). Το <strong>μέτρο</strong> του είναι η απόστασή του από την αρχή, με το Πυθαγόρειο θεώρημα:</p>
+      <div class="fbox">|x + yi| = √(x² + y²) &nbsp;&nbsp; |3 + 4i| = √(9 + 16) = 5</div>
+      <p><strong>Στον κώδικα:</strong> <code>complex(x, y)</code> φτιάχνει τον αριθμό και <code>abs(z)</code> δίνει το μέτρο του.</p>
+    </article>
+    <article class="math-item m2"><h3><span class="q">2</span>Το τετράγωνο ενός μιγαδικού</h3>
+      <p>Αναπτύσσουμε την ταυτότητα και χρησιμοποιούμε ότι i² = −1:</p>
+      <div class="fbox green">(x + yi)² = x² + 2xyi + y²i² = (x² − y²) + 2xy·i</div>
+      <p>Για παράδειγμα (1 + i)² = 0 + 2i = 2i. Ο εξερευνητής κάνει ακριβώς αυτόν τον υπολογισμό με πραγματικούς αριθμούς, γιατί είναι πιο γρήγορος.</p>
+    </article>
+    <article class="math-item m3"><h3><span class="q">3</span>Ποια c ανήκουν στο σύνολο;</h3>
+      <p>Υπολογίζουμε τους πρώτους όρους z₁, z₂, z₃, … για τρία c:</p>
+      <div class="table"><span class="th">c</span><span class="th">ακολουθία</span><span class="th">ανήκει;</span><span>−1</span><span>0, −1, 0, −1, …</span><span>ναι</span><span>i</span><span>i, −1 + i, −i, −1 + i, …</span><span>ναι</span><span>1</span><span>1, 2, 5, 26, 677, …</span><span>όχι</span></div>
+      <p>Για c = −1 και c = i η ακολουθία κάνει κύκλο και μένει φραγμένη. Για c = 1 μεγαλώνει χωρίς όριο.</p>
+    </article>
+    <article class="math-item m4"><h3><span class="q">4</span>Γιατί αρκεί να ελέγχουμε το |z| > 2;</h3>
+      <p>Έστω ότι σε κάποιο βήμα |z| > 2 και |z| ≥ |c|. Από την τριγωνική ανισότητα:</p>
+      <div class="fbox pink">|z² + c| ≥ |z|² − |c| ≥ |z|² − |z| = |z| · (|z| − 1)</div>
+      <p>Αφού |z| − 1 > 1, το μέτρο μεγαλώνει σε κάθε βήμα κατά έναν παράγοντα που κι αυτός μεγαλώνει, άρα |zₙ| → ∞. Αν |c| > 2, ήδη το z₁ = c ικανοποιεί και τις δύο συνθήκες. Επομένως όλο το σύνολο βρίσκεται μέσα στον δίσκο |c| ≤ 2.</p>
+    </article>
+    <article class="math-item m5"><h3><span class="q">5</span>Η καρδιοειδής και ο κύκλος</h3>
+      <svg class="fig" id="fig-card" role="img" aria-label="Η κύρια καρδιοειδής και ο κύκλος |c + 1| &lt; 1/4 πάνω στο σύνολο Mandelbrot" style="height:150px"></svg>
+      <p>Αν η ακολουθία πλησιάζει ένα σταθερό σημείο z* = z*² + c με |2z*| < 1, τότε c = w/2 − w²/4 με |w| < 1: αυτή είναι η <strong>κύρια καρδιοειδής</strong>. Οι κύκλοι δύο τιμών δίνουν τον δίσκο |c + 1| < 1/4. Ο εξερευνητής τα ελέγχει πρώτα και γλιτώνει χιλιάδες επαναλήψεις.</p>
+    </article>
+    <article class="math-item m6"><h3><span class="q">6</span>Ομαλά χρώματα</h3>
+      <p>Λίγο πριν ξεφύγει, το |z| σχεδόν τετραγωνίζεται σε κάθε βήμα, άρα το log₂(ln |z|) αυξάνεται περίπου κατά 1. Αν το αφαιρέσουμε από το n, ο αριθμός βημάτων γίνεται «συνεχής»:</p>
+      <div class="fbox blue">ν = n + 1 − log₂(ln |zₙ|)</div>
+      <p>Έτσι ο εξερευνητής βγάζει χρώματα χωρίς λωρίδες. Η Python χρησιμοποιεί τον ακέραιο n, γι' αυτό η εικόνα της έχει λωρίδες.</p>
+    </article>
+  </div>
+  <div class="answer">Συμπέρασμα: <span>το c ανήκει στο σύνολο Mandelbrot αν η ακολουθία 0, c, c² + c, … δεν βγαίνει ποτέ από τον δίσκο |z| ≤ 2</span></div>
+  <div class="bridge"><strong>Από τα μαθηματικά στην Python</strong><p>Στην Python οι μιγαδικοί είναι έτοιμοι: <code>complex(x, y)</code> φτιάχνει το x + yi, η γραμμή <code>z = z * z + c</code> εφαρμόζει τον κανόνα και το <code>abs(z) &gt; 2</code> ελέγχει αν το z ξέφυγε.</p></div>
+  <div class="did-you-know"><strong>Ήξερες ότι;</strong><p>Μέσα στο σύνολο Mandelbrot κρύβεται ο αριθμός <strong>π</strong>. Το 1991 ο Dave Boll μέτρησε πόσα βήματα χρειάζεται το c = −0,75 + ε·i για να ξεφύγει, για όλο και μικρότερα ε. Για ε = 0,01 χρειάζονται 315 βήματα, για ε = 0,0001 χρειάζονται 31.417, και γενικά το γινόμενο βήματα × ε πλησιάζει το π = 3,14159…</p></div>
+</section>
+<section class="block b-purple" aria-labelledby="s6">
+  <div class="tab"><span class="num">6</span><h2 id="s6">Γράψε και τρέξε Python</h2></div>
+  <p class="lab-guide">Η Python υπολογίζει την ίδια εικόνα σε ένα πλέγμα 240 × 160 σημείων. Τα <code>CENTER_X</code>, <code>CENTER_Y</code> και <code>WIDTH</code> ακολουθούν τον εξερευνητή: ζούμαρε κάπου επάνω, έλα εδώ και πάτησε <strong>«Εκτέλεση Python»</strong>.</p>
+  <div class="workspace">
+    <article class="panel p-code">
+      <div class="panel-head"><div><h3>Ο κώδικάς σου</h3><p>Python 3 στον browser, μέσω Pyodide</p></div><span class="tag">main.py</span></div>
+      <div class="editor-wrap"><pre id="highlight" aria-hidden="true" class="editor-highlight"><code id="highlightCode"></code></pre><textarea class="editor" id="code" spellcheck="false" aria-label="Επεξεργαστής κώδικα Python" wrap="off"></textarea></div>
+      <div class="actions"><button class="primary" id="run">▶ Εκτέλεση Python</button><button class="secondary" id="reset">↺ Αρχικός κώδικας</button><button class="secondary" id="copy">⧉ Αντιγραφή</button></div>
+      <div id="status" class="status" role="status" aria-live="polite">Το σχέδιο εμφανίζεται αμέσως. Για να τρέξει ο κώδικας Python που αλλάζεις, χρειάζεται σύνδεση στο διαδίκτυο.</div>
+    </article>
+    <article class="panel p-draw">
+      <div class="panel-head"><div><h3>Η εικόνα της Python</h3><p>Κάθε μικρό τετράγωνο είναι ένα σημείο c.</p></div><span class="tag" id="countBadge">240 × 160 σημεία</span></div>
+      <div class="preview"><canvas id="canvas" aria-label="Το σύνολο Mandelbrot όπως το υπολογίζει η Python"></canvas></div>
+      <div class="controls">
+        <div class="num-grid"><label>Κέντρο CENTER_X<input id="cx" type="number" step="any" min="-4" max="4" value="-0.75"></label><label>Κέντρο CENTER_Y<input id="cy" type="number" step="any" min="-4" max="4" value="0"></label><label>Πλάτος WIDTH<input id="cw" type="number" step="any" min="0" max="10" value="3.6"></label></div>
+        <div class="param"><div class="range-label"><label for="maxit">Επαναλήψεις MAX_ITER</label><strong id="maxitText">80</strong></div><input id="maxit" type="range" min="20" max="1000" step="10" value="80"/><div class="mini-row"><span>20</span><span>1000</span></div></div>
+      </div>
+      <div class="callout">💡 Η Python τρέχει μέσα στον browser και είναι πιο αργή από τον εξερευνητή, γι' αυτό η εικόνα της είναι μικρότερη. Με μεγάλο MAX_ITER ή σε βαθύ zoom θα περιμένεις λίγα δευτερόλεπτα.</div>
+    </article>
+  </div>
+</section>
+
+<nav class="lab-pager" aria-label="Άλλα εργαστήρια"><a href="../dragon-curve/">← Προηγούμενο: Καμπύλη του δράκου</a><a class="next-lab" href="../">Όλα τα εργαστήρια</a></nav>
+
+<footer>Εκπαιδευτικό εργαστήριο για fractals, γεωμετρία και υπολογιστική σκέψη. Δεν χρειάζεται λογαριασμός.</footer>
+</main>
+<script src="../assets/mandelbrot.js"></script>
+<script src="../assets/lab.js"></script>
+<script>
+
+const INITIAL = "# ΣΥΝΟΛΟ MANDELBROT — ΜΙΓΑΔΙΚΟΙ ΑΡΙΘΜΟΙ ΣΤΗΝ PYTHON\n# Η Python έχει έτοιμους μιγαδικούς: complex(x, y) είναι το x + yi\n# και abs(z) είναι το μέτρο |z|.\n\n# ΒΗΜΑ 1: Ποιο κομμάτι του μιγαδικού επιπέδου βλέπουμε.\n# Οι τρεις πρώτες τιμές αλλάζουν μόνες τους όταν ζουμάρεις στον εξερευνητή!\nCENTER_X = -0.75     # πραγματικό μέρος του κέντρου\nCENTER_Y = 0.0       # φανταστικό μέρος του κέντρου\nWIDTH = 3.6          # πλάτος της περιοχής\nMAX_ITER = 80        # μέγιστος αριθμός βημάτων\n# Δοκίμασε \"blue\", \"orange\", \"purple\", \"green\" ή \"gray\".\nCOLOR = \"blue\"\n\n# ΒΗΜΑ 2: Σε πόσα βήματα ξεφεύγει το c;\ndef escape_time(c):\n    z = 0\n    for n in range(MAX_ITER):\n        z = z * z + c          # ο κανόνας: z → z² + c\n        if abs(z) > 2:         # βγήκε από τον δίσκο ακτίνας 2,\n            return n           # άρα ξεφεύγει στο άπειρο\n    return MAX_ITER            # δεν ξέφυγε: το c ανήκει (μάλλον) στο σύνολο\n\n# ΒΗΜΑ 3: Ένα πλέγμα από σημεία c, γραμμή γραμμή.\nCOLS, ROWS = 240, 160\nHEIGHT = WIDTH * ROWS / COLS\nimage = []\nfor row in range(ROWS):\n    # Από πάνω προς τα κάτω το φανταστικό μέρος μικραίνει.\n    y = CENTER_Y + HEIGHT / 2 - row * HEIGHT / (ROWS - 1)\n    line = []\n    for col in range(COLS):\n        x = CENTER_X - WIDTH / 2 + col * WIDTH / (COLS - 1)\n        line.append(escape_time(complex(x, y)))\n    image.append(line)\n\n# ΤΕΛΟΣ! Η ιστοσελίδα χρωματίζει κάθε σημείο ανάλογα με το n.\n# ΠΕΙΡΑΜΑ: Γράψε z = z ** 3 + c και δες το «Multibrot» με τρία κλαδιά.\n";
+const $ = s => document.querySelector(s);
+const NS = 'http://www.w3.org/2000/svg';
+// Μια εικόνα του συνόλου μέσα σε SVG, ώστε να μπορούμε να σχεδιάσουμε και από πάνω.
+function setImage(svg, view, w, h, opts = {}) {
+  const c = document.createElement('canvas'); c.width = w; c.height = h; MB.renderTo(c, view, opts);
+  const H = view.w * h / w, x0 = view.cx - view.w / 2, y0 = -(view.cy + H / 2);
+  svg.setAttribute('viewBox', opts.viewBox || (x0 + ' ' + y0 + ' ' + view.w + ' ' + H));
+  svg.insertAdjacentHTML('afterbegin', '<image href="' + c.toDataURL() + '" x="' + x0 + '" y="' + y0 + '" width="' + view.w + '" height="' + H + '" preserveAspectRatio="none"'
+    + (opts.pixel ? ' style="image-rendering:pixelated"' : '') + (opts.opacity ? ' opacity="' + opts.opacity + '"' : '') + '/>');
+}
+const label = (svg, x, y, t, size, fill = '#1f2a5c', anchor = 'middle') => svg.insertAdjacentHTML('beforeend', '<text x="' + x + '" y="' + (-y) + '" font-size="' + size + '" text-anchor="' + anchor + '" dominant-baseline="central" font-family="Playpen Sans, cursive" font-weight="800" fill="' + fill + '">' + t + '</text>');
+const axes = (svg, x0, x1, y0, y1, sw) => svg.insertAdjacentHTML('beforeend', '<path d="M' + x0 + ' 0H' + x1 + 'M0 ' + (-y0) + 'V' + (-y1) + '" stroke="#1f2a5c" stroke-width="' + sw + '" opacity=".55"/>');
+
+// Εισαγωγή: η κοιλάδα των ιππόκαμπων.
+setImage($('#fig-hero'), { cx: -0.74345, cy: 0.13135, w: 0.0032 }, 340, 255, { maxIter: 900 });
+
+// A: ένα σημείο του μιγαδικού επιπέδου.
+{
+  const svg = $('#fig-a');
+  setImage(svg, { cx: -0.6, cy: 0, w: 3.4 }, 240, 160, { maxIter: 60, opacity: 0.22 });
+  axes(svg, -2.3, 1.1, -1.13, 1.13, 0.02);
+  svg.insertAdjacentHTML('beforeend', '<path d="M-0.5 0V-0.5H0" fill="none" stroke="#e0313b" stroke-width="0.022" stroke-dasharray="0.06 0.05"/><circle cx="-0.5" cy="-0.5" r="0.07" fill="#e0313b"/>');
+  label(svg, -0.5, 0.72, 'c = −0,5 + 0,5i', 0.17, '#e0313b'); label(svg, 1.0, -0.13, 'x', 0.15); label(svg, 0.12, 1.0, 'yi', 0.15, '#1f2a5c', 'start');
+}
+// B: η ακολουθία για δύο σημεία c.
+function orbit(cx, cy, n) { let x = 0, y = 0; const p = [[0, 0]]; for (let i = 0; i < n; i++) { const nx = x * x - y * y + cx; y = 2 * x * y + cy; x = nx; p.push([x, y]); if (x * x + y * y > 4) break; } return p; }
+{
+  const svg = $('#fig-b');
+  svg.setAttribute('viewBox', '-2.2 -2.2 4.4 4.4');
+  axes(svg, -2.2, 2.2, -2.2, 2.2, 0.025);
+  svg.insertAdjacentHTML('beforeend', '<circle cx="0" cy="0" r="2" fill="none" stroke="#2c6fd6" stroke-width="0.03" stroke-dasharray="0.09 0.07"/>');
+  const draw = (pts, col) => svg.insertAdjacentHTML('beforeend', '<path d="M' + pts.map(p => p[0].toFixed(3) + ' ' + (-p[1]).toFixed(3)).join('L') + '" fill="none" stroke="' + col + '" stroke-width="0.05" stroke-linejoin="round" opacity=".8"/>'
+    + pts.map(p => '<circle cx="' + p[0].toFixed(3) + '" cy="' + (-p[1]).toFixed(3) + '" r="0.1" fill="' + col + '"/>').join(''));
+  draw(orbit(-0.12, 0.75, 9), '#3f9d58');
+  const esc = orbit(0.35, 0.45, 20); draw(esc.map(p => [Math.max(-2.15, Math.min(2.15, p[0])), Math.max(-2.15, Math.min(2.15, p[1]))]), '#e2508c');
+  label(svg, 1.5, 1.85, '|z| = 2', 0.3, '#2c6fd6');
+}
+// C: κάθε pixel ένα σημείο c.
+setImage($('#fig-c'), { cx: -0.65, cy: 0, w: 3.0 }, 60, 40, { maxIter: 40, pixel: true });
+// Μαθηματικά: καρδιοειδής και κύκλος.
+{
+  const svg = $('#fig-card');
+  setImage(svg, { cx: -0.75, cy: 0, w: 2.6 }, 300, 200, { maxIter: 120, opacity: 0.35 });
+  let d = '';
+  for (let i = 0; i <= 200; i++) { const t = i / 200 * 2 * Math.PI, x = Math.cos(t) / 2 - Math.cos(2 * t) / 4, y = Math.sin(t) / 2 - Math.sin(2 * t) / 4; d += (i ? 'L' : 'M') + x.toFixed(4) + ' ' + (-y).toFixed(4); }
+  svg.insertAdjacentHTML('beforeend', '<path d="' + d + 'Z" fill="rgba(224,49,59,.12)" stroke="#e0313b" stroke-width="0.02"/><circle cx="-1" cy="0" r="0.25" fill="rgba(44,111,214,.14)" stroke="#2c6fd6" stroke-width="0.02"/>');
+  label(svg, -0.05, 0.03, 'καρδιοειδής', 0.11, '#e0313b'); label(svg, -1, 0.36, '|c + 1| < 1/4', 0.1, '#2c6fd6');
+}
+
+// ---------- Εξερευνητής ----------
+const PLACES = {
+  seahorse: { cx: -0.7437, cy: 0.1316, w: 0.0062 },
+  elephant: { cx: 0.28, cy: 0.008, w: 0.013 },
+  mini: { cx: -1.7548, cy: 0, w: 0.045 },
+  star: { cx: -0.1011, cy: 0.9563, w: 0.03 },
+  spiral: { cx: -0.7436447860, cy: 0.1318252536, w: 3.4e-5 }
+};
+const JOURNEY = { cx: -0.7436438870371587, cy: 0.1318259042053120, w: 3e-10 };
+const xp = new MB.Explorer({ canvas: $('#mset'), pos: $('#hudPos'), zoom: $('#hudZoom'), iter: $('#hudIter'), busy: $('#hudBusy'), hint: $('#xpHint') });
+setTimeout(() => $('#xpHint').classList.add('gone'), 9000);
+const press = (sel, attr, val) => document.querySelectorAll(sel).forEach(b => b.setAttribute('aria-pressed', String(b.getAttribute(attr) === val)));
+document.querySelectorAll('[data-place]').forEach(b => b.addEventListener('click', () => {
+  if (xp.journey) xp.stopJourney();
+  $('#xpHint').classList.add('gone');
+  const k = b.dataset.place; xp.setView(k === 'home' ? xp.homeView() : PLACES[k]); press('[data-place]', 'data-place', k);
+}));
+document.querySelectorAll('[data-pal]').forEach(b => {
+  const t = MB.lut(b.dataset.pal), stops = [];
+  for (let i = 0; i <= 8; i++) { const k = Math.floor(i / 8 * 1023) * 3; stops.push('rgb(' + t[k] + ',' + t[k + 1] + ',' + t[k + 2] + ')'); }
+  b.insertAdjacentHTML('afterbegin', '<span class="sw" style="background:linear-gradient(90deg,' + stops.join(',') + ')"></span>');
+  b.addEventListener('click', () => { xp.setPalette(b.dataset.pal); press('[data-pal]', 'data-pal', b.dataset.pal); });
+});
+press('[data-pal]', 'data-pal', 'ocean'); press('[data-place]', 'data-place', 'home');
+$('#detail').addEventListener('input', e => { xp.detail = Number(e.target.value); $('#detailOut').textContent = e.target.value; xp.hud(); clearTimeout(xp._dt); xp._dt = setTimeout(() => xp.render('full'), 150); });
+$('#xIn').addEventListener('click', () => { const v = xp.view; xp.setView({ ...v, w: v.w / 2.5 }); });
+$('#xOut').addEventListener('click', () => { const v = xp.view; xp.setView({ ...v, w: v.w * 2.5 }); });
+$('#xHome').addEventListener('click', () => { if (xp.journey) xp.stopJourney(); xp.setView(xp.homeView()); press('[data-place]', 'data-place', 'home'); });
+$('#xFull').addEventListener('click', () => {
+  const el = $('#xp');
+  if (document.fullscreenElement || document.webkitFullscreenElement) (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+  else (el.requestFullscreen || el.webkitRequestFullscreen || (() => {})).call(el);
+});
+$('#xShot').addEventListener('click', () => $('#mset').toBlob(b => { const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'mandelbrot.png'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }));
+const jbtn = $('#journey'), JLABEL = jbtn.textContent;
+jbtn.addEventListener('click', () => {
+  if (xp.journey) { xp.stopJourney(); return; }
+  jbtn.setAttribute('aria-pressed', 'true'); jbtn.textContent = '■ Σταμάτα το ταξίδι'; press('[data-place]', 'data-place', '');
+  xp.startJourney(JOURNEY, () => { jbtn.setAttribute('aria-pressed', 'false'); jbtn.textContent = JLABEL; });
+});
+
+// ---------- Python ----------
+const COLS = 240, ROWS = 160, pyCanvas = $('#canvas'), tmp = document.createElement('canvas');
+function pyImage(v) {
+  const H = v.WIDTH * ROWS / COLS, out = [];
+  for (let r = 0; r < ROWS; r++) {
+    const y = v.CENTER_Y + H / 2 - r * H / (ROWS - 1), line = [];
+    for (let c = 0; c < COLS; c++) line.push(MB.escapeCount(v.CENTER_X - v.WIDTH / 2 + c * v.WIDTH / (COLS - 1), y, v.MAX_ITER));
+    out.push(line);
+  }
+  return out;
+}
+function drawGrid(items, color, vars) {
+  const rows = items.length, cols = items[0].length, vals = new Float32Array(rows * cols);
+  let M = vars.MAX_ITER;
+  for (const line of items) for (const n of line) if (n > M) M = n;
+  items.forEach((line, r) => line.forEach((n, c) => { vals[r * cols + c] = n >= M ? -1 : n + 1; }));
+  tmp.width = cols; tmp.height = rows;
+  const img = tmp.getContext('2d').createImageData(cols, rows);
+  MB.colorize(vals, img.data, MB.lut(MB.paletteFor(color)), [0, 0, 0]);
+  tmp.getContext('2d').putImageData(img, 0, 0);
+  const rect = pyCanvas.getBoundingClientRect(), ratio = window.devicePixelRatio || 1;
+  pyCanvas.width = Math.round(rect.width * ratio); pyCanvas.height = Math.round(rect.height * ratio);
+  const ctx = pyCanvas.getContext('2d'), s = Math.min(pyCanvas.width / cols, pyCanvas.height / rows);
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(tmp, (pyCanvas.width - cols * s) / 2, (pyCanvas.height - rows * s) / 2, cols * s, rows * s);
+}
+const lab = FractalLab.start({
+  initial: INITIAL, outputVar: 'image', level: null, color: 'blue', maxItems: 400,
+  params: [
+    { name: 'CENTER_X', input: '#cx', value: -0.75 }, { name: 'CENTER_Y', input: '#cy', value: 0 },
+    { name: 'WIDTH', input: '#cw', value: 3.6 }, { name: 'MAX_ITER', input: '#maxit', text: '#maxitText', value: 80 }
+  ],
+  preview: pyImage,
+  validate: items => {
+    if (!items.length || !items.every(r => Array.isArray(r) && r.length === items[0].length && r.length > 0 && r.length <= 600 && r.every(Number.isFinite))) return 'Η image πρέπει να είναι λίστα από γραμμές με ίσο πλήθος αριθμών.';
+    return null;
+  },
+  render: drawGrid,
+  countLabel: items => items.length ? items[0].length + ' × ' + items.length + ' σημεία' : '0 σημεία',
+  afterRun: obj => {
+    const v = xp.view, nv = { cx: obj.CENTER_X, cy: obj.CENTER_Y, w: obj.WIDTH };
+    if ([nv.cx, nv.cy, nv.w].every(Number.isFinite) && nv.w > 0 && (Math.abs(nv.cx - v.cx) > v.w * 1e-6 || Math.abs(nv.cy - v.cy) > v.w * 1e-6 || Math.abs(nv.w / v.w - 1) > 1e-6)) xp.setView(nv);
+  }
+});
+// Ο εξερευνητής ενημερώνει τις τιμές της Python.
+const fmt = (x, w) => String(Number(x.toFixed(Math.min(16, Math.max(2, Math.ceil(-Math.log10(w)) + 3)))));
+const setNum = (sel, val) => { const el = $(sel); if (el.value === val) return; el.value = val; el.dispatchEvent(new Event('input')); };
+xp.onView = v => { setNum('#cx', fmt(v.cx, v.w)); setNum('#cy', fmt(v.cy, v.w)); setNum('#cw', String(Number(v.w.toPrecision(4)))); };
+['#cx', '#cy', '#cw'].forEach(s => $(s).addEventListener('change', () => {
+  const nv = { cx: Number($('#cx').value), cy: Number($('#cy').value), w: Number($('#cw').value) };
+  if ([nv.cx, nv.cy, nv.w].every(Number.isFinite) && nv.w > 0) xp.setView(nv);
+}));
+
+</script></body></html>

@@ -49,23 +49,25 @@
   /* cfg:
      initial      αρχικός κώδικας Python
      outputVar    όνομα της λίστας που σχεδιάζεται (π.χ. "triangles")
-     level        {min, max, value}
      color        αρχικό χρώμα
      maxItems     μέγιστο πλήθος στοιχείων
-     params       [{name, input, text, format}] επιπλέον μεταβλητές με slider
+     level        {min, max, value} ή null, αν το εργαστήριο δεν έχει LEVEL
+     params       [{name, input, text, format}] επιπλέον μεταβλητές με slider ή πεδίο αριθμού
+     afterRun(obj)          προαιρετικό, καλείται μετά από επιτυχημένη εκτέλεση
      preview(vars)          -> στοιχεία υπολογισμένα σε JavaScript
      validate(items)        -> null ή μήνυμα λάθους
      render(items, color, vars)
      countLabel(items)      -> κείμενο για το σήμα πλήθους
   */
   function start(cfg) {
-    const code = $('#code'), status = $('#status'), level = $('#level'), levelText = $('#levelText');
+    const code = $('#code'), status = $('#status');
+    const level = cfg.level ? $('#level') : null, levelText = cfg.level ? $('#levelText') : null;
     const highlight = $('#highlight'), highlightCode = $('#highlightCode'), badge = $('#countBadge');
     const params = cfg.params || [];
     let color = cfg.color, items = [];
 
     const vars = () => {
-      const v = { LEVEL: Number(level.value) };
+      const v = level ? { LEVEL: Number(level.value) } : {};
       for (const p of params) v[p.name] = Number($(p.input).value);
       return v;
     };
@@ -74,7 +76,7 @@
       highlight.scrollTop = code.scrollTop; highlight.scrollLeft = code.scrollLeft;
     };
     const setVarInCode = (name, value) => {
-      code.value = code.value.replace(new RegExp('^' + name + '\\s*=\\s*-?[\\d.]+', 'm'), name + ' = ' + value);
+      code.value = code.value.replace(new RegExp('^' + name + '\\s*=\\s*-?[\\d.]+(?:[eE][-+]?\\d+)?', 'm'), name + ' = ' + value);
     };
     const show = (list, c) => {
       items = list; color = c;
@@ -82,8 +84,8 @@
       cfg.render(list, c, vars());
     };
     const preview = () => {
-      levelText.textContent = level.value;
-      for (const p of params) $(p.text).textContent = p.format ? p.format(Number($(p.input).value)) : $(p.input).value;
+      if (level) levelText.textContent = level.value;
+      for (const p of params) if (p.text) $(p.text).textContent = p.format ? p.format(Number($(p.input).value)) : $(p.input).value;
       show(cfg.preview(vars()), color);
     };
 
@@ -94,14 +96,17 @@
       if (e.key === 'Tab') { e.preventDefault(); code.setRangeText('    ', code.selectionStart, code.selectionEnd, 'end'); updateHighlight(); }
     });
 
-    level.addEventListener('input', () => {
+    if (level) level.addEventListener('input', () => {
       setVarInCode('LEVEL', level.value); preview(); updateHighlight();
       status.textContent = 'Προεπισκόπηση για επίπεδο ' + level.value + '. Πάτησε «Εκτέλεση Python» για να τρέξει ο κώδικας.';
       status.className = 'status';
     });
     for (const p of params) {
       $(p.input).addEventListener('input', () => {
-        setVarInCode(p.name, $(p.input).value); preview(); updateHighlight();
+        // Ένα μισογραμμένο πεδίο αριθμού (π.χ. «-») δεν αλλάζει τον κώδικα.
+        const raw = $(p.input).value;
+        if (raw === '' || !Number.isFinite(Number(raw))) return;
+        setVarInCode(p.name, raw); preview(); updateHighlight();
         status.textContent = 'Προεπισκόπηση με ' + p.name + ' = ' + $(p.input).value + '. Πάτησε «Εκτέλεση Python» για να τρέξει ο κώδικας.';
         status.className = 'status';
       });
@@ -113,20 +118,23 @@
       try {
         const py = await loadPython(status);
         status.textContent = 'Εκτέλεση του κώδικα…';
-        const extra = params.map(p => ', "' + p.name + '": ' + p.name).join('');
-        const result = await py.runPythonAsync(code.value + '\nimport json\njson.dumps({"items": ' + cfg.outputVar + ', "color": COLOR, "level": LEVEL' + extra + '})');
+        // Μικρή παύση ώστε να φανεί το μήνυμα πριν αρχίσει ο υπολογισμός.
+        await new Promise(r => setTimeout(r, 40));
+        const extra = (level ? ', "level": LEVEL' : '') + params.map(p => ', "' + p.name + '": ' + p.name).join('');
+        const result = await py.runPythonAsync(code.value + '\nimport json\njson.dumps({"items": ' + cfg.outputVar + ', "color": COLOR' + extra + '})');
         const obj = JSON.parse(result);
         if (!Array.isArray(obj.items)) throw Error('Η μεταβλητή ' + cfg.outputVar + ' πρέπει να είναι λίστα.');
         if (obj.items.length > cfg.maxItems) throw Error('Πάρα πολλά στοιχεία (' + obj.items.length.toLocaleString('el-GR') + '). Η σελίδα δείχνει έως ' + cfg.maxItems.toLocaleString('el-GR') + '. Δοκίμασε μικρότερο LEVEL.');
         const problem = cfg.validate(obj.items);
         if (problem) throw Error(problem);
         if (typeof obj.color !== 'string' || !COLOR_NAMES.test(obj.color)) throw Error('Γράψε COLOR = "' + cfg.color + '" ή ένα άλλο όνομα χρώματος στα αγγλικά, π.χ. red, blue, green, purple.');
-        if (Number.isInteger(obj.level) && obj.level >= cfg.level.min && obj.level <= cfg.level.max) { level.value = obj.level; levelText.textContent = obj.level; }
+        if (level && Number.isInteger(obj.level) && obj.level >= cfg.level.min && obj.level <= cfg.level.max) { level.value = obj.level; levelText.textContent = obj.level; }
         for (const p of params) {
           const v = obj[p.name], el = $(p.input);
-          if (typeof v === 'number' && v >= Number(el.min) && v <= Number(el.max)) { el.value = v; $(p.text).textContent = p.format ? p.format(v) : v; }
+          if (typeof v === 'number' && v >= Number(el.min) && v <= Number(el.max)) { el.value = v; if (p.text) $(p.text).textContent = p.format ? p.format(v) : v; }
         }
         show(obj.items, obj.color.toLowerCase());
+        if (cfg.afterRun) cfg.afterRun(obj);
         status.textContent = '✓ Ο κώδικας Python εκτελέστηκε! ' + cfg.countLabel(obj.items) + '.';
         status.className = 'status ok';
       } catch (e) {
@@ -135,7 +143,7 @@
     });
 
     $('#reset').addEventListener('click', () => {
-      code.value = cfg.initial; level.value = cfg.level.value;
+      code.value = cfg.initial; if (level) level.value = cfg.level.value;
       for (const p of params) $(p.input).value = p.value;
       color = cfg.color; preview(); updateHighlight();
       status.textContent = 'Επαναφέρθηκε ο αρχικός κώδικας.'; status.className = 'status';
